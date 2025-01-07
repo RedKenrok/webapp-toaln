@@ -1,0 +1,37 @@
+html {
+  scroll-behavior: smooth;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.pending::after {
+  display: inline-block;
+  animation: ellipses steps(1, end) 1.5s infinite;
+  content: ''
+}
+
+@keyframes ellipses {
+  0% {
+    content: '';
+  }
+
+  25% {
+    content: '.';
+  }
+
+  50% {
+    content: '..';
+  }
+
+  75% {
+    content: '...';
+  }
+
+  100% {
+    content: '';
+  }
+}

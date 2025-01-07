@@ -1,0 +1,18 @@
+:root {
+  --background: white;
+  --foreground: black;
+  --highlight: rgb(232, 232, 232)
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --background: black;
+    --foreground: white;
+    --highlight: rgb(24, 24, 24)
+  }
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+}

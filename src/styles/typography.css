@@ -1,0 +1,50 @@
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+label,
+li,
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+ul,
+ol {
+  padding-left: 1rem;
+}
+
+@media screen and (min-width: 28rem) {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    hyphens: auto;
+  }
+
+  label,
+  li,
+  p {
+    hyphens: auto;
+    text-align: justify;
+  }
+}

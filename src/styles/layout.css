@@ -1,0 +1,53 @@
+blockquote {
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  border-width: 0px;
+  border-left-width: 1px;
+  border-color: currentColor;
+  border-style: solid;
+  margin: 0;
+}
+
+.messages {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.message-assistant,
+.message-user {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--highlight);
+}
+
+.message-assistant {
+  margin-right: 2rem;
+  border-bottom-left-radius: 0;
+}
+
+.message-user {
+  margin-left: 2rem;
+  border-bottom-right-radius: 0;
+}
+
+textarea.message-user {
+  width: calc(100% - 2rem);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.row.reverse {
+  flex-direction: row-reverse;
+}
+
+.screen {
+  display: block;
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+}

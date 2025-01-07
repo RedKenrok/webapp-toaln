@@ -1,0 +1,7 @@
+.DS_STORE
+._*
+
+node_modules/
+.env
+
+NOTES.md

@@ -1,0 +1,14 @@
+@import url('sanitize.css/sanitize.css');
+/* @import url('sanitize.css/reduce-motion.css'); */
+@import url('sanitize.css/system-ui.css');
+@import url('sanitize.css/forms.css');
+@import url('sanitize.css/ui-monospace.css');
+@import url('sanitize.css/typography.css');
+@import url('sanitize.css/assets.css');
+
+@import url('./styles/theme.css');
+@import url('./styles/layout.css');
+
+@import url('./styles/animation.css');
+@import url('./styles/form.css');
+@import url('./styles/typography.css');

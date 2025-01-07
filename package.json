@@ -1,0 +1,29 @@
+{
+  "name": "@redkenrok/learn-lang",
+  "version": "0.0.0",
+  "author": "Ron Dekker <rondekkker.com>",
+  "private": true,
+  "type": "module",
+  "main": "source/app.js",
+  "scripts": {
+    "develop:scripts": "NODE_ENV=development node config.scripts.js",
+    "build:scripts": "NODE_ENV=production node config.scripts.js",
+    "develop:styles": "NODE_ENV=development node config.styles.js",
+    "build:styles": "NODE_ENV=production node config.styles.js",
+    "serve": "serve ./dst/"
+  },
+  "devDependencies": {
+    "chokidar": "^4.0.1",
+    "cssnano": "^7.0.6",
+    "esbuild": "^0.24.0",
+    "postcss-import": "^16.1.0",
+    "postcss-preset-env": "^10.1.2",
+    "postcss": "^8.4.49",
+    "serve": "^14.2.4"
+  },
+  "dependencies": {
+    "@doars/staark": "^1.5.0",
+    "@doars/vroagn": "^1.3.0",
+    "sanitize.css": "^13.0.0"
+  }
+}
