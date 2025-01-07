@@ -1306,7 +1306,7 @@
       "prompt-conversation": "Du vil simulere en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Skriv den f\xF8rste besked i samtalen og introducer straks et emne at diskutere.",
       "prompt-conversation-follow_up": "Du simulerer en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv f\xF8rst kort, grundig feedback p\xE5 beskeden med fokus udelukkende p\xE5 sproglige aspekter, og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger. Besvar derefter beskeden p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
       "prompt-clarification": "Brugeren har et sp\xF8rgsm\xE5l nedenfor, svar kortfattet med dybdeg\xE5ende feedback, passende til brugerens sprogniveau. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Besvar ikke sp\xF8rgsm\xE5let, hvis det ikke er sprogligt relateret.",
-      "prompt-topic": 'Inkorpor\xE9r f\xF8lgende emne i din besked "{%topic%}".',
+      "prompt-topic": ' Inkorpor\xE9r f\xF8lgende emne i din besked "{%topic%}".',
       "greeting": "Hej!",
       "button-go_back": "Tilbage",
       "button-reset": "Nulstil",
@@ -1401,7 +1401,7 @@
       "prompt-conversation": "Sie werden eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%} simulieren. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Schreiben Sie die erste Nachricht der Konversation, indem Sie sofort ein Gespr\xE4chsthema einf\xFChren.",
       "prompt-conversation-follow_up": "Sie simulieren eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%}. Geben Sie zuerst ein kurzes, tiefgehendes Feedback zur Nachricht und konzentrieren Sie sich dabei ausschlie\xDFlich auf sprachliche Aspekte, ohne inhaltliche Bewertungen oder Interpretationen vorzunehmen. Antworten Sie anschlie\xDFend auf die Nachricht in {%t:{%s:targetLocale%}%}. Geben Sie keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften.",
       "prompt-clarification": "Der Benutzer hat eine Frage unten gestellt, beantworten Sie diese pr\xE4zise mit einem tiefgehenden Feedback, das der Sprachkompetenz des Benutzers entspricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Beantworten Sie die Frage nicht, wenn sie nicht sprachbezogen ist.",
-      "prompt-topic": 'Integrieren Sie das folgende Thema in Ihre Nachricht: "{%topic%}".',
+      "prompt-topic": ' Integrieren Sie das folgende Thema in Ihre Nachricht: "{%topic%}".',
       "greeting": "Hallo!",
       "button-go_back": "Zur\xFCck",
       "button-reset": "Zur\xFCcksetzen",
@@ -1514,7 +1514,7 @@
       "prompt-conversation": "You will simulate a conversation with the user in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings. Write the first message in the conversation, immediately introducing a topic to discuss.",
       "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
       "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
-      "prompt-topic": 'Incorporate the following topic into your message "{%topic%}".',
+      "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
       "greeting": "Hi!",
       "button-go_back": "Go back",
       "button-reset": "Reset",
@@ -1613,7 +1613,7 @@
       "prompt-conversation": "Je gaat met de gebruiker een gesprek simuleren in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Schrijf het eerste bericht in een gesprek dat al gelijk een onderwerp introduceert om het over te hebben.",
       "prompt-conversation-follow_up": "Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
-      "prompt-topic": 'Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
+      "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
       "greeting": "Hoi!",
       "button-go_back": "Ga terug",
       "button-reset": "Resetten",
@@ -1731,10 +1731,14 @@
     node("label", {
       for: "input_topics_of_interest"
     }, translate(state, "setup-topics_of_interest")),
-    ...state.topicsOfInterest.filter((topic) => topic).map(
+    ...state.topicsOfInterest.map(
       (topic, index) => node("input", {
-        change: (event) => {
-          state.topicsOfInterest[index] = event.target.value;
+        keyup: (event) => {
+          if (!event.target.value) {
+            state.topicsOfInterest.splice(index, 1);
+          } else {
+            state.topicsOfInterest[index] = event.target.value;
+          }
         },
         value: topic
       })
@@ -1926,6 +1930,19 @@
     }
   };
 
+  // src/utilities/random.js
+  var randomBool2 = (odds) => {
+    odds = Math.abs(odds);
+    return Math.random() < 1 / odds;
+  };
+  var randomItem2 = (items) => {
+    if (!Array.isArray(items) || items.length === 0) {
+      return null;
+    }
+    const index = Math.floor(Math.random() * items.length);
+    return items[index];
+  };
+
   // src/screens/conversation.js
   var conversation = (state) => [
     node("p", [
@@ -2017,7 +2034,9 @@
                 state,
                 [],
                 translate(state, "prompt-context"),
-                translate(state, "prompt-conversation")
+                translate(state, "prompt-conversation") + (randomBool2(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem2(
+                  state.topicsOfInterest.filter((topic) => topic)
+                )) : "")
               ).then(([error, response, result]) => {
                 state.conversationPending = false;
                 if (error) {
@@ -2233,7 +2252,9 @@
                 state,
                 [],
                 translate(state, "prompt-context"),
-                translate(state, "prompt-comprehension")
+                translate(state, "prompt-comprehension") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
+                  state.topicsOfInterest.filter((topic) => topic)
+                )) : "")
               ).then(([error, response, result]) => {
                 state.comprehensionPending = false;
                 if (error) {
@@ -2333,10 +2354,14 @@
     node("label", {
       for: "input_topics_of_interest"
     }, translate(state, "options-topics_of_interest")),
-    ...state.topicsOfInterest.filter((topic) => topic).map(
+    ...state.topicsOfInterest.map(
       (topic, index) => node("input", {
-        change: (event) => {
-          state.topicsOfInterest[index] = event.target.value;
+        keyup: (event) => {
+          if (!event.target.value) {
+            state.topicsOfInterest.splice(index, 1);
+          } else {
+            state.topicsOfInterest[index] = event.target.value;
+          }
         },
         value: topic
       })

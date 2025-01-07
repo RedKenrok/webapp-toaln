@@ -114,7 +114,14 @@ export const comprehension = (
                 state,
                 [],
                 t(state, 'prompt-context'),
-                t(state, 'prompt-comprehension'),
+                t(state, 'prompt-comprehension') + (
+                  randomBool(10)
+                    ? t(state, 'prompt-topic')
+                      .replace('{%topic%}', randomItem(
+                        state.topicsOfInterest.filter(topic => topic)
+                      ))
+                    : ''
+                ),
               ).then(([error, response, result]) => {
                 state.comprehensionPending = false
                 if (error) {

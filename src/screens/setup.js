@@ -107,11 +107,14 @@ export const setup = (
       for: 'input_topics_of_interest',
     }, t(state, 'setup-topics_of_interest')),
     ...state.topicsOfInterest
-      .filter(topic => topic)
       .map(
         (topic, index) => n('input', {
-          change: (event) => {
-            state.topicsOfInterest[index] = event.target.value
+          keyup: (event) => {
+            if (!event.target.value) {
+              state.topicsOfInterest.splice(index, 1)
+            } else {
+              state.topicsOfInterest[index] = event.target.value
+            }
           },
           value: topic,
         })

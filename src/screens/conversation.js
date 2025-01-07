@@ -6,6 +6,7 @@ import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
 import { createMessage } from '../apis/apis.js'
 import { onActivity } from '../utilities/streak.js'
+import { randomBool, randomItem } from '../utilities/random.js'
 
 export const conversation = (
   state,
@@ -116,7 +117,14 @@ export const conversation = (
                 state,
                 [],
                 t(state, 'prompt-context'),
-                t(state, 'prompt-conversation'),
+                t(state, 'prompt-conversation') + (
+                  randomBool(10)
+                    ? t(state, 'prompt-topic')
+                      .replace('{%topic%}', randomItem(
+                        state.topicsOfInterest.filter(topic => topic)
+                      ))
+                    : ''
+                ),
               ).then(([error, response, result]) => {
                 state.conversationPending = false
                 if (error) {
