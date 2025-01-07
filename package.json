@@ -10,7 +10,7 @@
     "build:scripts": "NODE_ENV=production node config.scripts.js",
     "develop:styles": "NODE_ENV=development node config.styles.js",
     "build:styles": "NODE_ENV=production node config.styles.js",
-    "serve": "serve ./dst/"
+    "serve": "serve ./docs/"
   },
   "devDependencies": {
     "chokidar": "^4.0.1",
