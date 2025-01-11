@@ -12,7 +12,7 @@
     if (condition) {
       return arrayify(onTruth);
     }
-    return arrayify(onFalse != null ? onFalse : []);
+    return arrayify(onFalse ?? []);
   };
   var marker = Symbol();
   var node = (type, attributesOrContents, contents) => {
@@ -179,24 +179,6 @@
       };
     }
   });
-  var cloneRecursive = (value) => {
-    if (typeof value === "object") {
-      if (Array.isArray(value)) {
-        const clone = [];
-        for (let i = 0; i < value.length; i++) {
-          clone.push(cloneRecursive(value[i]));
-        }
-        value = clone;
-      } else {
-        const clone = {};
-        for (const key in value) {
-          clone[key] = cloneRecursive(value[key]);
-        }
-        value = clone;
-      }
-    }
-    return value;
-  };
   var equalRecursive = (valueA, valueB) => {
     if (valueA === valueB) {
       return true;
@@ -222,13 +204,12 @@
     );
   };
   var childrenToNodes = (element) => {
-    var _a;
     const abstractChildNodes = [];
     for (let i = 0; i < element.childNodes.length; i++) {
       const childNode = element.childNodes[i];
       if (childNode instanceof Text) {
         abstractChildNodes.push(
-          (_a = childNode.textContent) != null ? _a : ""
+          childNode.textContent ?? ""
         );
       } else {
         let attributes = {};
@@ -416,12 +397,11 @@
       if (!newMemoList.includes(match2)) {
         newMemoList.push(match2);
       }
-      return cloneRecursive(
+      return structuredClone(
         match2.c
       );
     };
     const updateElementTree = (element, newChildAbstracts, oldChildAbstracts, elementAbstract) => {
-      var _a, _b, _c;
       let newIndex = 0;
       let newCount = 0;
       if (newChildAbstracts) {
@@ -515,7 +495,7 @@
                   elementAbstract,
                   "afterbegin"
                 );
-              } else if (((_a = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _a : 0) + newCount > newIndex) {
+              } else if ((oldChildAbstracts?.length ?? 0) + newCount > newIndex) {
                 insertAdjacentElement(
                   element.childNodes[newIndex]
                   // (oldChildAbstracts as NodeContent[])[newIndex + newCount],
@@ -549,7 +529,7 @@
                   elementAbstract,
                   "afterbegin"
                 );
-              } else if (((_b = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _b : 0) + newCount > newIndex) {
+              } else if ((oldChildAbstracts?.length ?? 0) + newCount > newIndex) {
                 insertAdjacentText(
                   element.childNodes[newIndex]
                   // (oldChildAbstracts as NodeContent[])[newIndex + newCount],
@@ -567,7 +547,7 @@
           }
         }
       }
-      const elementLength = ((_c = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _c : 0) + newCount;
+      const elementLength = (oldChildAbstracts?.length ?? 0) + newCount;
       if (elementLength >= newIndex) {
         for (let i = elementLength - 1; i >= newIndex; i--) {
           element.childNodes[i].remove();
@@ -577,16 +557,17 @@
     if (typeof initialState === "string") {
       initialState = JSON.parse(initialState);
     }
-    initialState != null ? initialState : initialState = {};
+    initialState ??= {};
     let proxyChanged = true;
+    const triggerUpdate = () => {
+      if (!proxyChanged) {
+        proxyChanged = true;
+        Promise.resolve().then(updateAbstracts);
+      }
+    };
     let state = Object.getPrototypeOf(initialState) === Proxy.prototype ? initialState : proxify(
       initialState,
-      () => {
-        proxyChanged = true;
-        requestAnimationFrame(
-          updateAbstracts
-        );
-      }
+      triggerUpdate
     );
     const _rootElement = typeof rootElement === "string" ? document.querySelector(rootElement) || document.body.appendChild(
       document.createElement("div")
@@ -598,7 +579,7 @@
         oldAbstractTree = void 0;
       }
     }
-    oldAbstractTree != null ? oldAbstractTree : oldAbstractTree = childrenToNodes(_rootElement);
+    oldAbstractTree ??= childrenToNodes(_rootElement);
     let active = true, updating = false;
     const updateAbstracts = () => {
       if (active && !updating && // Only update if changes to the state have been made.
@@ -625,12 +606,7 @@
     };
     updateAbstracts();
     return [
-      () => {
-        proxyChanged = true;
-        requestAnimationFrame(
-          updateAbstracts
-        );
-      },
+      triggerUpdate,
       () => {
         if (active) {
           active = false;
@@ -644,68 +620,14 @@
   };
 
   // node_modules/@doars/vroagn/dst/vroagn.js
-  var __defProp = Object.defineProperty;
-  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __propIsEnum = Object.prototype.propertyIsEnumerable;
-  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-  var __spreadValues = (a, b) => {
-    for (var prop in b || (b = {}))
-      if (__hasOwnProp.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    if (__getOwnPropSymbols)
-      for (var prop of __getOwnPropSymbols(b)) {
-        if (__propIsEnum.call(b, prop))
-          __defNormalProp(a, prop, b[prop]);
-      }
-    return a;
-  };
-  var __async = (__this, __arguments, generator) => {
-    return new Promise((resolve, reject) => {
-      var fulfilled = (value) => {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      var rejected = (value) => {
-        try {
-          step(generator.throw(value));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-      step((generator = generator.apply(__this, __arguments)).next());
-    });
-  };
-  var cloneRecursive2 = (value) => {
-    if (typeof value === "object") {
-      if (Array.isArray(value)) {
-        const clone = [];
-        for (let i = 0; i < value.length; i++) {
-          clone.push(cloneRecursive2(value[i]));
-        }
-        value = clone;
-      } else {
-        const clone = {};
-        for (const key in value) {
-          clone[key] = cloneRecursive2(value[key]);
-        }
-        value = clone;
-      }
-    }
-    return value;
-  };
-  var delay = (time) => __async(void 0, null, function* () {
+  var delay = async (time) => {
     if (time > 0) {
       return new Promise(
         (resolve) => setTimeout(resolve, time)
       );
     }
     return null;
-  });
+  };
   var normalizeContentType = (contentType) => contentType.split(";")[0].trim().toLowerCase();
   var getFileExtension = (url) => {
     const match = url.match(/\.([^./?]+)(?:[?#]|$)/);
@@ -738,17 +660,20 @@
     retryDelay: 500
   };
   var create = (initialOptions) => {
-    initialOptions = __spreadValues(__spreadValues({}, DEFAULT_VALUES), cloneRecursive2(initialOptions));
+    initialOptions = {
+      ...DEFAULT_VALUES,
+      ...structuredClone(initialOptions)
+    };
     let lastExecutionTime = 0;
     let activeRequests = 0;
     let totalRequests = 0;
     let debounceTimeout = null;
-    const throttle = (throttleValue) => __async(void 0, null, function* () {
+    const throttle = async (throttleValue) => {
       const now = Date.now();
       const waitTime = throttleValue - (now - lastExecutionTime);
       lastExecutionTime = now + (waitTime > 0 ? waitTime : 0);
-      yield delay(waitTime);
-    });
+      await delay(waitTime);
+    };
     const debounce = (debounceValue) => {
       return new Promise((resolve) => {
         if (debounceTimeout) {
@@ -760,7 +685,7 @@
         );
       });
     };
-    const sendRequest = (options2) => __async(void 0, null, function* () {
+    const sendRequest = async (options2) => {
       if (options2.maxRequests !== void 0 && totalRequests >= options2.maxRequests) {
         return [new Error("Maximum request limit reached"), null, null];
       }
@@ -788,9 +713,8 @@
           options2.timeout
         );
       }
-      const executeFetch = () => __async(void 0, null, function* () {
-        var _a;
-        const response2 = yield ((_a = options2.fetch) != null ? _a : fetch)(url, config);
+      const executeFetch = async () => {
+        const response2 = await (options2.fetch ?? fetch)(url, config);
         if (!response2.ok) {
           return [new Error("Invalid response"), response2, null];
         }
@@ -802,7 +726,7 @@
             for (const parser of options2.parsers) {
               foundParser = parser.types.includes(type);
               if (foundParser) {
-                result2 = yield parser.parser(
+                result2 = await parser.parser(
                   response2,
                   options2,
                   type
@@ -814,45 +738,45 @@
           if (!foundParser) {
             switch (type.toLowerCase()) {
               case "arraybuffer":
-                result2 = yield response2.arrayBuffer();
+                result2 = await response2.arrayBuffer();
                 break;
               case "blob":
-                result2 = yield response2.blob();
+                result2 = await response2.blob();
                 break;
               case "formdata":
-                result2 = yield response2.formData();
+                result2 = await response2.formData();
                 break;
               case "text/plain":
               case "text":
               case "txt":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 break;
               case "text/html-partial":
               case "html-partial":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 const template = document.createElement("template");
                 template.innerHTML = result2;
                 result2 = template.content.childNodes;
                 break;
               case "text/html":
               case "html":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 result2 = new DOMParser().parseFromString(result2, "text/html");
                 break;
               case "application/json":
               case "text/json":
               case "json":
-                result2 = yield response2.json();
+                result2 = await response2.json();
                 break;
               case "image/svg+xml":
               case "svg":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 result2 = new DOMParser().parseFromString(result2, "image/svg+xml");
                 break;
               case "application/xml":
               case "text/xml":
               case "xml":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 result2 = new DOMParser().parseFromString(result2, "application/xml");
                 break;
             }
@@ -861,18 +785,17 @@
         } catch (error2) {
           return [error2 || new Error("Thrown parsing error is falsy"), response2, null];
         }
-      });
-      const retryRequest = () => __async(void 0, null, function* () {
-        var _a;
+      };
+      const retryRequest = async () => {
         let attempt = 0;
         const retryAttempts = options2.retryAttempts || 0;
         const retryDelay = options2.retryDelay || 0;
         while (attempt < retryAttempts) {
-          const [error2, response2, result2] = yield executeFetch();
+          const [error2, response2, result2] = await executeFetch();
           if (!error2) {
             return [error2, response2, result2];
           }
-          if (!((_a = options2.retryCodes) == null ? void 0 : _a.includes(response2.status || 200))) {
+          if (!options2.retryCodes?.includes(response2.status || 200)) {
             return [new Error("Invalid status code"), response2, result2];
           }
           attempt++;
@@ -893,32 +816,38 @@
               }
             }
           }
-          yield delay(delayTime);
+          await delay(delayTime);
         }
         return executeFetch();
-      });
-      const [error, response, result] = yield retryRequest();
+      };
+      const [error, response, result] = await retryRequest();
       if (!response.ok) {
         return [new Error(response.statusText), response, result];
       }
       return [error, response, result];
-    });
-    return (sendOptions) => __async(void 0, null, function* () {
-      const options2 = __spreadValues(__spreadValues({}, initialOptions), cloneRecursive2(sendOptions));
+    };
+    return async (sendOptions) => {
+      const options2 = {
+        ...initialOptions,
+        ...structuredClone(sendOptions)
+      };
       if (initialOptions.headers) {
-        options2.headers = __spreadValues(__spreadValues({}, initialOptions.headers), options2.headers);
+        options2.headers = {
+          ...initialOptions.headers,
+          ...options2.headers
+        };
       }
       if (options2.debounce) {
-        yield debounce(options2.debounce);
+        await debounce(options2.debounce);
       }
       if (options2.delay) {
-        yield delay(options2.delay);
+        await delay(options2.delay);
       }
       if (options2.throttle) {
-        yield throttle(options2.throttle);
+        await throttle(options2.throttle);
       }
       if (options2.maxConcurrency && activeRequests >= options2.maxConcurrency) {
-        yield new Promise((resolve) => {
+        await new Promise((resolve) => {
           let interval = null;
           const wait = () => {
             if (activeRequests >= options2.maxConcurrency) {
@@ -934,27 +863,27 @@
         });
       }
       activeRequests++;
-      const results = yield sendRequest(
+      const results = await sendRequest(
         options2
       );
       activeRequests--;
       return results;
-    });
+    };
   };
 
   // src/utilities/clone.js
-  var cloneRecursive3 = (value) => {
+  var cloneRecursive = (value) => {
     if (typeof value === "object") {
       if (Array.isArray(value)) {
         const clone = [];
         for (let i = 0; i < value.length; i++) {
-          clone.push(cloneRecursive3(value[i]));
+          clone.push(cloneRecursive(value[i]));
         }
         value = clone;
       } else {
         const clone = {};
         for (const key in value) {
-          clone[key] = cloneRecursive3(value[key]);
+          clone[key] = cloneRecursive(value[key]);
         }
         value = clone;
       }
@@ -987,7 +916,7 @@
   );
   var createMessage = (state, messages, context = null, instructions = null) => {
     const appRole = state.apiModel.toLowerCase().includes("o1") ? "developer" : "system";
-    messages = cloneRecursive3(messages);
+    messages = cloneRecursive(messages);
     const prependAppRole = (message) => {
       if (message) {
         if (messages.length > 0 && messages[0].role === appRole) {
@@ -1051,7 +980,7 @@
     })
   );
   var createMessage2 = (state, messages, context = null, instructions = null) => {
-    messages = cloneRecursive3(messages);
+    messages = cloneRecursive(messages);
     if (instructions) {
       messages.unshift({
         role: "user",
@@ -1169,13 +1098,31 @@
   });
   var PROFICIENCY_LEVEL_CODES = Object.keys(PROFICIENCY_LEVELS);
   var LOCALES = Object.freeze({
-    da_dk: "da_dk",
-    de_de: "de_de",
-    en_gb: "en_gb",
-    nl_nl: "nl_nl"
+    dan: "dan",
+    // Danish
+    deu: "deu",
+    // German
+    eng: "eng",
+    // English
+    epo: "epo",
+    // Esperanto
+    fry: "fry",
+    // Frisian (West)
+    isl: "isl",
+    // Icelandic
+    nld: "nld",
+    // Dutch
+    nno: "nno",
+    // Norwegian (Nynorsk)
+    nob: "nob",
+    // Norwegian (Bokmål)
+    swe: "swe",
+    // Swedish
+    vls: "vls"
+    // Flemish
   });
   var LOCALE_CODES = Object.keys(LOCALES);
-  var getLanguageFromLocale = (localeCode) => localeCode.split("_")[0].split("-")[0];
+  var getLanguageFromLocale = (localeCode) => (localeCode ?? "").split("_")[0].split("-")[0];
   var getPreferredLocale = () => window.navigator.languages.map(
     (languageCode) => languageCode.split("-").filter(
       (_, index) => index < 2
@@ -1194,7 +1141,7 @@
       }
     }
     return preferredLanguage;
-  }, null) ?? LOCALES.en_gb;
+  }, null) ?? LOCALES.eng;
 
   // src/data/screens.js
   var SCREENS = Object.freeze({
@@ -1212,7 +1159,7 @@
   var translate = (state, key, locale = null) => {
     locale ??= state.sourceLocale;
     if (!(locale in TRANSLATIONS)) {
-      console.warn('Er is geen vertaling beschikbaar voor de taal "' + locale + '"');
+      console.warn('Er zijn geen vertalingen beschikbaar voor de taal "' + locale + '"');
       return key;
     }
     if (!(key in TRANSLATIONS[locale])) {
@@ -1260,11 +1207,18 @@
     return replace(TRANSLATIONS[locale][key]);
   };
   var TRANSLATIONS = Object.freeze({
-    [LOCALES.da_dk]: {
-      "da_dk": "Dansk",
-      "de_de": "Tysk",
-      "en_gb": "Engelsk (Storbritannien)",
-      "nl_nl": "Hollandsk",
+    [LOCALES.dan]: {
+      [LOCALES.dan]: "Dansk",
+      [LOCALES.deu]: "Tysk",
+      [LOCALES.eng]: "Engelsk (Storbritannien)",
+      [LOCALES.epo]: "Esperanto",
+      [LOCALES.fry]: "Frisisk (West)",
+      [LOCALES.isl]: "Islandsk",
+      [LOCALES.nld]: "Hollandsk",
+      [LOCALES.nno]: "Norsk (nynorsk)",
+      [LOCALES.nob]: "Norsk (bokm\xE5l)",
+      [LOCALES.swe]: "Svensk",
+      [LOCALES.vls]: "Flamsk",
       "proficiency_name-a1": "A1: Begynder",
       "proficiency_description-a1": [
         "L\xE6sning: Du kan forst\xE5 velkendte navne, ord og meget enkle s\xE6tninger, for eksempel p\xE5 skilte, plakater eller i kataloger.",
@@ -1302,7 +1256,8 @@
       ],
       "proficiency_example-c2": '"Nuancerne i den sproglige udvikling afsl\xF8rer meget om kulturelle og samfundsm\xE6ssige skift over tid. For eksempel signalerer optagelsen af l\xE5neord ofte en periode med kulturel udveksling eller indflydelse. Analyse af s\xE5danne m\xF8nstre forbedrer ikke kun vores forst\xE5else af sprogudvikling, men giver ogs\xE5 dybe indsigter i historiske forhold mellem civilisationer. Dette dynamiske samspil understreger kompleksiteten og sammenh\xE6ngen i menneskelig kommunikation."',
       "prompt-context": 'Du er ekspert i og underviser i {%t:{%s:targetLocale%}%}. Brugeren studerer {%t:{%s:targetLocale%}%}. Brugeren behersker allerede sproget p\xE5 CEFR-niveau {%s:proficiencyLevel%}. Dette betyder, at brugeren allerede har f\xF8lgende f\xE6rdigheder: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Dog \xF8nsker brugeren at forbedre sine f\xE6rdigheder yderligere.',
-      "prompt-comprehension": "Lav en l\xE6seforst\xE5elses\xF8velse, hvor brugeren modtager en tekst p\xE5 {%t:{%s:targetLocale%}%} sammen med et sp\xF8rgsm\xE5l p\xE5 {%t:{%s:sourceLocale%}%}, som skal besvares p\xE5 {%t:{%s:targetLocale%}%}. Giv derefter kort feedback p\xE5 {%t:{%s:targetLocale%}%} med stor dybde, passende til brugerens sprogniveau p\xE5 {%t:{%s:targetLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignorer indholdsm\xE6ssige vurderinger eller fortolkninger af budskabet. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
+      "prompt-comprehension": "Lav en l\xE6se- og skrive\xF8velse, hvor brugeren modtager en tekst p\xE5 {%t:{%s:targetLocale%}%} sammen med et sp\xF8rgsm\xE5l p\xE5 {%t:{%s:sourceLocale%}%} om teksten, som brugeren skal besvare p\xE5 {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner, forklaringer eller svar til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
+      "prompt-comprehension-follow_up": "Giv feedback p\xE5 den stillede l\xE6se- og skrive\xF8velse. Giv kort feedback p\xE5 {%t:{%s:targetLocale%}%} med en dybdeg\xE5ende analyse, der er klar nok til brugerens vidensniveau i {%t:{%s:targetLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger af beskeden. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
       "prompt-conversation": "Du vil simulere en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Skriv den f\xF8rste besked i samtalen og introducer straks et emne at diskutere.",
       "prompt-conversation-follow_up": "Du simulerer en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv f\xF8rst kort, grundig feedback p\xE5 beskeden med fokus udelukkende p\xE5 sproglige aspekter, og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger. Besvar derefter beskeden p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
       "prompt-clarification": "Brugeren har et sp\xF8rgsm\xE5l nedenfor, svar kortfattet med dybdeg\xE5ende feedback, passende til brugerens sprogniveau. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Besvar ikke sp\xF8rgsm\xE5let, hvis det ikke er sprogligt relateret.",
@@ -1355,11 +1310,18 @@
       "comprehension-intro": "Du vil snart l\xE6se en tekst p\xE5 {%t:{%s:targetLanguage%}%} sammen med et sp\xF8rgsm\xE5l om den. Besvar sp\xF8rgsm\xE5let p\xE5 {%t:{%s:targetLanguage%}%}. Derefter vil du modtage noget feedback om dit svar.",
       "conversation-intro": "Du vil snart simulere en samtale p\xE5 {%t:{%s:targetLanguage%}%}, s\xE5 svar altid p\xE5 {%t:{%s:targetLanguage%}%}. Du kan modtage feedback undervejs."
     },
-    [LOCALES.de_de]: {
-      "da_dk": "D\xE4nisch",
-      "de_de": "Deutsch",
-      "en_gb": "Englisch (Vereinigtes K\xF6nigreich)",
-      "nl_nl": "Duits",
+    [LOCALES.deu]: {
+      [LOCALES.dan]: "D\xE4nisch",
+      [LOCALES.deu]: "Deutsch",
+      [LOCALES.eng]: "Englisch (Vereinigtes K\xF6nigreich)",
+      [LOCALES.epo]: "Esperanto",
+      [LOCALES.fry]: "Friesisch (West)",
+      [LOCALES.isl]: "Isl\xE4ndisch",
+      [LOCALES.nld]: "Niederl\xE4ndisch",
+      [LOCALES.nno]: "Norwegisch (Nynorsk)",
+      [LOCALES.nob]: "Norwegisch (Bokm\xE5l)",
+      [LOCALES.swe]: "Schwedisch",
+      [LOCALES.vls]: "Fl\xE4misch",
       "proficiency_name-a1": "A1: Anf\xE4nger",
       "proficiency_description-a1": [
         "Lesen: Sie k\xF6nnen vertraute Namen, W\xF6rter und sehr einfache S\xE4tze verstehen, zum Beispiel auf Schildern, Plakaten oder in Katalogen.",
@@ -1397,7 +1359,8 @@
       ],
       "proficiency_example-c2": '"Die Nuancen der sprachlichen Evolution offenbaren viel \xFCber kulturelle und gesellschaftliche Ver\xE4nderungen im Laufe der Zeit. Beispielsweise signalisiert die \xDCbernahme von Lehnw\xF6rtern oft eine Phase kulturellen Austauschs oder Einflusses. Die Analyse solcher Muster erweitert nicht nur unser Verst\xE4ndnis der Sprachentwicklung, sondern bietet auch tiefgehende Einblicke in historische Beziehungen zwischen Zivilisationen. Dieses dynamische Zusammenspiel unterstreicht die Komplexit\xE4t und Vernetzung menschlicher Kommunikation."',
       "prompt-context": 'Sie sind ein Experte in und Lehrer f\xFCr {%t:{%s:targetLocale%}%}. Der Benutzer lernt {%t:{%s:targetLocale%}%}. Der Benutzer beherrscht die Sprache bereits auf dem GER-Niveau {%s:proficiencyLevel%}. Das bedeutet, dass der Benutzer bereits \xFCber die folgenden F\xE4higkeiten verf\xFCgt: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Allerdings m\xF6chte der Benutzer seine Sprachkenntnisse weiter verbessern.',
-      "prompt-comprehension": "Erstellen Sie eine Leseverst\xE4ndnis\xFCbung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} sowie eine Frage in {%t:{%s:sourceLocale%}%} zum Text erh\xE4lt, die in {%t:{%s:targetLocale%}%} beantwortet werden soll. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Geben Sie anschlie\xDFend ein kurzes Feedback auf {%t:{%s:targetLocale%}%}, das der Sprachkompetenz des Benutzers auf diesem Niveau entspricht. Konzentrieren Sie sich ausschlie\xDFlich auf sprachliche Aspekte und ignorieren Sie inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften.",
+      "prompt-comprehension": "Erstelle eine Lese- und Schreib\xFCbung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} erh\xE4lt, zusammen mit einer Frage in {%t:{%s:sourceLocale%}%} \xFCber den Text, auf die der Benutzer in {%t:{%s:targetLocale%}%} antworten muss. Gib dem Benutzer keine weiteren Anweisungen, Erkl\xE4rungen oder Antworten. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
+      "prompt-comprehension-follow_up": "Gib Feedback zur gestellten Lese- und Schreib\xFCbung. Gib kurzes Feedback zum {%t:{%s:targetLocale%}%} mit einer detaillierten Analyse, die dem Kenntnisstand des Benutzers im {%t:{%s:targetLocale%}%} angemessen ist. Konzentriere dich ausschlie\xDFlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
       "prompt-conversation": "Sie werden eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%} simulieren. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Schreiben Sie die erste Nachricht der Konversation, indem Sie sofort ein Gespr\xE4chsthema einf\xFChren.",
       "prompt-conversation-follow_up": "Sie simulieren eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%}. Geben Sie zuerst ein kurzes, tiefgehendes Feedback zur Nachricht und konzentrieren Sie sich dabei ausschlie\xDFlich auf sprachliche Aspekte, ohne inhaltliche Bewertungen oder Interpretationen vorzunehmen. Antworten Sie anschlie\xDFend auf die Nachricht in {%t:{%s:targetLocale%}%}. Geben Sie keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften.",
       "prompt-clarification": "Der Benutzer hat eine Frage unten gestellt, beantworten Sie diese pr\xE4zise mit einem tiefgehenden Feedback, das der Sprachkompetenz des Benutzers entspricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Beantworten Sie die Frage nicht, wenn sie nicht sprachbezogen ist.",
@@ -1450,11 +1413,18 @@
       "comprehension-intro": "Sie werden gleich einen Text in {%t:{%s:targetLanguage%}%} lesen, zusammen mit einer Frage dazu. Beantworten Sie die Frage in {%t:{%s:targetLanguage%}%}. Anschlie\xDFend erhalten Sie ein Feedback zu Ihrer Antwort.",
       "conversation-intro": "Sie werden gleich eine Konversation in {%t:{%s:targetLanguage%}%} simulieren. Antworten Sie stets in {%t:{%s:targetLanguage%}%}. M\xF6glicherweise erhalten Sie zwischendurch Feedback."
     },
-    [LOCALES.en_gb]: {
-      "da_dk": "Danish",
-      "de_de": "German",
-      "en_gb": "English (United Kingdom)",
-      "nl_nl": "Dutch",
+    [LOCALES.eng]: {
+      [LOCALES.dan]: "Danish",
+      [LOCALES.deu]: "German",
+      [LOCALES.eng]: "English (United Kingdom)",
+      [LOCALES.epo]: "Esperanto",
+      [LOCALES.fry]: "Frisian (West)",
+      [LOCALES.isl]: "Icelandic",
+      [LOCALES.nld]: "Dutch",
+      [LOCALES.nno]: "Norwegian (Nynorsk)",
+      [LOCALES.nob]: "Norwegian (Bokm\xE5l)",
+      [LOCALES.swe]: "Swedish",
+      [LOCALES.vls]: "Flamish",
       "proficiency_name-a1": "A1: Beginner",
       "proficiency_description-a1": [
         // 'Spoken interaction: You can interact in a simple way provided the other person is prepared to repeat or rephrase things at a slower rate of speech and help me formulate what you are trying to say. You can ask and answer simple questions in areas of immediate need or on very familiar topics.',
@@ -1510,10 +1480,11 @@
       ],
       "proficiency_example-c2": '"The nuances of linguistic evolution reveal much about cultural and societal shifts over time. For instance, the adoption of loanwords often signals a period of cultural exchange or influence. Analysing such patterns not only enhances our understanding of language development but also offers profound insights into historical relationships between civilizations. This dynamic interplay underscores the complexity and interconnectedness of human communication."',
       "prompt-context": 'You are an expert in and teacher of {%t:{%s:targetLocale%}%}. The user is studying {%t:{%s:targetLocale%}%}. The user already masters the language at CEFR level {%s:proficiencyLevel%}. This means that the user already has the following skills: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". However, the user wants to improve their proficiency further.',
-      "prompt-comprehension": "Create a reading comprehension exercise where the user receives a text in {%t:{%s:targetLocale%}%} along with a question in {%t:{%s:sourceLocale%}%} about the text, to be answered in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Then give brief feedback on {%t:{%s:targetLocale%}%} with a great deal of depth, appropriate to the user's proficiency level in {%t:{%s:targetLocale%}%}. Focus solely on linguistic aspects and ignore any content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.",
+      "prompt-comprehension": "Write a reading and writing exercise where the user receives a text in {%t:{%s:targetLocale%}%} along with a question in {%t:{%s:sourceLocale%}%} about the text, to which the user must respond in {%t:{%s:targetLocale%}%}. Do not provide any further instructions, explanations, or answers to the user. Always write in plain text without any formatting, labels, or headings.",
+      "prompt-comprehension-follow_up": "Provide feedback on the reading and writing exercise given. Offer concise feedback on the {%t:{%s:targetLocale%}%} with in-depth analysis that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:targetLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.",
       "prompt-conversation": "You will simulate a conversation with the user in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings. Write the first message in the conversation, immediately introducing a topic to discuss.",
       "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
-      "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
+      "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
       "greeting": "Hi!",
       "button-go_back": "Go back",
@@ -1563,15 +1534,18 @@
       "comprehension-intro": "You will soon read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You will then receive some feedback regarding your answer.",
       "conversation-intro": "You will soon simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way."
     },
-    [LOCALES.nl_nl]: {
-      "da_dk": "Deens",
-      "de_de": "Duits",
-      "en_gb": "Engels (Verenigd Koninkrijk)",
-      "nl_nl": "Nederlands",
-      "da": "Deens",
-      "de": "Duits",
-      "en": "Engels",
-      "nl": "Nederlands",
+    [LOCALES.nld]: {
+      [LOCALES.dan]: "Deens",
+      [LOCALES.deu]: "Duits",
+      [LOCALES.eng]: "Engels (Verenigd Koninkrijk)",
+      [LOCALES.epo]: "Esperanto",
+      [LOCALES.fry]: "Fries (West)",
+      [LOCALES.isl]: "IJslands",
+      [LOCALES.nld]: "Nederlands",
+      [LOCALES.nno]: "Noors (Nynorsk)",
+      [LOCALES.nob]: "Noors (Bokm\xE5l)",
+      [LOCALES.swe]: "Zweeds",
+      [LOCALES.vls]: "Vlaams",
       "proficiency_name-a1": "A1: Beginner",
       "proficiency_description-a1": [
         "Lezen: Je kunt vertrouwde namen, woorden en zeer eenvoudige zinnen begrijpen, bijvoorbeeld op aankondigingen en posters of in catalogi.",
@@ -1609,10 +1583,11 @@
       ],
       "proficiency_example-c2": '"De nuances van taalontwikkeling onthullen veel over culturele en maatschappelijke veranderingen door de tijd heen. Zo duidt de opname van leenwoorden vaak op een periode van culturele uitwisseling of invloed. Het analyseren van dergelijke patronen verrijkt niet alleen ons begrip van taalontwikkeling, maar biedt ook waardevolle inzichten in historische relaties tussen beschavingen. Deze dynamiek benadrukt de complexiteit en verbondenheid van menselijke communicatie."',
       "prompt-context": 'Je bent een expert in en docent van het {%t:{%s:targetLocale%}%}. De gebruiker is {%t:{%s:targetLocale%}%} aan het studeren. De gebruiker beheerst de taal al tot CEFR niveau {%s:proficiencyLevel%}. Dit betekend dat de gebruiker al de volgende vaardigheden beheerst: "{%t:proficiency_description-{%s:proficiencyLevel%}%}" Maar de gebruiker wil de taal nog beter leren beheersen.',
-      "prompt-comprehension": "Schrijf een leesvaardigheidsoefening waarbij de gebruiker een tekst in het {%t:{%s:targetLocale%}%} krijgt samen met een vraag in het {%t:{%s:sourceLocale%}%} over de tekst waarop de gebruiker moet antwoorden in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Vervolgens geef je beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:targetLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
+      "prompt-comprehension": "Schrijf een lees en schrijfvaardigheidsoefening waarbij de gebruiker een tekst in het {%t:{%s:targetLocale%}%} krijgt samen met een vraag in het {%t:{%s:sourceLocale%}%} over de tekst waarop de gebruiker moet antwoorden in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
+      "prompt-comprehension-follow_up": "Geef feedback op de lees en schrijfvaardigheidsoefening die gesteld is. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:targetLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-conversation": "Je gaat met de gebruiker een gesprek simuleren in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Schrijf het eerste bericht in een gesprek dat al gelijk een onderwerp introduceert om het over te hebben.",
       "prompt-conversation-follow_up": "Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
-      "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
+      "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
       "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
       "greeting": "Hoi!",
       "button-go_back": "Ga terug",
@@ -1663,6 +1638,7 @@
       "conversation-intro": "Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen."
     }
   });
+  var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
   // src/screens/setup.js
   var isReady = (state) => {
@@ -1681,7 +1657,7 @@
           state.sourceLanguage = getLanguageFromLocale(state.sourceLocale);
         }
       }
-    }, LOCALE_CODES.map(
+    }, TRANSLATABLE_CODES.map(
       (localeCode) => node("option", {
         selected: state.sourceLocale === localeCode ? "selected" : false,
         value: localeCode
@@ -1726,7 +1702,11 @@
     ),
     node(
       "blockquote",
-      node("p", translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale))
+      node("p", conditional(
+        TRANSLATABLE_CODES.includes(state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel)
+      ))
     ),
     node("label", {
       for: "input_topics_of_interest"
@@ -1931,11 +1911,11 @@
   };
 
   // src/utilities/random.js
-  var randomBool2 = (odds) => {
+  var randomBool = (odds) => {
     odds = Math.abs(odds);
     return Math.random() < 1 / odds;
   };
-  var randomItem2 = (items) => {
+  var randomItem = (items) => {
     if (!Array.isArray(items) || items.length === 0) {
       return null;
     }
@@ -2034,7 +2014,7 @@
                 state,
                 [],
                 translate(state, "prompt-context"),
-                translate(state, "prompt-conversation") + (randomBool2(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem2(
+                translate(state, "prompt-conversation") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
                   state.topicsOfInterest.filter((topic) => topic)
                 )) : "")
               ).then(([error, response, result]) => {
@@ -2224,7 +2204,7 @@
                 state,
                 state.comprehensionMessages,
                 translate(state, "prompt-context"),
-                translate(state, "prompt-comprehension")
+                translate(state, "prompt-comprehension-follow_up")
               ).then(([error, response, result]) => {
                 state.comprehensionPending = false;
                 if (error) {
@@ -2304,7 +2284,7 @@
           state.sourceLanguage = getLanguageFromLocale(state.sourceLocale);
         }
       }
-    }, LOCALE_CODES.map(
+    }, TRANSLATABLE_CODES.map(
       (localeCode) => node("option", {
         selected: state.sourceLocale === localeCode ? "selected" : false,
         value: localeCode
@@ -2349,7 +2329,11 @@
     ),
     node(
       "blockquote",
-      node("p", translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale))
+      node("p", conditional(
+        TRANSLATABLE_CODES.includes(state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel)
+      ))
     ),
     node("label", {
       for: "input_topics_of_interest"

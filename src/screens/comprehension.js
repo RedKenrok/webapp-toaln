@@ -6,6 +6,10 @@ import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
 import { createMessage } from '../apis/apis.js'
 import { onActivity } from '../utilities/streak.js'
+import {
+  randomBool,
+  randomItem,
+} from '../utilities/random.js'
 
 export const comprehension = (
   state,
@@ -86,7 +90,7 @@ export const comprehension = (
                 state,
                 state.comprehensionMessages,
                 t(state, 'prompt-context'),
-                t(state, 'prompt-comprehension'),
+                t(state, 'prompt-comprehension-follow_up'),
               ).then(([error, response, result]) => {
                 state.comprehensionPending = false
                 if (error) {

@@ -48,7 +48,6 @@ export const createMessage = (
   // Check context afterwards so the instructions come after the context.
   prependAppRole(context)
 
-  // TODO: Normalize response.
   return _createMessage()({
     headers: {
       Authorization: 'Bearer ' + state.apiCredentials,

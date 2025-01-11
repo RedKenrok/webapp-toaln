@@ -7,7 +7,7 @@ export const translate = (
 ) => {
   locale ??= state.sourceLocale
   if (!(locale in TRANSLATIONS)) {
-    console.warn('Er is geen vertaling beschikbaar voor de taal "' + (locale) + '"')
+    console.warn('Er zijn geen vertalingen beschikbaar voor de taal "' + (locale) + '"')
     return key
   }
   if (!(key in TRANSLATIONS[locale])) {
@@ -69,11 +69,18 @@ export const translate = (
 }
 
 export const TRANSLATIONS = Object.freeze({
-  [LOCALES.da_dk]: {
-    'da_dk': 'Dansk',
-    'de_de': 'Tysk',
-    'en_gb': 'Engelsk (Storbritannien)',
-    'nl_nl': 'Hollandsk',
+  [LOCALES.dan]: {
+    [LOCALES.dan]: 'Dansk',
+    [LOCALES.deu]: 'Tysk',
+    [LOCALES.eng]: 'Engelsk (Storbritannien)',
+    [LOCALES.epo]: 'Esperanto',
+    [LOCALES.fry]: 'Frisisk (West)',
+    [LOCALES.isl]: 'Islandsk',
+    [LOCALES.nld]: 'Hollandsk',
+    [LOCALES.nno]: 'Norsk (nynorsk)',
+    [LOCALES.nob]: 'Norsk (bokmål)',
+    [LOCALES.swe]: 'Svensk',
+    [LOCALES.vls]: 'Flamsk',
 
     'proficiency_name-a1': 'A1: Begynder',
     'proficiency_description-a1': [
@@ -113,7 +120,8 @@ export const TRANSLATIONS = Object.freeze({
     'proficiency_example-c2': '"Nuancerne i den sproglige udvikling afslører meget om kulturelle og samfundsmæssige skift over tid. For eksempel signalerer optagelsen af låneord ofte en periode med kulturel udveksling eller indflydelse. Analyse af sådanne mønstre forbedrer ikke kun vores forståelse af sprogudvikling, men giver også dybe indsigter i historiske forhold mellem civilisationer. Dette dynamiske samspil understreger kompleksiteten og sammenhængen i menneskelig kommunikation."',
 
     'prompt-context': 'Du er ekspert i og underviser i {%t:{%s:targetLocale%}%}. Brugeren studerer {%t:{%s:targetLocale%}%}. Brugeren behersker allerede sproget på CEFR-niveau {%s:proficiencyLevel%}. Dette betyder, at brugeren allerede har følgende færdigheder: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Dog ønsker brugeren at forbedre sine færdigheder yderligere.',
-    'prompt-comprehension': 'Lav en læseforståelsesøvelse, hvor brugeren modtager en tekst på {%t:{%s:targetLocale%}%} sammen med et spørgsmål på {%t:{%s:sourceLocale%}%}, som skal besvares på {%t:{%s:targetLocale%}%}. Giv derefter kort feedback på {%t:{%s:targetLocale%}%} med stor dybde, passende til brugerens sprogniveau på {%t:{%s:targetLocale%}%}. Fokuser udelukkende på sproglige aspekter og ignorer indholdsmæssige vurderinger eller fortolkninger af budskabet. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.',
+    'prompt-comprehension': 'Lav en læse- og skriveøvelse, hvor brugeren modtager en tekst på {%t:{%s:targetLocale%}%} sammen med et spørgsmål på {%t:{%s:sourceLocale%}%} om teksten, som brugeren skal besvare på {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner, forklaringer eller svar til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.',
+    'prompt-comprehension-follow_up': 'Giv feedback på den stillede læse- og skriveøvelse. Giv kort feedback på {%t:{%s:targetLocale%}%} med en dybdegående analyse, der er klar nok til brugerens vidensniveau i {%t:{%s:targetLocale%}%}. Fokuser udelukkende på sproglige aspekter og ignorér indholdsmæssige vurderinger eller fortolkninger af beskeden. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.',
     'prompt-conversation': 'Du vil simulere en samtale med brugeren på {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Skriv den første besked i samtalen og introducer straks et emne at diskutere.',
     'prompt-conversation-follow_up': 'Du simulerer en samtale med brugeren på {%t:{%s:targetLocale%}%}. Giv først kort, grundig feedback på beskeden med fokus udelukkende på sproglige aspekter, og ignorér indholdsmæssige vurderinger eller fortolkninger. Besvar derefter beskeden på {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.',
     'prompt-clarification': 'Brugeren har et spørgsmål nedenfor, svar kortfattet med dybdegående feedback, passende til brugerens sprogniveau. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Besvar ikke spørgsmålet, hvis det ikke er sprogligt relateret.',
@@ -174,11 +182,18 @@ export const TRANSLATIONS = Object.freeze({
 
     'conversation-intro': 'Du vil snart simulere en samtale på {%t:{%s:targetLanguage%}%}, så svar altid på {%t:{%s:targetLanguage%}%}. Du kan modtage feedback undervejs.',
   },
-  [LOCALES.de_de]: {
-    'da_dk': 'Dänisch',
-    'de_de': 'Deutsch',
-    'en_gb': 'Englisch (Vereinigtes Königreich)',
-    'nl_nl': 'Duits',
+  [LOCALES.deu]: {
+    [LOCALES.dan]: 'Dänisch',
+    [LOCALES.deu]: 'Deutsch',
+    [LOCALES.eng]: 'Englisch (Vereinigtes Königreich)',
+    [LOCALES.epo]: 'Esperanto',
+    [LOCALES.fry]: 'Friesisch (West)',
+    [LOCALES.isl]: 'Isländisch',
+    [LOCALES.nld]: 'Niederländisch',
+    [LOCALES.nno]: 'Norwegisch (Nynorsk)',
+    [LOCALES.nob]: 'Norwegisch (Bokmål)',
+    [LOCALES.swe]: 'Schwedisch',
+    [LOCALES.vls]: 'Flämisch',
 
     'proficiency_name-a1': 'A1: Anfänger',
     'proficiency_description-a1': [
@@ -223,7 +238,8 @@ export const TRANSLATIONS = Object.freeze({
     'proficiency_example-c2': '"Die Nuancen der sprachlichen Evolution offenbaren viel über kulturelle und gesellschaftliche Veränderungen im Laufe der Zeit. Beispielsweise signalisiert die Übernahme von Lehnwörtern oft eine Phase kulturellen Austauschs oder Einflusses. Die Analyse solcher Muster erweitert nicht nur unser Verständnis der Sprachentwicklung, sondern bietet auch tiefgehende Einblicke in historische Beziehungen zwischen Zivilisationen. Dieses dynamische Zusammenspiel unterstreicht die Komplexität und Vernetzung menschlicher Kommunikation."',
 
     'prompt-context': 'Sie sind ein Experte in und Lehrer für {%t:{%s:targetLocale%}%}. Der Benutzer lernt {%t:{%s:targetLocale%}%}. Der Benutzer beherrscht die Sprache bereits auf dem GER-Niveau {%s:proficiencyLevel%}. Das bedeutet, dass der Benutzer bereits über die folgenden Fähigkeiten verfügt: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Allerdings möchte der Benutzer seine Sprachkenntnisse weiter verbessern.',
-    'prompt-comprehension': 'Erstellen Sie eine Leseverständnisübung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} sowie eine Frage in {%t:{%s:sourceLocale%}%} zum Text erhält, die in {%t:{%s:targetLocale%}%} beantwortet werden soll. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erklärungen. Geben Sie anschließend ein kurzes Feedback auf {%t:{%s:targetLocale%}%}, das der Sprachkompetenz des Benutzers auf diesem Niveau entspricht. Konzentrieren Sie sich ausschließlich auf sprachliche Aspekte und ignorieren Sie inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder Überschriften.',
+    'prompt-comprehension': 'Erstelle eine Lese- und Schreibübung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} erhält, zusammen mit einer Frage in {%t:{%s:sourceLocale%}%} über den Text, auf die der Benutzer in {%t:{%s:targetLocale%}%} antworten muss. Gib dem Benutzer keine weiteren Anweisungen, Erklärungen oder Antworten. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder Überschriften.',
+    'prompt-comprehension-follow_up': 'Gib Feedback zur gestellten Lese- und Schreibübung. Gib kurzes Feedback zum {%t:{%s:targetLocale%}%} mit einer detaillierten Analyse, die dem Kenntnisstand des Benutzers im {%t:{%s:targetLocale%}%} angemessen ist. Konzentriere dich ausschließlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder Überschriften.',
     'prompt-conversation': 'Sie werden eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%} simulieren. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erklärungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder Überschriften. Schreiben Sie die erste Nachricht der Konversation, indem Sie sofort ein Gesprächsthema einführen.',
     'prompt-conversation-follow_up': 'Sie simulieren eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%}. Geben Sie zuerst ein kurzes, tiefgehendes Feedback zur Nachricht und konzentrieren Sie sich dabei ausschließlich auf sprachliche Aspekte, ohne inhaltliche Bewertungen oder Interpretationen vorzunehmen. Antworten Sie anschließend auf die Nachricht in {%t:{%s:targetLocale%}%}. Geben Sie keine weiteren Anweisungen oder Erklärungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder Überschriften.',
     'prompt-clarification': 'Der Benutzer hat eine Frage unten gestellt, beantworten Sie diese präzise mit einem tiefgehenden Feedback, das der Sprachkompetenz des Benutzers entspricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder Überschriften. Beantworten Sie die Frage nicht, wenn sie nicht sprachbezogen ist.',
@@ -284,11 +300,18 @@ export const TRANSLATIONS = Object.freeze({
 
     'conversation-intro': 'Sie werden gleich eine Konversation in {%t:{%s:targetLanguage%}%} simulieren. Antworten Sie stets in {%t:{%s:targetLanguage%}%}. Möglicherweise erhalten Sie zwischendurch Feedback.',
   },
-  [LOCALES.en_gb]: {
-    'da_dk': 'Danish',
-    'de_de': 'German',
-    'en_gb': 'English (United Kingdom)',
-    'nl_nl': 'Dutch',
+  [LOCALES.eng]: {
+    [LOCALES.dan]: 'Danish',
+    [LOCALES.deu]: 'German',
+    [LOCALES.eng]: 'English (United Kingdom)',
+    [LOCALES.epo]: 'Esperanto',
+    [LOCALES.fry]: 'Frisian (West)',
+    [LOCALES.isl]: 'Icelandic',
+    [LOCALES.nld]: 'Dutch',
+    [LOCALES.nno]: 'Norwegian (Nynorsk)',
+    [LOCALES.nob]: 'Norwegian (Bokmål)',
+    [LOCALES.swe]: 'Swedish',
+    [LOCALES.vls]: 'Flamish',
 
     'proficiency_name-a1': 'A1: Beginner',
     'proficiency_description-a1': [
@@ -346,10 +369,11 @@ export const TRANSLATIONS = Object.freeze({
     'proficiency_example-c2': '"The nuances of linguistic evolution reveal much about cultural and societal shifts over time. For instance, the adoption of loanwords often signals a period of cultural exchange or influence. Analysing such patterns not only enhances our understanding of language development but also offers profound insights into historical relationships between civilizations. This dynamic interplay underscores the complexity and interconnectedness of human communication."',
 
     'prompt-context': 'You are an expert in and teacher of {%t:{%s:targetLocale%}%}. The user is studying {%t:{%s:targetLocale%}%}. The user already masters the language at CEFR level {%s:proficiencyLevel%}. This means that the user already has the following skills: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". However, the user wants to improve their proficiency further.',
-    'prompt-comprehension': 'Create a reading comprehension exercise where the user receives a text in {%t:{%s:targetLocale%}%} along with a question in {%t:{%s:sourceLocale%}%} about the text, to be answered in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Then give brief feedback on {%t:{%s:targetLocale%}%} with a great deal of depth, appropriate to the user\'s proficiency level in {%t:{%s:targetLocale%}%}. Focus solely on linguistic aspects and ignore any content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.',
+    'prompt-comprehension': 'Write a reading and writing exercise where the user receives a text in {%t:{%s:targetLocale%}%} along with a question in {%t:{%s:sourceLocale%}%} about the text, to which the user must respond in {%t:{%s:targetLocale%}%}. Do not provide any further instructions, explanations, or answers to the user. Always write in plain text without any formatting, labels, or headings.',
+    'prompt-comprehension-follow_up': 'Provide feedback on the reading and writing exercise given. Offer concise feedback on the {%t:{%s:targetLocale%}%} with in-depth analysis that is clear enough for the user\'s level of knowledge. Write the feedback in {%t:{%s:targetLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.',
     'prompt-conversation': 'You will simulate a conversation with the user in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings. Write the first message in the conversation, immediately introducing a topic to discuss.',
     'prompt-conversation-follow_up': 'You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.',
-    'prompt-clarification': 'The user has a question below, answer it concisely with in-depth feedback, appropriate to the user\'s proficiency level. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.',
+    'prompt-clarification': 'The user has a question below, answer it concisely with in-depth feedback, appropriate to the user\'s proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.',
     'prompt-topic': ' Incorporate the following topic into your message "{%topic%}".',
 
     'greeting': 'Hi!',
@@ -407,15 +431,18 @@ export const TRANSLATIONS = Object.freeze({
 
     'conversation-intro': 'You will soon simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.',
   },
-  [LOCALES.nl_nl]: {
-    'da_dk': 'Deens',
-    'de_de': 'Duits',
-    'en_gb': 'Engels (Verenigd Koninkrijk)',
-    'nl_nl': 'Nederlands',
-    'da': 'Deens',
-    'de': 'Duits',
-    'en': 'Engels',
-    'nl': 'Nederlands',
+  [LOCALES.nld]: {
+    [LOCALES.dan]: 'Deens',
+    [LOCALES.deu]: 'Duits',
+    [LOCALES.eng]: 'Engels (Verenigd Koninkrijk)',
+    [LOCALES.epo]: 'Esperanto',
+    [LOCALES.fry]: 'Fries (West)',
+    [LOCALES.isl]: 'IJslands',
+    [LOCALES.nld]: 'Nederlands',
+    [LOCALES.nno]: 'Noors (Nynorsk)',
+    [LOCALES.nob]: 'Noors (Bokmål)',
+    [LOCALES.swe]: 'Zweeds',
+    [LOCALES.vls]: 'Vlaams',
 
     'proficiency_name-a1': 'A1: Beginner',
     'proficiency_description-a1': [
@@ -455,10 +482,11 @@ export const TRANSLATIONS = Object.freeze({
     'proficiency_example-c2': '"De nuances van taalontwikkeling onthullen veel over culturele en maatschappelijke veranderingen door de tijd heen. Zo duidt de opname van leenwoorden vaak op een periode van culturele uitwisseling of invloed. Het analyseren van dergelijke patronen verrijkt niet alleen ons begrip van taalontwikkeling, maar biedt ook waardevolle inzichten in historische relaties tussen beschavingen. Deze dynamiek benadrukt de complexiteit en verbondenheid van menselijke communicatie."',
 
     'prompt-context': 'Je bent een expert in en docent van het {%t:{%s:targetLocale%}%}. De gebruiker is {%t:{%s:targetLocale%}%} aan het studeren. De gebruiker beheerst de taal al tot CEFR niveau {%s:proficiencyLevel%}. Dit betekend dat de gebruiker al de volgende vaardigheden beheerst: "{%t:proficiency_description-{%s:proficiencyLevel%}%}" Maar de gebruiker wil de taal nog beter leren beheersen.',
-    'prompt-comprehension': 'Schrijf een leesvaardigheidsoefening waarbij de gebruiker een tekst in het {%t:{%s:targetLocale%}%} krijgt samen met een vraag in het {%t:{%s:sourceLocale%}%} over de tekst waarop de gebruiker moet antwoorden in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Vervolgens geef je beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:targetLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
+    'prompt-comprehension': 'Schrijf een lees en schrijfvaardigheidsoefening waarbij de gebruiker een tekst in het {%t:{%s:targetLocale%}%} krijgt samen met een vraag in het {%t:{%s:sourceLocale%}%} over de tekst waarop de gebruiker moet antwoorden in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
+    'prompt-comprehension-follow_up': 'Geef feedback op de lees en schrijfvaardigheidsoefening die gesteld is. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:targetLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
     'prompt-conversation': 'Je gaat met de gebruiker een gesprek simuleren in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Schrijf het eerste bericht in een gesprek dat al gelijk een onderwerp introduceert om het over te hebben.',
     'prompt-conversation-follow_up': 'Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
-    'prompt-clarification': 'De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.',
+    'prompt-clarification': 'De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.',
     'prompt-topic': ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
 
     'greeting': 'Hoi!',
@@ -517,3 +545,5 @@ export const TRANSLATIONS = Object.freeze({
     'conversation-intro': 'Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.',
   },
 })
+
+export const TRANSLATABLE_CODES = Object.keys(TRANSLATIONS)

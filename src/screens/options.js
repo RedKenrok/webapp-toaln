@@ -1,4 +1,7 @@
-import { node as n } from '@doars/staark'
+import {
+  conditional as c,
+  node as n,
+} from '@doars/staark'
 
 import {
   getLanguageFromLocale,
@@ -7,11 +10,19 @@ import {
 } from '../data/locales.js'
 import { SCREENS } from '../data/screens.js'
 
-import { translate as t } from '../data/translations.js'
+import {
+  translate as t,
+  TRANSLATABLE_CODES,
+} from '../data/translations.js'
 import {
   APIS,
   getModels,
 } from '../apis/apis.js'
+
+const log = (...input) => {
+  console.log(input)
+  return input
+}
 
 const isReady = (state) => {
   return (
@@ -41,7 +52,7 @@ export const options = (
           state.sourceLanguage = getLanguageFromLocale(state.sourceLocale)
         }
       },
-    }, LOCALE_CODES.map(
+    }, TRANSLATABLE_CODES.map(
       localeCode => n('option', {
         selected: (
           state.sourceLocale === localeCode
@@ -100,7 +111,11 @@ export const options = (
         .map(text => n('li', text))
     ),
     n('blockquote',
-      n('p', t(state, 'proficiency_example-' + state.proficiencyLevel, state.targetLocale)),
+      n('p', c(
+        TRANSLATABLE_CODES.includes(state.targetLocale),
+        t(state, 'proficiency_example-' + state.proficiencyLevel, state.targetLocale),
+        t(state, 'proficiency_example-' + state.proficiencyLevel),
+      )),
     ),
 
     n('label', {

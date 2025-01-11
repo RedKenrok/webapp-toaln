@@ -10,17 +10,24 @@ export const PROFICIENCY_LEVELS = Object.freeze({
 export const PROFICIENCY_LEVEL_CODES = Object.keys(PROFICIENCY_LEVELS)
 
 export const LOCALES = Object.freeze({
-  da_dk: 'da_dk',
-  de_de: 'de_de',
-  en_gb: 'en_gb',
-  nl_nl: 'nl_nl',
+  dan: 'dan', // Danish
+  deu: 'deu', // German
+  eng: 'eng', // English
+  epo: 'epo', // Esperanto
+  fry: 'fry', // Frisian (West)
+  isl: 'isl', // Icelandic
+  nld: 'nld', // Dutch
+  nno: 'nno', // Norwegian (Nynorsk)
+  nob: 'nob', // Norwegian (Bokmål)
+  swe: 'swe', // Swedish
+  vls: 'vls', // Flemish
 })
 
 export const LOCALE_CODES = Object.keys(LOCALES)
 
 export const getLanguageFromLocale = (
   localeCode
-) => localeCode.split('_')[0].split('-')[0]
+) => (localeCode ?? '').split('_')[0].split('-')[0]
 
 export const getPreferredLocale = (
 ) => (
@@ -45,4 +52,4 @@ export const getPreferredLocale = (
       }
       return preferredLanguage
     }, null)
-) ?? LOCALES.en_gb
+) ?? LOCALES.eng
