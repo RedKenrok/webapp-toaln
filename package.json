@@ -1,10 +1,15 @@
 {
+  "author": {
+    "name": "Ron Dekker",
+    "website": "https://rondekker.com"
+  },
   "name": "@redkenrok/learn-lang",
+  "description": "",
+  "keywords": [],
   "version": "0.0.0",
-  "author": "Ron Dekker <rondekkker.com>",
   "private": true,
   "type": "module",
-  "main": "source/app.js",
+  "main": "src/app.js",
   "scripts": {
     "develop:scripts": "NODE_ENV=development node config.scripts.js",
     "build:scripts": "NODE_ENV=production node config.scripts.js",
@@ -18,7 +23,7 @@
     "esbuild": "^0.24.2",
     "postcss-import": "^16.1.0",
     "postcss-preset-env": "^10.1.3",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.1",
     "serve": "^14.2.4"
   },
   "dependencies": {
