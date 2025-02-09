@@ -1,20 +1,18 @@
 (() => {
   // node_modules/@doars/staark/dst/staark.js
-  var arrayify = function(data) {
-    if (Array.isArray(data)) {
-      return data;
-    }
-    return [
-      data
-    ];
+  var arrayify = (data) => {
+    var _a;
+    return (_a = arrayifyOrUndefined(data)) != null ? _a : [];
   };
+  var arrayifyOrUndefined = (data) => data ? Array.isArray(data) ? data : [data] : void 0;
   var conditional = (condition, onTruth, onFalse) => {
-    if (condition) {
-      return arrayify(onTruth);
+    let result = condition ? onTruth : onFalse;
+    if (typeof result === "function") {
+      result = result();
     }
-    return arrayify(onFalse ?? []);
+    return arrayify(result);
   };
-  var marker = Symbol();
+  var marker = "n";
   var node = (type, attributesOrContents, contents) => {
     if (typeof attributesOrContents !== "object" || attributesOrContents._ === marker || Array.isArray(attributesOrContents)) {
       contents = attributesOrContents;
@@ -23,7 +21,7 @@
     return {
       _: marker,
       a: attributesOrContents,
-      c: contents ? Array.isArray(contents) ? contents : [contents] : [],
+      c: arrayifyOrUndefined(contents),
       t: type.toUpperCase()
     };
   };
@@ -179,42 +177,41 @@
       };
     }
   });
+  var cloneRecursive = (value) => {
+    if (typeof value === "object") {
+      const clone = Array.isArray(value) ? [] : {};
+      for (const key in value) {
+        clone[key] = cloneRecursive(value[key]);
+      }
+      return clone;
+    }
+    return value;
+  };
   var equalRecursive = (valueA, valueB) => {
     if (valueA === valueB) {
       return true;
     }
-    if (valueA instanceof Date && valueB instanceof Date) {
-      return valueA.getTime() === valueB.getTime();
-    }
-    if (!valueA || !valueB || typeof valueA !== "object" && typeof valueB !== "object") {
+    if (!valueA || !valueB || typeof valueA !== "object" || typeof valueB !== "object") {
       return valueA === valueB;
     }
-    if (valueA === null || valueA === void 0 || valueB === null || valueB === void 0) {
-      return false;
+    if (valueA instanceof Date) {
+      return valueB instanceof Date && valueA.getTime() === valueB.getTime();
     }
-    if (valueA.prototype !== valueB.prototype) {
-      return false;
-    }
-    let keys = Object.keys(valueA);
-    if (keys.length !== Object.keys(valueB).length) {
-      return false;
-    }
-    return keys.every(
-      (key) => equalRecursive(valueA[key], valueB[key])
-    );
+    const keys = Object.keys(valueA);
+    return keys.length === Object.keys(valueB).length && keys.every((k) => equalRecursive(valueA[k], valueB[k]));
   };
   var childrenToNodes = (element) => {
+    var _a;
     const abstractChildNodes = [];
-    for (let i = 0; i < element.childNodes.length; i++) {
-      const childNode = element.childNodes[i];
+    for (const childNode of element.childNodes) {
       if (childNode instanceof Text) {
         abstractChildNodes.push(
-          childNode.textContent ?? ""
+          (_a = childNode.textContent) != null ? _a : ""
         );
       } else {
-        let attributes = {};
-        for (let i2 = 0; i2 < childNode.attributes.length; i2++) {
-          const attribute = childNode.attributes[i2];
+        const elementChild = childNode;
+        const attributes = {};
+        for (const attribute of elementChild.attributes) {
           attributes[attribute.name] = attribute.value;
         }
         abstractChildNodes.push(
@@ -230,63 +227,67 @@
   };
   var proxify = (root, onChange) => {
     const map = /* @__PURE__ */ new WeakMap();
-    const remove = (target) => {
-      if (map.has(target)) {
-        const revocable = map.get(target);
-        map.delete(revocable);
-        for (const property in revocable.proxy) {
-          if (typeof revocable.proxy[property] === "object") {
-            remove(revocable.proxy[property]);
+    const handler = {
+      deleteProperty: (target, key) => {
+        if (Reflect.has(target, key)) {
+          const value = target[key];
+          if (typeof value === "object" && value && map.has(value)) {
+            map.get(value).revoke();
           }
-        }
-        revocable.revoke();
-      }
-    };
-    const add = (target) => {
-      if (map.has(target)) {
-        return map.get(target);
-      }
-      for (const key in target) {
-        if (target[key] && typeof target[key] === "object") {
-          target[key] = add(target[key]);
-        }
-      }
-      const revocable = Proxy.revocable(target, {
-        deleteProperty: (target2, key) => {
-          if (Reflect.has(target2, key)) {
-            remove(target2);
-            const deleted = Reflect.deleteProperty(target2, key);
-            if (deleted) {
-              onChange();
-            }
-            return deleted;
-          }
-          return true;
-        },
-        set: (target2, key, value) => {
-          const existingValue = target2[key];
-          if (existingValue !== value) {
-            if (typeof existingValue === "object") {
-              remove(existingValue);
-            }
-            if (value && typeof value === "object") {
-              value = add(value);
-            }
-            target2[key] = value;
+          const deleted = Reflect.deleteProperty(target, key);
+          if (deleted) {
             onChange();
           }
-          return true;
+          return deleted;
         }
-      });
-      map.set(revocable, target);
+        return true;
+      },
+      set: (target, key, value) => {
+        const existingValue = target[key];
+        if (existingValue !== value) {
+          if (typeof existingValue === "object" && existingValue && map.has(existingValue)) {
+            map.get(existingValue).revoke();
+          }
+          target[key] = typeof value === "object" && value ? map.has(value) ? map.get(value).proxy : createProxy(value) : value;
+          onChange();
+        }
+        return true;
+      }
+    };
+    const createProxy = (target) => {
+      if (map.has(target)) {
+        return map.get(target).proxy;
+      }
+      for (const key in target) {
+        const value = target[key];
+        if (value && typeof value === "object") {
+          target[key] = createProxy(value);
+        }
+      }
+      const revocable = Proxy.revocable(target, handler);
+      map.set(target, revocable);
       return revocable.proxy;
     };
-    return add(root);
+    return createProxy(root);
   };
   var MATCH_CAPITALS = /[A-Z]+(?![a-z])|[A-Z]/g;
   var HYPHENATE = (part, offset) => (offset ? "-" : "") + part;
   var mount = (rootElement, renderView, initialState, oldAbstractTree) => {
-    let listenerCount = 0;
+    if (typeof initialState === "string") {
+      initialState = JSON.parse(initialState);
+    }
+    initialState != null ? initialState : initialState = {};
+    let updatePromise = null;
+    const triggerUpdate = () => {
+      if (!updatePromise) {
+        updatePromise = Promise.resolve().then(updateAbstracts);
+      }
+      return updatePromise;
+    };
+    let state = Object.getPrototypeOf(initialState) === Proxy.prototype ? initialState : proxify(
+      initialState,
+      triggerUpdate
+    );
     const updateAttributes = (element, newAttributes, oldAttributes) => {
       if (newAttributes) {
         for (const name in newAttributes) {
@@ -294,18 +295,23 @@
           if (value) {
             const type = typeof value;
             if (type === "function") {
-              const listener = newAttributes[name] = (event) => {
-                listenerCount++;
-                try {
-                  value(event);
-                } catch (error) {
-                  console.error("listener error", error);
+              const oldValue = oldAttributes == null ? void 0 : oldAttributes[name];
+              if ((oldValue == null ? void 0 : oldValue.f) !== value) {
+                if (oldValue) {
+                  element.removeEventListener(
+                    name,
+                    oldValue
+                  );
                 }
-                listenerCount--;
-                updateAbstracts();
-              };
-              element.addEventListener(name, listener);
-              continue;
+                const listener = newAttributes[name] = (event) => {
+                  value(event, state);
+                };
+                listener.f = value;
+                element.addEventListener(
+                  name,
+                  listener
+                );
+              }
             } else {
               if (name === "class") {
                 if (typeof value === "object") {
@@ -321,100 +327,93 @@
                     value = classNames;
                   }
                 }
-              } else if (name === "style") {
-                if (typeof value === "object") {
-                  if (Array.isArray(value)) {
-                    value = value.join(";");
-                  } else {
-                    let styles = "";
-                    for (let styleProperty in value) {
-                      let styleValue = value[styleProperty];
-                      styleProperty = styleProperty.replace(MATCH_CAPITALS, HYPHENATE).toLowerCase();
-                      if (Array.isArray(styleValue)) {
-                        styles += ";" + styleProperty + ":" + styleValue.join(" ");
-                      } else if (styleValue) {
-                        styles += ";" + styleProperty + ":" + styleValue;
-                      }
+                element.className = value;
+              } else if (name === "style" && typeof value === "object") {
+                for (let styleName in value) {
+                  let styleValue = value[styleName];
+                  styleName = styleName.replace(MATCH_CAPITALS, HYPHENATE).toLowerCase();
+                  if (Array.isArray(styleValue)) {
+                    styleValue = styleValue.join(" ");
+                  }
+                  element.style.setProperty(
+                    styleName,
+                    styleValue
+                  );
+                }
+                if (oldAttributes && oldAttributes[name] && typeof oldAttributes[name] === "object" && !Array.isArray(oldAttributes[name])) {
+                  for (let styleName in oldAttributes[name]) {
+                    if (!(styleName in value)) {
+                      styleName = styleName.replace(MATCH_CAPITALS, HYPHENATE).toLowerCase();
+                      element.style.removeProperty(
+                        styleName
+                      );
                     }
-                    value = styles;
                   }
                 }
               } else {
-                if (type === "boolean") {
-                  if (!value) {
-                    element.removeAttribute(name);
-                    continue;
-                  }
+                if (value === true) {
                   value = "true";
                 } else if (type !== "string") {
                   value = value.toString();
                 }
-                if (name === "value" && element.value !== value) {
-                  element.value = value;
-                } else if (name === "checked") {
-                  element.checked = newAttributes[name];
-                }
+                element.setAttribute(name, value);
               }
-              element.setAttribute(name, value);
             }
           }
         }
       }
       if (oldAttributes) {
         for (const name in oldAttributes) {
-          if (typeof oldAttributes[name] === "function") {
-            element.removeEventListener(
-              name,
-              oldAttributes[name]
-            );
-          } else if (!newAttributes || !(name in newAttributes) || !newAttributes[name]) {
-            if (name === "value") {
-              element.value = "";
-            } else if (name === "checked") {
-              element.checked = false;
+          const value = oldAttributes[name];
+          if (!newAttributes || !newAttributes[name]) {
+            if (typeof value === "function") {
+              element.removeEventListener(
+                name,
+                oldAttributes[name]
+              );
+            } else if (name === "class") {
+              element.className = "";
+            } else if (name === "style") {
+              element.style.cssText = "";
+            } else {
+              element.removeAttribute(name);
             }
-            element.removeAttribute(name);
           }
         }
       }
     };
-    let oldMemoList = [];
-    let newMemoList = [];
-    const resolveMemoization = (memoAbstract) => {
-      let match2 = oldMemoList.find((oldMemo) => oldMemo.r === memoAbstract.r && equalRecursive(oldMemo.m, memoAbstract.m));
-      if (!match2) {
-        match2 = {
-          c: arrayify(
-            memoAbstract.r(
-              state,
-              memoAbstract.m
-            )
-          ),
-          m: memoAbstract.m,
-          r: memoAbstract.r
-        };
-      }
-      if (!newMemoList.includes(match2)) {
-        newMemoList.push(match2);
-      }
-      return structuredClone(
-        match2.c
-      );
-    };
+    let oldMemoMap = /* @__PURE__ */ new WeakMap();
+    let newMemoMap = /* @__PURE__ */ new WeakMap();
     const updateElementTree = (element, newChildAbstracts, oldChildAbstracts, elementAbstract) => {
+      var _a, _b, _c;
       let newIndex = 0;
       let newCount = 0;
       if (newChildAbstracts) {
         for (; newIndex < newChildAbstracts.length; newIndex++) {
           const newAbstract = newChildAbstracts[newIndex];
           if (newAbstract.r) {
-            const memoAbstracts = resolveMemoization(
-              newAbstract
+            let match2 = oldMemoMap.get(
+              newAbstract.r
             );
+            if (!match2 || !equalRecursive(match2.m, newAbstract.m)) {
+              match2 = {
+                c: arrayifyOrUndefined(
+                  newAbstract.r(
+                    state,
+                    newAbstract.m
+                  )
+                ),
+                m: newAbstract.m,
+                r: newAbstract.r
+              };
+            }
+            newMemoMap.set(newAbstract.r, match2);
             newChildAbstracts.splice(
               newIndex,
               1,
-              ...memoAbstracts
+              ...cloneRecursive(
+                match2.c
+              )
             );
             newIndex--;
             continue;
@@ -452,7 +451,9 @@
                     oldAbstract
                   );
                 } else {
-                  element.childNodes[newIndex].textContent = typeof newAbstract === "string" ? newAbstract : newAbstract.c;
+                  if (oldAbstract !== newAbstract) {
+                    element.childNodes[newIndex].textContent = newAbstract;
+                  }
                 }
                 break;
               }
@@ -495,7 +496,7 @@
                   elementAbstract,
                   "afterbegin"
                 );
-              } else if ((oldChildAbstracts?.length ?? 0) + newCount > newIndex) {
+              } else if (((_a = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _a : 0) + newCount > newIndex) {
                 insertAdjacentElement(
                   element.childNodes[newIndex]
                   // (oldChildAbstracts as NodeContent[])[newIndex + newCount],
@@ -509,17 +510,16 @@
                 );
               }
             } else {
-              childElement = typeof newAbstract === "string" ? newAbstract : newAbstract.c;
               const insertAdjacentText = (element2, elementAbstract2, position) => {
                 if (position && (!elementAbstract2 || elementAbstract2.t)) {
                   element2.insertAdjacentText(
                     position,
-                    childElement
+                    newAbstract
                   );
                 } else {
                   element2.parentNode.insertBefore(
-                    document.createTextNode(childElement),
-                    element2.nextSibling
+                    document.createTextNode(newAbstract),
+                    element2
                   );
                 }
               };
@@ -529,7 +529,7 @@
                   elementAbstract,
                   "afterbegin"
                 );
-              } else if ((oldChildAbstracts?.length ?? 0) + newCount > newIndex) {
+              } else if (((_b = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _b : 0) + newCount > newIndex) {
                 insertAdjacentText(
                   element.childNodes[newIndex]
                   // (oldChildAbstracts as NodeContent[])[newIndex + newCount],
@@ -547,28 +547,13 @@
           }
         }
       }
-      const elementLength = (oldChildAbstracts?.length ?? 0) + newCount;
+      const elementLength = ((_c = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _c : 0) + newCount;
       if (elementLength >= newIndex) {
         for (let i = elementLength - 1; i >= newIndex; i--) {
           element.childNodes[i].remove();
         }
       }
     };
-    if (typeof initialState === "string") {
-      initialState = JSON.parse(initialState);
-    }
-    initialState ??= {};
-    let proxyChanged = true;
-    const triggerUpdate = () => {
-      if (!proxyChanged) {
-        proxyChanged = true;
-        Promise.resolve().then(updateAbstracts);
-      }
-    };
-    let state = Object.getPrototypeOf(initialState) === Proxy.prototype ? initialState : proxify(
-      initialState,
-      triggerUpdate
-    );
     const _rootElement = typeof rootElement === "string" ? document.querySelector(rootElement) || document.body.appendChild(
       document.createElement("div")
     ) : rootElement;
@@ -579,15 +564,13 @@
         oldAbstractTree = void 0;
       }
     }
-    oldAbstractTree ??= childrenToNodes(_rootElement);
+    oldAbstractTree != null ? oldAbstractTree : oldAbstractTree = childrenToNodes(_rootElement);
     let active = true, updating = false;
     const updateAbstracts = () => {
-      if (active && !updating && // Only update if changes to the state have been made.
-      proxyChanged && // Don't update while handling listeners.
-      listenerCount <= 0) {
+      if (active && !updating && updatePromise) {
         updating = true;
-        proxyChanged = false;
-        let newAbstractTree = arrayify(
+        updatePromise = null;
+        let newAbstractTree = arrayifyOrUndefined(
           renderView(state)
         );
         updateElementTree(
@@ -596,14 +579,12 @@
           oldAbstractTree
         );
         oldAbstractTree = newAbstractTree;
-        oldMemoList = newMemoList;
-        newMemoList = [];
+        oldMemoMap = newMemoMap;
+        newMemoMap = /* @__PURE__ */ new WeakMap();
         updating = false;
-        if (proxyChanged) {
-          throw new Error("update during render");
-        }
       }
     };
+    triggerUpdate();
     updateAbstracts();
     return [
       triggerUpdate,
@@ -620,14 +601,60 @@
   };
 
   // node_modules/@doars/vroagn/dst/vroagn.js
-  var delay = async (time) => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b)) {
+        if (__propIsEnum.call(b, prop))
+          __defNormalProp(a, prop, b[prop]);
+      }
+    return a;
+  };
+  var __async = (__this, __arguments, generator) => {
+    return new Promise((resolve, reject) => {
+      var fulfilled = (value) => {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      var rejected = (value) => {
+        try {
+          step(generator.throw(value));
+        } catch (e) {
+          reject(e);
+        }
+      };
+      var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+      step((generator = generator.apply(__this, __arguments)).next());
+    });
+  };
+  var cloneRecursive2 = (value) => {
+    if (typeof value === "object") {
+      const clone = Array.isArray(value) ? [] : {};
+      for (const key in value) {
+        clone[key] = cloneRecursive2(value[key]);
+      }
+      return clone;
+    }
+    return value;
+  };
+  var delay = (time) => __async(void 0, null, function* () {
     if (time > 0) {
       return new Promise(
         (resolve) => setTimeout(resolve, time)
       );
     }
     return null;
-  };
+  });
   var normalizeContentType = (contentType) => contentType.split(";")[0].trim().toLowerCase();
   var getFileExtension = (url) => {
     const match = url.match(/\.([^./?]+)(?:[?#]|$)/);
@@ -660,20 +687,17 @@
     retryDelay: 500
   };
   var create = (initialOptions) => {
-    initialOptions = {
-      ...DEFAULT_VALUES,
-      ...structuredClone(initialOptions)
-    };
+    initialOptions = __spreadValues(__spreadValues({}, DEFAULT_VALUES), cloneRecursive2(initialOptions));
     let lastExecutionTime = 0;
     let activeRequests = 0;
     let totalRequests = 0;
     let debounceTimeout = null;
-    const throttle = async (throttleValue) => {
+    const throttle = (throttleValue) => __async(void 0, null, function* () {
       const now = Date.now();
       const waitTime = throttleValue - (now - lastExecutionTime);
       lastExecutionTime = now + (waitTime > 0 ? waitTime : 0);
-      await delay(waitTime);
-    };
+      yield delay(waitTime);
+    });
     const debounce = (debounceValue) => {
       return new Promise((resolve) => {
         if (debounceTimeout) {
@@ -685,7 +709,7 @@
         );
       });
     };
-    const sendRequest = async (options2) => {
+    const sendRequest = (options2) => __async(void 0, null, function* () {
       if (options2.maxRequests !== void 0 && totalRequests >= options2.maxRequests) {
         return [new Error("Maximum request limit reached"), null, null];
       }
@@ -713,8 +737,9 @@
           options2.timeout
         );
       }
-      const executeFetch = async () => {
-        const response2 = await (options2.fetch ?? fetch)(url, config);
+      const executeFetch = () => __async(void 0, null, function* () {
+        var _a;
+        const response2 = yield ((_a = options2.fetch) != null ? _a : fetch)(url, config);
         if (!response2.ok) {
           return [new Error("Invalid response"), response2, null];
         }
@@ -726,7 +751,7 @@
             for (const parser of options2.parsers) {
               foundParser = parser.types.includes(type);
               if (foundParser) {
-                result2 = await parser.parser(
+                result2 = yield parser.parser(
                   response2,
                   options2,
                   type
@@ -738,45 +763,45 @@
           if (!foundParser) {
             switch (type.toLowerCase()) {
               case "arraybuffer":
-                result2 = await response2.arrayBuffer();
+                result2 = yield response2.arrayBuffer();
                 break;
               case "blob":
-                result2 = await response2.blob();
+                result2 = yield response2.blob();
                 break;
               case "formdata":
-                result2 = await response2.formData();
+                result2 = yield response2.formData();
                 break;
               case "text/plain":
               case "text":
               case "txt":
-                result2 = await response2.text();
+                result2 = yield response2.text();
                 break;
               case "text/html-partial":
               case "html-partial":
-                result2 = await response2.text();
+                result2 = yield response2.text();
                 const template = document.createElement("template");
                 template.innerHTML = result2;
                 result2 = template.content.childNodes;
                 break;
               case "text/html":
               case "html":
-                result2 = await response2.text();
+                result2 = yield response2.text();
                 result2 = new DOMParser().parseFromString(result2, "text/html");
                 break;
               case "application/json":
               case "text/json":
               case "json":
-                result2 = await response2.json();
+                result2 = yield response2.json();
                 break;
               case "image/svg+xml":
               case "svg":
-                result2 = await response2.text();
+                result2 = yield response2.text();
                 result2 = new DOMParser().parseFromString(result2, "image/svg+xml");
                 break;
               case "application/xml":
               case "text/xml":
               case "xml":
-                result2 = await response2.text();
+                result2 = yield response2.text();
                 result2 = new DOMParser().parseFromString(result2, "application/xml");
                 break;
             }
@@ -785,17 +810,18 @@
         } catch (error2) {
           return [error2 || new Error("Thrown parsing error is falsy"), response2, null];
         }
-      };
-      const retryRequest = async () => {
+      });
+      const retryRequest = () => __async(void 0, null, function* () {
+        var _a;
         let attempt = 0;
         const retryAttempts = options2.retryAttempts || 0;
         const retryDelay = options2.retryDelay || 0;
         while (attempt < retryAttempts) {
-          const [error2, response2, result2] = await executeFetch();
+          const [error2, response2, result2] = yield executeFetch();
           if (!error2) {
             return [error2, response2, result2];
           }
-          if (!options2.retryCodes?.includes(response2.status || 200)) {
+          if (!((_a = options2.retryCodes) == null ? void 0 : _a.includes(response2.status || 200))) {
             return [new Error("Invalid status code"), response2, result2];
           }
           attempt++;
@@ -816,38 +842,32 @@
               }
             }
           }
-          await delay(delayTime);
+          yield delay(delayTime);
         }
         return executeFetch();
-      };
-      const [error, response, result] = await retryRequest();
+      });
+      const [error, response, result] = yield retryRequest();
       if (!response.ok) {
         return [new Error(response.statusText), response, result];
       }
       return [error, response, result];
-    };
-    return async (sendOptions) => {
-      const options2 = {
-        ...initialOptions,
-        ...structuredClone(sendOptions)
-      };
+    });
+    return (sendOptions) => __async(void 0, null, function* () {
+      const options2 = __spreadValues(__spreadValues({}, initialOptions), cloneRecursive2(sendOptions));
       if (initialOptions.headers) {
-        options2.headers = {
-          ...initialOptions.headers,
-          ...options2.headers
-        };
+        options2.headers = __spreadValues(__spreadValues({}, initialOptions.headers), options2.headers);
       }
       if (options2.debounce) {
-        await debounce(options2.debounce);
+        yield debounce(options2.debounce);
       }
       if (options2.delay) {
-        await delay(options2.delay);
+        yield delay(options2.delay);
       }
       if (options2.throttle) {
-        await throttle(options2.throttle);
+        yield throttle(options2.throttle);
       }
       if (options2.maxConcurrency && activeRequests >= options2.maxConcurrency) {
-        await new Promise((resolve) => {
+        yield new Promise((resolve) => {
           let interval = null;
           const wait = () => {
             if (activeRequests >= options2.maxConcurrency) {
@@ -863,27 +883,27 @@
         });
       }
       activeRequests++;
-      const results = await sendRequest(
+      const results = yield sendRequest(
         options2
       );
       activeRequests--;
       return results;
-    };
+    });
   };
 
   // src/utilities/clone.js
-  var cloneRecursive = (value) => {
+  var cloneRecursive3 = (value) => {
     if (typeof value === "object") {
       if (Array.isArray(value)) {
         const clone = [];
         for (let i = 0; i < value.length; i++) {
-          clone.push(cloneRecursive(value[i]));
+          clone.push(cloneRecursive3(value[i]));
         }
         value = clone;
       } else {
         const clone = {};
         for (const key in value) {
-          clone[key] = cloneRecursive(value[key]);
+          clone[key] = cloneRecursive3(value[key]);
         }
         value = clone;
       }
@@ -916,7 +936,7 @@
   );
   var createMessage = (state, messages, context = null, instructions = null) => {
     const appRole = state.apiModel.toLowerCase().includes("o1") ? "developer" : "system";
-    messages = cloneRecursive(messages);
+    messages = cloneRecursive3(messages);
     const prependAppRole = (message) => {
       if (message) {
         if (messages.length > 0 && messages[0].role === appRole) {
@@ -980,7 +1000,7 @@
     })
   );
   var createMessage2 = (state, messages, context = null, instructions = null) => {
-    messages = cloneRecursive(messages);
+    messages = cloneRecursive3(messages);
     if (instructions) {
       messages.unshift({
         role: "user",
@@ -1257,9 +1277,9 @@
       "proficiency_example-c2": '"Nuancerne i den sproglige udvikling afsl\xF8rer meget om kulturelle og samfundsm\xE6ssige skift over tid. For eksempel signalerer optagelsen af l\xE5neord ofte en periode med kulturel udveksling eller indflydelse. Analyse af s\xE5danne m\xF8nstre forbedrer ikke kun vores forst\xE5else af sprogudvikling, men giver ogs\xE5 dybe indsigter i historiske forhold mellem civilisationer. Dette dynamiske samspil understreger kompleksiteten og sammenh\xE6ngen i menneskelig kommunikation."',
       "prompt-context": 'Du er ekspert i og underviser i {%t:{%s:targetLocale%}%}. Brugeren studerer {%t:{%s:targetLocale%}%}. Brugeren behersker allerede sproget p\xE5 CEFR-niveau {%s:proficiencyLevel%}. Dette betyder, at brugeren allerede har f\xF8lgende f\xE6rdigheder: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Dog \xF8nsker brugeren at forbedre sine f\xE6rdigheder yderligere.',
       "prompt-comprehension": "Lav en l\xE6se- og skrive\xF8velse, hvor brugeren modtager en tekst p\xE5 {%t:{%s:targetLocale%}%} sammen med et sp\xF8rgsm\xE5l p\xE5 {%t:{%s:sourceLocale%}%} om teksten, som brugeren skal besvare p\xE5 {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner, forklaringer eller svar til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
-      "prompt-comprehension-follow_up": "Giv feedback p\xE5 den stillede l\xE6se- og skrive\xF8velse. Giv kort feedback p\xE5 {%t:{%s:targetLocale%}%} med en dybdeg\xE5ende analyse, der er klar nok til brugerens vidensniveau i {%t:{%s:targetLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger af beskeden. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
+      "prompt-comprehension-follow_up": "Giv feedback p\xE5 den stillede l\xE6se- og skrive\xF8velse. Giv kort feedback p\xE5 {%t:{%s:targetLocale%}%} med en dybdeg\xE5ende analyse, der er klar nok til brugerens vidensniveau i {%t:{%s:sourceLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger af beskeden. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
       "prompt-conversation": "Du vil simulere en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Skriv den f\xF8rste besked i samtalen og introducer straks et emne at diskutere.",
-      "prompt-conversation-follow_up": "Du simulerer en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv f\xF8rst kort, grundig feedback p\xE5 beskeden med fokus udelukkende p\xE5 sproglige aspekter, og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger. Besvar derefter beskeden p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
+      "prompt-conversation-follow_up": "Du simulerer en samtale med brugeren i {%t:{%s:targetLocale%}%}. Som svar p\xE5 en besked, giv f\xF8rst en kortfattet feedback med stor dybde, som er tydelig nok for brugerens vidensniveau i {%t:{%s:sourceLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignorer indholdsm\xE6ssige evalueringer eller fortolkninger af beskeden. Forts\xE6t derefter med at svare p\xE5 beskeden i {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner eller forklaringer til brugeren. Skriv altid i almindelig tekst uden nogen form for formatering, labels eller overskrifter.",
       "prompt-clarification": "Brugeren har et sp\xF8rgsm\xE5l nedenfor, svar kortfattet med dybdeg\xE5ende feedback, passende til brugerens sprogniveau. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Besvar ikke sp\xF8rgsm\xE5let, hvis det ikke er sprogligt relateret.",
       "prompt-topic": ' Inkorpor\xE9r f\xF8lgende emne i din besked "{%topic%}".',
       "greeting": "Hej!",
@@ -1360,9 +1380,9 @@
       "proficiency_example-c2": '"Die Nuancen der sprachlichen Evolution offenbaren viel \xFCber kulturelle und gesellschaftliche Ver\xE4nderungen im Laufe der Zeit. Beispielsweise signalisiert die \xDCbernahme von Lehnw\xF6rtern oft eine Phase kulturellen Austauschs oder Einflusses. Die Analyse solcher Muster erweitert nicht nur unser Verst\xE4ndnis der Sprachentwicklung, sondern bietet auch tiefgehende Einblicke in historische Beziehungen zwischen Zivilisationen. Dieses dynamische Zusammenspiel unterstreicht die Komplexit\xE4t und Vernetzung menschlicher Kommunikation."',
       "prompt-context": 'Sie sind ein Experte in und Lehrer f\xFCr {%t:{%s:targetLocale%}%}. Der Benutzer lernt {%t:{%s:targetLocale%}%}. Der Benutzer beherrscht die Sprache bereits auf dem GER-Niveau {%s:proficiencyLevel%}. Das bedeutet, dass der Benutzer bereits \xFCber die folgenden F\xE4higkeiten verf\xFCgt: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Allerdings m\xF6chte der Benutzer seine Sprachkenntnisse weiter verbessern.',
       "prompt-comprehension": "Erstelle eine Lese- und Schreib\xFCbung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} erh\xE4lt, zusammen mit einer Frage in {%t:{%s:sourceLocale%}%} \xFCber den Text, auf die der Benutzer in {%t:{%s:targetLocale%}%} antworten muss. Gib dem Benutzer keine weiteren Anweisungen, Erkl\xE4rungen oder Antworten. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
-      "prompt-comprehension-follow_up": "Gib Feedback zur gestellten Lese- und Schreib\xFCbung. Gib kurzes Feedback zum {%t:{%s:targetLocale%}%} mit einer detaillierten Analyse, die dem Kenntnisstand des Benutzers im {%t:{%s:targetLocale%}%} angemessen ist. Konzentriere dich ausschlie\xDFlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
+      "prompt-comprehension-follow_up": "Gib Feedback zur gestellten Lese- und Schreib\xFCbung. Gib kurzes Feedback zum {%t:{%s:targetLocale%}%} mit einer detaillierten Analyse, die dem Kenntnisstand des Benutzers im {%t:{%s:sourceLocale%}%} angemessen ist. Konzentriere dich ausschlie\xDFlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
       "prompt-conversation": "Sie werden eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%} simulieren. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Schreiben Sie die erste Nachricht der Konversation, indem Sie sofort ein Gespr\xE4chsthema einf\xFChren.",
-      "prompt-conversation-follow_up": "Sie simulieren eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%}. Geben Sie zuerst ein kurzes, tiefgehendes Feedback zur Nachricht und konzentrieren Sie sich dabei ausschlie\xDFlich auf sprachliche Aspekte, ohne inhaltliche Bewertungen oder Interpretationen vorzunehmen. Antworten Sie anschlie\xDFend auf die Nachricht in {%t:{%s:targetLocale%}%}. Geben Sie keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften.",
+      "prompt-conversation-follow_up": "Du simulierst ein Gespr\xE4ch mit dem Benutzer in {%t:{%s:targetLocale%}%}. Gib als Antwort auf eine Nachricht zun\xE4chst ein knappes, aber tiefgr\xFCndiges Feedback, das f\xFCr das Wissensniveau des Benutzers in {%t:{%s:sourceLocale%}%} klar genug ist. Konzentriere dich dabei ausschlie\xDFlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Fahre anschlie\xDFend damit fort, auf die Nachricht in {%t:{%s:targetLocale%}%} zu antworten. Gib dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Schreibe immer in einfachem Text ohne jegliche Formatierung, Labels oder \xDCberschriften.",
       "prompt-clarification": "Der Benutzer hat eine Frage unten gestellt, beantworten Sie diese pr\xE4zise mit einem tiefgehenden Feedback, das der Sprachkompetenz des Benutzers entspricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Beantworten Sie die Frage nicht, wenn sie nicht sprachbezogen ist.",
       "prompt-topic": ' Integrieren Sie das folgende Thema in Ihre Nachricht: "{%topic%}".',
       "greeting": "Hallo!",
@@ -1481,9 +1501,9 @@
       "proficiency_example-c2": '"The nuances of linguistic evolution reveal much about cultural and societal shifts over time. For instance, the adoption of loanwords often signals a period of cultural exchange or influence. Analysing such patterns not only enhances our understanding of language development but also offers profound insights into historical relationships between civilizations. This dynamic interplay underscores the complexity and interconnectedness of human communication."',
       "prompt-context": 'You are an expert in and teacher of {%t:{%s:targetLocale%}%}. The user is studying {%t:{%s:targetLocale%}%}. The user already masters the language at CEFR level {%s:proficiencyLevel%}. This means that the user already has the following skills: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". However, the user wants to improve their proficiency further.',
       "prompt-comprehension": "Write a reading and writing exercise where the user receives a text in {%t:{%s:targetLocale%}%} along with a question in {%t:{%s:sourceLocale%}%} about the text, to which the user must respond in {%t:{%s:targetLocale%}%}. Do not provide any further instructions, explanations, or answers to the user. Always write in plain text without any formatting, labels, or headings.",
-      "prompt-comprehension-follow_up": "Provide feedback on the reading and writing exercise given. Offer concise feedback on the {%t:{%s:targetLocale%}%} with in-depth analysis that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:targetLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.",
+      "prompt-comprehension-follow_up": "Provide feedback on the reading and writing exercise given. Offer concise feedback on the {%t:{%s:targetLocale%}%} with in-depth analysis that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.",
       "prompt-conversation": "You will simulate a conversation with the user in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings. Write the first message in the conversation, immediately introducing a topic to discuss.",
-      "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
+      "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message in {%t:{%s:sourceLocale%}%}, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
       "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
       "greeting": "Hi!",
@@ -1584,7 +1604,7 @@
       "proficiency_example-c2": '"De nuances van taalontwikkeling onthullen veel over culturele en maatschappelijke veranderingen door de tijd heen. Zo duidt de opname van leenwoorden vaak op een periode van culturele uitwisseling of invloed. Het analyseren van dergelijke patronen verrijkt niet alleen ons begrip van taalontwikkeling, maar biedt ook waardevolle inzichten in historische relaties tussen beschavingen. Deze dynamiek benadrukt de complexiteit en verbondenheid van menselijke communicatie."',
       "prompt-context": 'Je bent een expert in en docent van het {%t:{%s:targetLocale%}%}. De gebruiker is {%t:{%s:targetLocale%}%} aan het studeren. De gebruiker beheerst de taal al tot CEFR niveau {%s:proficiencyLevel%}. Dit betekend dat de gebruiker al de volgende vaardigheden beheerst: "{%t:proficiency_description-{%s:proficiencyLevel%}%}" Maar de gebruiker wil de taal nog beter leren beheersen.',
       "prompt-comprehension": "Schrijf een lees en schrijfvaardigheidsoefening waarbij de gebruiker een tekst in het {%t:{%s:targetLocale%}%} krijgt samen met een vraag in het {%t:{%s:sourceLocale%}%} over de tekst waarop de gebruiker moet antwoorden in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
-      "prompt-comprehension-follow_up": "Geef feedback op de lees en schrijfvaardigheidsoefening die gesteld is. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:targetLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
+      "prompt-comprehension-follow_up": "Geef feedback op de lees en schrijfvaardigheidsoefening die gesteld is. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-conversation": "Je gaat met de gebruiker een gesprek simuleren in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Schrijf het eerste bericht in een gesprek dat al gelijk een onderwerp introduceert om het over te hebben.",
       "prompt-conversation-follow_up": "Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
@@ -1754,11 +1774,10 @@
       }, translate(state, "setup-api_credentials")),
       node("textarea", {
         id: "input-api_credentials",
-        change: (event) => {
+        keyup: (event) => {
           state.apiCredentials = event.target.value;
-        },
-        value: state.apiCredentials
-      })
+        }
+      }, state.apiCredentials)
     ] : [],
     node("button", {
       click: () => {
@@ -2381,11 +2400,11 @@
       }, translate(state, "options-api_credentials")),
       node("textarea", {
         id: "input-api_credentials",
-        change: (event) => {
+        keyup: (event) => {
+          console.log("update api cred", event.target.value);
           state.apiCredentials = event.target.value;
-        },
-        value: state.apiCredentials
-      })
+        }
+      }, state.apiCredentials)
     ] : [],
     node("button", {
       click: () => {
@@ -2501,6 +2520,7 @@
     (state) => {
       localStorage.setItem(STATE_KEY, JSON.stringify(state));
       document.documentElement.setAttribute("lang", state.sourceLocale);
+      console.log("state", state);
       let screen = null;
       switch (state.screen) {
         default:

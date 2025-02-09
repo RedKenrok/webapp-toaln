@@ -19,11 +19,6 @@ import {
   getModels,
 } from '../apis/apis.js'
 
-const log = (...input) => {
-  console.log(input)
-  return input
-}
-
 const isReady = (state) => {
   return (
     state.apiCode
@@ -173,11 +168,11 @@ export const options = (
           }, t(state, 'options-api_credentials')),
           n('textarea', {
             id: 'input-api_credentials',
-            change: (event) => {
+            keyup: (event) => {
+              console.log('update api cred', event.target.value)
               state.apiCredentials = event.target.value
             },
-            value: state.apiCredentials,
-          }),
+          }, state.apiCredentials),
         ]
         : []
     ),

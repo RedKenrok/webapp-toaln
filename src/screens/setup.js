@@ -168,11 +168,10 @@ export const setup = (
           }, t(state, 'setup-api_credentials')),
           n('textarea', {
             id: 'input-api_credentials',
-            change: (event) => {
+            keyup: (event) => {
               state.apiCredentials = event.target.value
             },
-            value: state.apiCredentials,
-          }),
+          }, state.apiCredentials),
         ]
         : []
     ),

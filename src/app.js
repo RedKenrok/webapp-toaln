@@ -32,6 +32,8 @@ mount(
     localStorage.setItem(STATE_KEY, JSON.stringify(state))
     document.documentElement.setAttribute('lang', state.sourceLocale)
 
+    console.log('state', state)
+
     let screen = null
     switch (state.screen) {
       default:
