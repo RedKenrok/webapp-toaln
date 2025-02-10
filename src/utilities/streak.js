@@ -21,11 +21,11 @@ export const onActivity = (
 
   const deltaTime = (todayUTC - lastActivityUTC)
 
-  if (deltaTime > ONE_DAY) {
-    state.statisticCurrentActivityStreak++
-    state.statisticLastActivityOn = today.toISOString()
-  } else if (deltaTime > TWO_DAYS) {
+  if (deltaTime > TWO_DAYS) {
     state.statisticCurrentActivityStreak = 1
+    state.statisticLastActivityOn = today.toISOString()
+  } else if (deltaTime > ONE_DAY) {
+    state.statisticCurrentActivityStreak++
     state.statisticLastActivityOn = today.toISOString()
   }
 

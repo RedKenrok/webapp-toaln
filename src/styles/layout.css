@@ -51,3 +51,32 @@ textarea.message-user {
   margin-right: auto;
   padding: 1rem;
 }
+
+.vertical-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vertical-layout>* {
+  margin: 0;
+}
+
+.margin {
+  height: 1px;
+  opacity: 0;
+}
+
+hr {
+  display: block;
+  opacity: 0.5;
+}
+
+.card .icon {
+  margin-right: 0.5em;
+}
+
+.text-right {
+  text-align: right;
+}

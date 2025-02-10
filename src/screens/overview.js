@@ -11,63 +11,111 @@ export const overview = (
       t(state, 'overview-intro'),
     ]),
 
-    n('button', {
-      class: 'card',
-      click: () => {
-        state.screen = SCREENS.comprehension
-      },
-      type: 'button',
+    n('div', {
+      class: 'vertical-layout',
     }, [
-      n('b', t(state, 'overview-comprehension-title')),
-      n('br'),
-      t(state, 'overview-comprehension-description'),
-    ]),
+      n('button', {
+        class: 'card',
+        click: () => {
+          state.screen = SCREENS.comprehension
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '📖'),
+        n('b', t(state, 'overview-comprehension-title')),
+        n('br'),
+        t(state, 'overview-comprehension-description'),
+      ]),
 
-    n('button', {
-      class: 'card',
-      click: () => {
-        state.screen = SCREENS.conversation
-      },
-      type: 'button',
-    }, [
-      n('b', t(state, 'overview-conversation-title')),
-      n('br'),
-      t(state, 'overview-conversation-description'),
-    ]),
+      n('button', {
+        class: 'card',
+        click: () => {
+          state.screen = SCREENS.vocabulary
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '🔎'),
+        n('b', t(state, 'overview-vocabulary-title')),
+        n('br'),
+        t(state, 'overview-vocabulary-description'),
+      ]),
 
-    n('button', {
-      class: 'card',
-      click: () => {
-        state.screen = SCREENS.clarification
-      },
-      type: 'button',
-    }, [
-      n('b', t(state, 'overview-clarification-title')),
-      n('br'),
-      t(state, 'overview-clarification-description'),
-    ]),
+      n('button', {
+        class: 'card',
+        click: () => {
+          state.screen = SCREENS.conversation
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '💬'),
+        n('b', t(state, 'overview-conversation-title')),
+        n('br'),
+        t(state, 'overview-conversation-description'),
+      ]),
 
-    n('button', {
-      class: 'card',
-      click: () => {
-        state.screen = SCREENS.statistics
-      },
-      type: 'button',
-    }, [
-      n('b', t(state, 'overview-statistics-title')),
-      n('br'),
-      t(state, 'overview-statistics-description')
-    ]),
+      n('button', {
+        class: 'card',
+        click: () => {
+          state.screen = SCREENS.clarification
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '🙋'),
+        n('b', t(state, 'overview-clarification-title')),
+        n('br'),
+        t(state, 'overview-clarification-description'),
+      ]),
 
-    n('button', {
-      class: 'card',
-      click: () => {
-        state.screen = SCREENS.options
-      },
-      type: 'button',
-    }, [
-      n('b', t(state, 'overview-options-title')),
-      n('br'),
-      t(state, 'overview-options-description')
+      // Story 🎭
+
+      n('div', {
+        class: 'margin',
+      }),
+
+      n('button', {
+        class: 'card',
+        click: () => {
+          state.screen = SCREENS.statistics
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '📈'),
+        n('b', t(state, 'overview-statistics-title')),
+        n('br'),
+        t(state, 'overview-statistics-description')
+      ]),
+
+      n('button', {
+        class: 'card',
+        click: () => {
+          state.screen = SCREENS.options
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '⚙️'),
+        n('b', t(state, 'overview-options-title')),
+        n('br'),
+        t(state, 'overview-options-description')
+      ]),
+
+      n('p', {
+        class: 'text-right',
+      }, n('a', {
+        href: 'https://rondekker.com/',
+        target: '_blank',
+        rel: 'noopener me',
+      }, t(state, 'credits-link').replace('{%name%}', 'Ron Dekker')))
     ]),
   ]

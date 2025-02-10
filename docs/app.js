@@ -1171,8 +1171,8 @@
     statistics: "statistics",
     clarification: "clarification",
     comprehension: "comprehension",
-    conversation: "conversation"
-    // TODO: Fill in the blank would be fun, good to practise spelling and vocabulary. Give the user several options of what could fit. Bit bland and boring. The time it takes to answer is too low compared to the time it tames to generate the question.
+    conversation: "conversation",
+    vocabulary: "vocabulary"
   });
 
   // src/data/translations.js
@@ -1227,212 +1227,6 @@
     return replace(TRANSLATIONS[locale][key]);
   };
   var TRANSLATIONS = Object.freeze({
-    [LOCALES.dan]: {
-      [LOCALES.dan]: "Dansk",
-      [LOCALES.deu]: "Tysk",
-      [LOCALES.eng]: "Engelsk (Storbritannien)",
-      [LOCALES.epo]: "Esperanto",
-      [LOCALES.fry]: "Frisisk (West)",
-      [LOCALES.isl]: "Islandsk",
-      [LOCALES.nld]: "Hollandsk",
-      [LOCALES.nno]: "Norsk (nynorsk)",
-      [LOCALES.nob]: "Norsk (bokm\xE5l)",
-      [LOCALES.swe]: "Svensk",
-      [LOCALES.vls]: "Flamsk",
-      "proficiency_name-a1": "A1: Begynder",
-      "proficiency_description-a1": [
-        "L\xE6sning: Du kan forst\xE5 velkendte navne, ord og meget enkle s\xE6tninger, for eksempel p\xE5 skilte, plakater eller i kataloger.",
-        "Skrivning: Du kan skrive et kort, enkelt postkort, for eksempel sende en feriehilsen. Du kan udfylde formularer med personlige oplysninger, for eksempel indtaste dit navn, nationalitet og adresse p\xE5 en hotelregistreringsformular."
-      ],
-      "proficiency_example-a1": '"Hej! Mit navn er Maria. Jeg bor i et lille hus i London med min familie. Jeg har en bror og en s\xF8ster. Jeg kan godt lide at spise \xE6bler og p\xE6rer. Hvad er din yndlingsfrugt?"',
-      "proficiency_name-a2": "A2: Let \xF8vet",
-      "proficiency_description-a2": [
-        "L\xE6sning: Du kan l\xE6se meget korte, enkle tekster. Du kan finde specifikke, forudsigelige oplysninger i enkle hverdagstekster s\xE5som annoncer, brochurer, menuer og k\xF8replaner, og du kan forst\xE5 korte, simple personlige breve.",
-        "Skrivning: Du kan skrive korte, enkle noter og beskeder om emner, der vedr\xF8rer umiddelbare behov. Du kan skrive et meget simpelt personligt brev, for eksempel takke nogen for noget."
-      ],
-      "proficiency_example-a2": '"Sidste weekend gik jeg i parken med mine venner. Vi havde en picnic med sandwiches og juice. Vejret var solrigt, og vi spillede fodbold. Derefter gik vi p\xE5 caf\xE9 og fik is. Det var en sjov dag!"',
-      "proficiency_name-b1": "B1: Mellem",
-      "proficiency_description-b1": [
-        "L\xE6sning: Du kan forst\xE5 tekster, der hovedsageligt best\xE5r af hverdags- eller jobrelateret sprog med h\xF8j frekvens. Du kan forst\xE5 beskrivelser af begivenheder, f\xF8lelser og \xF8nsker i personlige breve.",
-        "Skrivning: Du kan skrive enkle sammenh\xE6ngende tekster om emner, der er velkendte eller af personlig interesse. Du kan skrive personlige breve, der beskriver oplevelser og indtryk."
-      ],
-      "proficiency_example-b1": '"Jeg nyder at l\xE6se b\xF8ger, is\xE6r krimier. For nylig l\xE6ste jeg en historie om en detektiv, der l\xF8ste en vanskelig sag. Det var meget sp\xE6ndende, og jeg kunne ikke stoppe med at l\xE6se. Jeg kan godt lide krimier, fordi de f\xE5r mig til at t\xE6nke og pr\xF8ve at g\xE6tte slutningen."',
-      "proficiency_name-b2": "B2: Over middel",
-      "proficiency_description-b2": [
-        "L\xE6sning: Du kan l\xE6se artikler og rapporter om aktuelle problemer, hvor skribenterne indtager bestemte holdninger eller synspunkter. Du kan forst\xE5 moderne litter\xE6r prosa.",
-        "Skrivning: Du kan skrive klar, detaljeret tekst om en bred vifte af emner, der er relateret til dine interesser. Du kan skrive et essay eller en rapport, hvor du videregiver information eller giver grunde for eller imod et bestemt synspunkt. Du kan skrive breve, der fremh\xE6ver den personlige betydning af begivenheder og oplevelser."
-      ],
-      "proficiency_example-b2": '"Konceptet om fjernarbejde er blevet stadig mere popul\xE6rt i de seneste \xE5r. Det giver fleksibilitet og bekvemmelighed for medarbejdere, s\xE5 de kan arbejde hvor som helst fra. Dog medf\xF8rer det ogs\xE5 udfordringer som opretholdelse af produktivitet og kommunikation med kollegaer. Samlet set synes jeg, at fordelene opvejer ulemperne."',
-      "proficiency_name-c1": "C1: Avanceret",
-      "proficiency_description-c1": [
-        "L\xE6sning: Du kan forst\xE5 lange og komplekse faktuelle og litter\xE6re tekster og v\xE6rds\xE6tte stilistiske forskelle. Du kan forst\xE5 specialiserede artikler og l\xE6ngere tekniske instruktioner, selv n\xE5r de ikke er relateret til dit fagomr\xE5de.",
-        "Skrivning: Du kan udtrykke dig klart i velstruktureret tekst og uddybe synspunkter. Du kan skrive om komplekse emner i et brev, essay eller rapport og understrege de v\xE6sentligste punkter. Du kan v\xE6lge en stil, der passer til l\xE6seren."
-      ],
-      "proficiency_example-c1": '"Klima\xE6ndringer er et af de mest presserende problemer i vor tid. Selvom vedvarende energikilder som vind- og solenergi bliver stadig vigtigere, er overgangen v\xE6k fra fossile br\xE6ndstoffer stadig en stor udfordring. Regeringerne skal samarbejde med industrien og lokalsamfundene om at skabe b\xE6redygtige politikker, der balancerer \xF8konomisk v\xE6kst med milj\xF8beskyttelse."',
-      "proficiency_name-c2": "C2: Kompetent",
-      "proficiency_description-c2": [
-        "L\xE6sning: Du kan uden besv\xE6r l\xE6se n\xE6sten alle former for skrevet sprog, inklusive abstrakte, strukturelt eller sprogligt komplekse tekster s\xE5som manualer, specialartikler og litter\xE6re v\xE6rker.",
-        "Skrivning: Du kan skrive klar, flydende tekst i en passende stil. Du kan skrive komplekse breve, rapporter eller artikler, der pr\xE6senterer en sag med en effektiv logisk struktur, som hj\xE6lper modtageren med at bem\xE6rke og huske v\xE6sentlige punkter. Du kan skrive resum\xE9er og anmeldelser af professionelle eller litter\xE6re v\xE6rker."
-      ],
-      "proficiency_example-c2": '"Nuancerne i den sproglige udvikling afsl\xF8rer meget om kulturelle og samfundsm\xE6ssige skift over tid. For eksempel signalerer optagelsen af l\xE5neord ofte en periode med kulturel udveksling eller indflydelse. Analyse af s\xE5danne m\xF8nstre forbedrer ikke kun vores forst\xE5else af sprogudvikling, men giver ogs\xE5 dybe indsigter i historiske forhold mellem civilisationer. Dette dynamiske samspil understreger kompleksiteten og sammenh\xE6ngen i menneskelig kommunikation."',
-      "prompt-context": 'Du er ekspert i og underviser i {%t:{%s:targetLocale%}%}. Brugeren studerer {%t:{%s:targetLocale%}%}. Brugeren behersker allerede sproget p\xE5 CEFR-niveau {%s:proficiencyLevel%}. Dette betyder, at brugeren allerede har f\xF8lgende f\xE6rdigheder: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Dog \xF8nsker brugeren at forbedre sine f\xE6rdigheder yderligere.',
-      "prompt-comprehension": "Lav en l\xE6se- og skrive\xF8velse, hvor brugeren modtager en tekst p\xE5 {%t:{%s:targetLocale%}%} sammen med et sp\xF8rgsm\xE5l p\xE5 {%t:{%s:sourceLocale%}%} om teksten, som brugeren skal besvare p\xE5 {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner, forklaringer eller svar til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
-      "prompt-comprehension-follow_up": "Giv feedback p\xE5 den stillede l\xE6se- og skrive\xF8velse. Giv kort feedback p\xE5 {%t:{%s:targetLocale%}%} med en dybdeg\xE5ende analyse, der er klar nok til brugerens vidensniveau i {%t:{%s:sourceLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignor\xE9r indholdsm\xE6ssige vurderinger eller fortolkninger af beskeden. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.",
-      "prompt-conversation": "Du vil simulere en samtale med brugeren p\xE5 {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Skriv den f\xF8rste besked i samtalen og introducer straks et emne at diskutere.",
-      "prompt-conversation-follow_up": "Du simulerer en samtale med brugeren i {%t:{%s:targetLocale%}%}. Som svar p\xE5 en besked, giv f\xF8rst en kortfattet feedback med stor dybde, som er tydelig nok for brugerens vidensniveau i {%t:{%s:sourceLocale%}%}. Fokuser udelukkende p\xE5 sproglige aspekter og ignorer indholdsm\xE6ssige evalueringer eller fortolkninger af beskeden. Forts\xE6t derefter med at svare p\xE5 beskeden i {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner eller forklaringer til brugeren. Skriv altid i almindelig tekst uden nogen form for formatering, labels eller overskrifter.",
-      "prompt-clarification": "Brugeren har et sp\xF8rgsm\xE5l nedenfor, svar kortfattet med dybdeg\xE5ende feedback, passende til brugerens sprogniveau. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Besvar ikke sp\xF8rgsm\xE5let, hvis det ikke er sprogligt relateret.",
-      "prompt-topic": ' Inkorpor\xE9r f\xF8lgende emne i din besked "{%topic%}".',
-      "greeting": "Hej!",
-      "button-go_back": "Tilbage",
-      "button-reset": "Nulstil",
-      "button-generate": "Gener\xE9r",
-      "button-answer": "Svar",
-      "button-reply": "Svar",
-      "button-ask": "Sp\xF8rg",
-      "setup-source_language": "S\xE5, du vil forbedre dine f\xE6rdigheder i et sprog? Lad denne app hj\xE6lpe dig med at \xF8ve. Vi skal starte med at v\xE6lge et sprog, du allerede kender.",
-      "setup-target_language": "Nu til n\xE6ste trin, hvilket sprog vil du gerne l\xE6re?",
-      "setup-proficiency_leven": "Hvor god vil du sige, du allerede er i sproget? Se forklaringen nedenfor sammen med en eksempeltekst for at f\xE5 en id\xE9 om, hvilken slags tekster du kan forvente.",
-      "setup-topics_of_interest": "Det er meget sjovere, hvis \xF8velserne nogle gange indeholder et emne, du finder interessant. Udfyld derfor et par emner nedenfor, som j\xE6vnligt kan dukke op. T\xE6nk is\xE6r p\xE5 hobbyer eller andre interesser. Jo flere, jo bedre!",
-      "setup-api_code": 'Denne app bruger en "stor sprogmodel" til at generere og vurdere \xF8velser. Du har m\xE5ske h\xF8rt om det, alle i tech-sektoren taler om udviklingen inden for kunstig intelligens. Appen bruger en LLM, men leveres ikke med en, s\xE5 vi skal linke den til en LLM-udbyder. Hvilken udbyder vil du bruge?',
-      "setup-api_credentials": "Nu er det vigtige sp\xF8rgsm\xE5l n\xF8glen. Du kan f\xE5 den fra udviklerens dashboard. Der st\xE5r sandsynligvis, at du ikke b\xF8r dele den med tredjeparter. Heldigvis sender denne app aldrig n\xF8glen videre. Stadig ikke overbevist? Tjek appens kildekode eller vent p\xE5 en version, der ikke l\xE6ngere kr\xE6ver dette.",
-      "setup-test_api_credentials": "Test n\xF8gle",
-      "setup-api_credentials_untested": "Test legitimationsoplysningerne, f\xF8r du forts\xE6tter.",
-      "setup-api_credentials_tested": 'Den angivne n\xF8gle virker. Nu kan du v\xE6lge, hvilken "stor sprogmodel" du vil bruge. Ikke sikker p\xE5 forskellene? Intet problem, vi anbefaler at v\xE6lge "{%preferredModel%}". Det b\xF8r v\xE6re fint.',
-      "setup-outro": "Held og lykke, og hav det sjovt!",
-      "setup-next": "Begynd at \xF8ve",
-      "overview-intro": "Hvad vil du gerne g\xF8re?",
-      "overview-comprehension-title": "Besvar sp\xF8rgsm\xE5l om tekster",
-      "overview-comprehension-description": "Du modtager en kort tekst p\xE5 {%t:{%s:targetLanguage%}%} sammen med et sp\xF8rgsm\xE5l, der skal besvares p\xE5 {%t:{%s:targetLanguage%}%}.",
-      "overview-conversation-title": "\xD8v samtaler",
-      "overview-conversation-description": "En kort samtale vil blive simuleret p\xE5 {%t:{%s:targetLanguage%}%}, for eksempel om at bestille mad eller diskutere en hobby.",
-      "overview-clarification-title": "Bed om afklaring",
-      "overview-clarification-description": "F\xE5 forklaringer om {%t:{%s:targetLanguage%}%}, s\xE5som en grammatisk regel som b\xF8jninger eller kasus.",
-      "overview-statistics-title": "Se statistik",
-      "overview-statistics-description": "Se antallet af aktiviteter, du har gennemf\xF8rt.",
-      "overview-options-title": "Just\xE9r indstillinger",
-      "overview-options-description": "Skift det sprog, du vil l\xE6re, de emner, du finder interessante, eller den anvendte LLM.",
-      "options-source_language": "Hvilket sprog kender du allerede?",
-      "options-target_language": "Hvilket sprog vil du gerne l\xE6re?",
-      "options-proficiency_leven": "Hvor god er du til sproget? Se forklaringen nedenfor sammen med en eksempeltekst for at f\xE5 en id\xE9 om, hvilken slags tekster du kan forvente.",
-      "options-topics_of_interest": "Udfyld et par emner nedenfor, som j\xE6vnligt kan dukke op i \xF8velserne.",
-      "options-api_code": 'Denne app bruger en "stor sprogmodel" til at generere og vurdere \xF8velser. Hvilken udbyder vil du linke?',
-      "options-api_credentials": "Indtast n\xF8glen fra udviklerens dashboard.",
-      "options-test_api_credentials": "Test n\xF8gle",
-      "options-api_credentials_untested": "Test legitimationsoplysningerne, f\xF8r du forts\xE6tter.",
-      "options-api_credentials_tested": 'Den angivne n\xF8gle virker. V\xE6lg en "stor sprogmodel" at bruge, vi anbefaler "{%preferredModel%}".',
-      "statistics-activity_per_category": "I alt har du besvaret {%s:statisticComprehensionActivity%} sp\xF8rgsm\xE5l om tekster, sendt {%s:statisticConversationActivity%} beskeder i \xF8velsessamtaler og stillet {%s:statisticClarificationActivity%} sp\xF8rgsm\xE5l.",
-      "statistics-no_activity": "Desv\xE6rre har du endnu ikke gennemf\xF8rt nok aktiviteter til at blive vist her. G\xE5 til oversigten, og v\xE6lg en \xF8velse for at komme i gang. Din fremgang vil blive sporet i baggrunden.",
-      "statistics-no_activity_streak": "Du har i \xF8jeblikket ingen igangv\xE6rende aktivitetsr\xE6kke. Du kan opbygge en ved at gennemf\xF8re mindst \xE9n \xF8velse p\xE5 flere p\xE5 hinanden f\xF8lgende dage.",
-      "statistics-current_activity_streak": "Din nuv\xE6rende aktivitetsr\xE6kke er {%s:statisticCurrentActivityStreak%} dage lang.",
-      "statistics-longest_activity_streak": "Din l\xE6ngste aktivitetsr\xE6kke nogensinde var {%s:statisticLongestActivityStreak%} dage lang.",
-      "clarification-intro": "Hvad vil du gerne have mere information om?",
-      "clarification-placeholder": "Jeg undrer mig over...",
-      "comprehension-intro": "Du vil snart l\xE6se en tekst p\xE5 {%t:{%s:targetLanguage%}%} sammen med et sp\xF8rgsm\xE5l om den. Besvar sp\xF8rgsm\xE5let p\xE5 {%t:{%s:targetLanguage%}%}. Derefter vil du modtage noget feedback om dit svar.",
-      "conversation-intro": "Du vil snart simulere en samtale p\xE5 {%t:{%s:targetLanguage%}%}, s\xE5 svar altid p\xE5 {%t:{%s:targetLanguage%}%}. Du kan modtage feedback undervejs."
-    },
-    [LOCALES.deu]: {
-      [LOCALES.dan]: "D\xE4nisch",
-      [LOCALES.deu]: "Deutsch",
-      [LOCALES.eng]: "Englisch (Vereinigtes K\xF6nigreich)",
-      [LOCALES.epo]: "Esperanto",
-      [LOCALES.fry]: "Friesisch (West)",
-      [LOCALES.isl]: "Isl\xE4ndisch",
-      [LOCALES.nld]: "Niederl\xE4ndisch",
-      [LOCALES.nno]: "Norwegisch (Nynorsk)",
-      [LOCALES.nob]: "Norwegisch (Bokm\xE5l)",
-      [LOCALES.swe]: "Schwedisch",
-      [LOCALES.vls]: "Fl\xE4misch",
-      "proficiency_name-a1": "A1: Anf\xE4nger",
-      "proficiency_description-a1": [
-        "Lesen: Sie k\xF6nnen vertraute Namen, W\xF6rter und sehr einfache S\xE4tze verstehen, zum Beispiel auf Schildern, Plakaten oder in Katalogen.",
-        "Schreiben: Sie k\xF6nnen eine kurze, einfache Postkarte schreiben, zum Beispiel Urlaubsgr\xFC\xDFe verschicken. Sie k\xF6nnen Formulare mit pers\xF6nlichen Angaben ausf\xFCllen, z. B. Name, Staatsangeh\xF6rigkeit und Adresse in einem Hotelanmeldeformular eintragen."
-      ],
-      "proficiency_example-a1": '"Hallo! Mein Name ist Maria. Ich wohne mit meiner Familie in einem kleinen Haus in London. Ich habe einen Bruder und eine Schwester. Ich esse gerne \xC4pfel und Birnen. Was ist dein Lieblingsobst?"',
-      "proficiency_name-a2": "A2: Grundlegende Kenntnisse",
-      "proficiency_description-a2": [
-        "Lesen: Sie k\xF6nnen sehr kurze, einfache Texte lesen. Sie k\xF6nnen spezifische, vorhersehbare Informationen in einfachen Alltagsmaterialien wie Anzeigen, Prospekten, Speisekarten und Fahrpl\xE4nen finden und kurze einfache pers\xF6nliche Briefe verstehen.",
-        "Schreiben: Sie k\xF6nnen kurze, einfache Notizen und Mitteilungen zu unmittelbaren Bed\xFCrfnissen schreiben. Sie k\xF6nnen einen sehr einfachen pers\xF6nlichen Brief schreiben, zum Beispiel, um jemandem f\xFCr etwas zu danken."
-      ],
-      "proficiency_example-a2": '"Letztes Wochenende bin ich mit meinen Freunden in den Park gegangen. Wir hatten ein Picknick mit Sandwiches und Saft. Das Wetter war sonnig und wir haben Fu\xDFball gespielt. Danach sind wir in ein Caf\xE9 gegangen und haben Eis gegessen. Es war ein sch\xF6ner Tag!"',
-      "proficiency_name-b1": "B1: Mittelstufe",
-      "proficiency_description-b1": [
-        "Lesen: Sie k\xF6nnen Texte verstehen, die haupts\xE4chlich aus h\xE4ufig gebrauchten Alltags- oder beruflichen Ausdr\xFCcken bestehen. Sie k\xF6nnen Beschreibungen von Ereignissen, Gef\xFChlen und W\xFCnschen in pers\xF6nlichen Briefen verstehen.",
-        "Schreiben: Sie k\xF6nnen einfache, zusammenh\xE4ngende Texte zu vertrauten Themen oder Themen von pers\xF6nlichem Interesse schreiben. Sie k\xF6nnen pers\xF6nliche Briefe schreiben, in denen Erfahrungen und Eindr\xFCcke beschrieben werden."
-      ],
-      "proficiency_example-b1": '"Ich lese gerne B\xFCcher, besonders Krimis. K\xFCrzlich habe ich eine Geschichte \xFCber einen Detektiv gelesen, der einen schwierigen Fall gel\xF6st hat. Es war sehr spannend, und ich konnte nicht aufh\xF6ren zu lesen. Ich mag Krimis, weil sie mich zum Nachdenken bringen und ich das Ende erraten m\xF6chte."',
-      "proficiency_name-b2": "B2: Fortgeschrittene Kenntnisse",
-      "proficiency_description-b2": [
-        "Lesen: Sie k\xF6nnen Artikel und Berichte lesen, die sich mit aktuellen Problemen befassen, bei denen die Verfasser bestimmte Haltungen oder Standpunkte einnehmen. Sie k\xF6nnen moderne literarische Texte verstehen.",
-        "Schreiben: Sie k\xF6nnen klare, detaillierte Texte zu einer Vielzahl von Themen schreiben, die mit Ihren Interessen zusammenh\xE4ngen. Sie k\xF6nnen Aufs\xE4tze oder Berichte schreiben, in denen Sie Informationen weitergeben oder Gr\xFCnde f\xFCr oder gegen einen bestimmten Standpunkt darlegen. Sie k\xF6nnen Briefe schreiben, in denen die pers\xF6nliche Bedeutung von Ereignissen und Erfahrungen hervorgehoben wird."
-      ],
-      "proficiency_example-b2": '"Das Konzept des Remote-Arbeitens wird in den letzten Jahren immer beliebter. Es bietet Flexibilit\xE4t und Komfort f\xFCr Mitarbeiter, da sie von \xFCberall aus arbeiten k\xF6nnen. Allerdings gibt es auch Herausforderungen, wie zum Beispiel die Aufrechterhaltung der Produktivit\xE4t und der Kommunikation mit Kollegen. Insgesamt denke ich, dass die Vorteile die Nachteile \xFCberwiegen."',
-      "proficiency_name-c1": "C1: Fortgeschritten",
-      "proficiency_description-c1": [
-        "Lesen: Sie k\xF6nnen lange und komplexe Sach- und literarische Texte verstehen und Stilunterschiede w\xFCrdigen. Sie k\xF6nnen spezialisierte Artikel und l\xE4ngere technische Anweisungen verstehen, selbst wenn sie nicht in Ihrem Fachgebiet liegen.",
-        "Schreiben: Sie k\xF6nnen sich in klaren, gut strukturierten Texten ausdr\xFCcken und Standpunkte ausf\xFChrlich darlegen. Sie k\xF6nnen \xFCber komplexe Themen in einem Brief, Aufsatz oder Bericht schreiben und dabei hervorheben, was Sie f\xFCr besonders wichtig halten. Sie k\xF6nnen den Stil an die Zielgruppe anpassen."
-      ],
-      "proficiency_example-c1": '"Der Klimawandel ist eines der dr\xE4ngendsten Probleme unserer Zeit. W\xE4hrend erneuerbare Energiequellen wie Wind- und Solarenergie an Bedeutung gewinnen, bleibt der \xDCbergang weg von fossilen Brennstoffen eine gro\xDFe Herausforderung. Regierungen m\xFCssen mit Industrien und Gemeinschaften zusammenarbeiten, um nachhaltige Richtlinien zu schaffen, die wirtschaftliches Wachstum mit Umweltschutz in Einklang bringen."',
-      "proficiency_name-c2": "C2: Kompetente Sprachverwendung",
-      "proficiency_description-c2": [
-        "Lesen: Sie k\xF6nnen nahezu alle Formen der geschriebenen Sprache m\xFChelos lesen, einschlie\xDFlich abstrakter, strukturell oder sprachlich komplexer Texte wie Handb\xFCcher, spezialisierte Artikel und literarische Werke.",
-        "Schreiben: Sie k\xF6nnen klar und fl\xFCssig schreiben und dabei einen Stil verwenden, der dem jeweiligen Kontext entspricht. Sie k\xF6nnen komplexe Briefe, Berichte oder Artikel verfassen, die einen Sachverhalt effektiv darstellen und eine logische Struktur aufweisen, die dem Leser hilft, wichtige Punkte zu erkennen und sich zu merken. Sie k\xF6nnen Zusammenfassungen und Rezensionen professioneller oder literarischer Werke schreiben."
-      ],
-      "proficiency_example-c2": '"Die Nuancen der sprachlichen Evolution offenbaren viel \xFCber kulturelle und gesellschaftliche Ver\xE4nderungen im Laufe der Zeit. Beispielsweise signalisiert die \xDCbernahme von Lehnw\xF6rtern oft eine Phase kulturellen Austauschs oder Einflusses. Die Analyse solcher Muster erweitert nicht nur unser Verst\xE4ndnis der Sprachentwicklung, sondern bietet auch tiefgehende Einblicke in historische Beziehungen zwischen Zivilisationen. Dieses dynamische Zusammenspiel unterstreicht die Komplexit\xE4t und Vernetzung menschlicher Kommunikation."',
-      "prompt-context": 'Sie sind ein Experte in und Lehrer f\xFCr {%t:{%s:targetLocale%}%}. Der Benutzer lernt {%t:{%s:targetLocale%}%}. Der Benutzer beherrscht die Sprache bereits auf dem GER-Niveau {%s:proficiencyLevel%}. Das bedeutet, dass der Benutzer bereits \xFCber die folgenden F\xE4higkeiten verf\xFCgt: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Allerdings m\xF6chte der Benutzer seine Sprachkenntnisse weiter verbessern.',
-      "prompt-comprehension": "Erstelle eine Lese- und Schreib\xFCbung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} erh\xE4lt, zusammen mit einer Frage in {%t:{%s:sourceLocale%}%} \xFCber den Text, auf die der Benutzer in {%t:{%s:targetLocale%}%} antworten muss. Gib dem Benutzer keine weiteren Anweisungen, Erkl\xE4rungen oder Antworten. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
-      "prompt-comprehension-follow_up": "Gib Feedback zur gestellten Lese- und Schreib\xFCbung. Gib kurzes Feedback zum {%t:{%s:targetLocale%}%} mit einer detaillierten Analyse, die dem Kenntnisstand des Benutzers im {%t:{%s:sourceLocale%}%} angemessen ist. Konzentriere dich ausschlie\xDFlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder \xDCberschriften.",
-      "prompt-conversation": "Sie werden eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%} simulieren. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Schreiben Sie die erste Nachricht der Konversation, indem Sie sofort ein Gespr\xE4chsthema einf\xFChren.",
-      "prompt-conversation-follow_up": "Du simulierst ein Gespr\xE4ch mit dem Benutzer in {%t:{%s:targetLocale%}%}. Gib als Antwort auf eine Nachricht zun\xE4chst ein knappes, aber tiefgr\xFCndiges Feedback, das f\xFCr das Wissensniveau des Benutzers in {%t:{%s:sourceLocale%}%} klar genug ist. Konzentriere dich dabei ausschlie\xDFlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Fahre anschlie\xDFend damit fort, auf die Nachricht in {%t:{%s:targetLocale%}%} zu antworten. Gib dem Benutzer keine weiteren Anweisungen oder Erkl\xE4rungen. Schreibe immer in einfachem Text ohne jegliche Formatierung, Labels oder \xDCberschriften.",
-      "prompt-clarification": "Der Benutzer hat eine Frage unten gestellt, beantworten Sie diese pr\xE4zise mit einem tiefgehenden Feedback, das der Sprachkompetenz des Benutzers entspricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder \xDCberschriften. Beantworten Sie die Frage nicht, wenn sie nicht sprachbezogen ist.",
-      "prompt-topic": ' Integrieren Sie das folgende Thema in Ihre Nachricht: "{%topic%}".',
-      "greeting": "Hallo!",
-      "button-go_back": "Zur\xFCck",
-      "button-reset": "Zur\xFCcksetzen",
-      "button-generate": "Generieren",
-      "button-answer": "Antworten",
-      "button-reply": "Antworten",
-      "button-ask": "Fragen",
-      "setup-source_language": "Sie m\xF6chten also Ihre Sprachkenntnisse verbessern? Lassen Sie diese App Ihnen beim \xDCben helfen. Wir m\xFCssen zun\xE4chst eine Sprache ausw\xE4hlen, die Sie bereits beherrschen.",
-      "setup-target_language": "Nun der n\xE4chste Schritt: Welche Sprache m\xF6chten Sie lernen?",
-      "setup-proficiency_leven": "Wie gut sch\xE4tzen Sie Ihre Kenntnisse in der Sprache ein? Siehe die Erkl\xE4rung unten zusammen mit einem Beispieltext, um eine Vorstellung davon zu bekommen, welche Art von Texten Sie erwarten k\xF6nnen.",
-      "setup-topics_of_interest": "Es macht viel mehr Spa\xDF, wenn die \xDCbungen manchmal ein Thema behandeln, das Sie interessant finden. F\xFCllen Sie daher unten einige Themen ein, die regelm\xE4\xDFig vorkommen k\xF6nnen. Denken Sie vor allem an Hobbys oder andere Interessen. Je mehr, desto besser!",
-      "setup-api_code": 'Diese App verwendet ein "Large Language Model", um \xDCbungen zu generieren und zu bewerten. Vielleicht haben Sie schon davon geh\xF6rt, jeder in der Tech-Branche spricht \xFCber die Entwicklungen in der k\xFCnstlichen Intelligenz. Die App nutzt ein LLM, bringt jedoch keines mit, daher m\xFCssen wir es mit einem LLM-Anbieter verkn\xFCpfen. Welchen Anbieter m\xF6chten Sie verwenden?',
-      "setup-api_credentials": "Nun die wichtige Frage: der Schl\xFCssel. Sie k\xF6nnen ihn im Entwickler-Dashboard erhalten. Dort steht wahrscheinlich, dass Sie ihn nicht mit Dritten teilen sollen. Zum Gl\xFCck sendet diese App den Schl\xFCssel niemals weiter. Immer noch nicht \xFCberzeugt? Schauen Sie sich den Quellcode der App an oder warten Sie auf eine Version, die diesen nicht mehr ben\xF6tigt.",
-      "setup-test_api_credentials": "Schl\xFCssel testen",
-      "setup-api_credentials_untested": "Testen Sie die Zugangsdaten, bevor Sie fortfahren.",
-      "setup-api_credentials_tested": 'Der angegebene Schl\xFCssel funktioniert. Jetzt k\xF6nnen Sie ausw\xE4hlen, welches "Large Language Model" Sie verwenden m\xF6chten. Nicht sicher, welche Unterschiede es gibt? Kein Problem, wir empfehlen Ihnen die Auswahl von "{%preferredModel%}". Das sollte passen.',
-      "setup-outro": "Viel Erfolg und viel Spa\xDF!",
-      "setup-next": "Mit dem \xDCben beginnen",
-      "overview-intro": "Was m\xF6chten Sie tun?",
-      "overview-comprehension-title": "Fragen zu Texten beantworten",
-      "overview-comprehension-description": "Sie erhalten einen kurzen Text in {%t:{%s:targetLanguage%}%} zusammen mit einer Frage, die in {%t:{%s:targetLanguage%}%} beantwortet werden soll.",
-      "overview-conversation-title": "Konversationen \xFCben",
-      "overview-conversation-description": "Es wird eine kurze Konversation in {%t:{%s:targetLanguage%}%} simuliert, beispielsweise \xFCber das Bestellen von Essen oder das Diskutieren eines Hobbys.",
-      "overview-clarification-title": "Erkl\xE4rung anfordern",
-      "overview-clarification-description": "Erhalten Sie Erkl\xE4rungen zu {%t:{%s:targetLanguage%}%}, z. B. zu einer Grammatikregel wie Konjugationen oder F\xE4llen.",
-      "overview-statistics-title": "Statistiken ansehen",
-      "overview-statistics-description": "Werfen Sie einen Blick auf die Anzahl der abgeschlossenen Aktivit\xE4ten.",
-      "overview-options-title": "Optionen anpassen",
-      "overview-options-description": "\xC4ndern Sie die Sprache, die Sie lernen m\xF6chten, die Themen, die Sie interessieren, oder das verwendete LLM.",
-      "options-source_language": "Welche Sprache beherrschen Sie bereits?",
-      "options-target_language": "Welche Sprache m\xF6chten Sie lernen?",
-      "options-proficiency_leven": "Wie gut sind Sie in der Sprache? Siehe die Erkl\xE4rung unten zusammen mit einem Beispieltext, um eine Vorstellung davon zu bekommen, welche Art von Texten Sie erwarten k\xF6nnen.",
-      "options-topics_of_interest": "F\xFCllen Sie unten einige Themen ein, die regelm\xE4\xDFig in den \xDCbungen vorkommen k\xF6nnen.",
-      "options-api_code": 'Diese App verwendet ein "Large Language Model", um \xDCbungen zu generieren und zu bewerten. Welchen Anbieter m\xF6chten Sie verkn\xFCpfen?',
-      "options-api_credentials": "Geben Sie den Schl\xFCssel aus dem Entwickler-Dashboard ein.",
-      "options-test_api_credentials": "Schl\xFCssel testen",
-      "options-api_credentials_untested": "Testen Sie die Zugangsdaten, bevor Sie fortfahren.",
-      "options-api_credentials_tested": 'Der angegebene Schl\xFCssel funktioniert. W\xE4hlen Sie ein "Large Language Model", das Sie verwenden m\xF6chten. Wir empfehlen "{%preferredModel%}".',
-      "statistics-activity_per_category": "Insgesamt haben Sie {%s:statisticComprehensionActivity%} Fragen zu Texten beantwortet, {%s:statisticConversationActivity%} Nachrichten in \xDCbungsgespr\xE4chen gesendet und {%s:statisticClarificationActivity%} Fragen gestellt.",
-      "statistics-no_activity": "Leider haben Sie noch nicht gen\xFCgend Aktivit\xE4ten abgeschlossen, um hier angezeigt zu werden. Gehen Sie zur \xDCbersicht und w\xE4hlen Sie eine \xDCbung, um zu beginnen. Ihr Fortschritt wird im Hintergrund verfolgt.",
-      "statistics-no_activity_streak": "Sie haben derzeit keine laufende Aktivit\xE4tsserie. Sie k\xF6nnen eine aufbauen, indem Sie an mehreren aufeinanderfolgenden Tagen mindestens eine \xDCbung abschlie\xDFen.",
-      "statistics-current_activity_streak": "Ihre aktuelle Aktivit\xE4tsserie betr\xE4gt {%s:statisticCurrentActivityStreak%} Tage.",
-      "statistics-longest_activity_streak": "Ihre l\xE4ngste Aktivit\xE4tsserie war jemals {%s:statisticLongestActivityStreak%} Tage lang.",
-      "clarification-intro": "Wozu m\xF6chten Sie mehr Informationen?",
-      "clarification-placeholder": "Ich frage mich...",
-      "comprehension-intro": "Sie werden gleich einen Text in {%t:{%s:targetLanguage%}%} lesen, zusammen mit einer Frage dazu. Beantworten Sie die Frage in {%t:{%s:targetLanguage%}%}. Anschlie\xDFend erhalten Sie ein Feedback zu Ihrer Antwort.",
-      "conversation-intro": "Sie werden gleich eine Konversation in {%t:{%s:targetLanguage%}%} simulieren. Antworten Sie stets in {%t:{%s:targetLanguage%}%}. M\xF6glicherweise erhalten Sie zwischendurch Feedback."
-    },
     [LOCALES.eng]: {
       [LOCALES.dan]: "Danish",
       [LOCALES.deu]: "German",
@@ -1506,6 +1300,8 @@
       "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message in {%t:{%s:sourceLocale%}%}, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
       "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
+      "prompt-vocabulary": "Write a word along with a definition in {%t:{%s:targetLocale%}%}. The user will then write a sentence in {%t:{%s:targetLocale%}%} in which this word must be used. Take into account the user's skill and language level. Do not provide any additional instructions, explanations, or the answer to the user. Always write in plain text without any formatting, labels, or headings.",
+      "prompt-vocabulary-follow_up": "Provide feedback on the sentence in which the user has answered. Check whether the word has been used correctly in the sentence. Provide concise feedback on the {%t:{%s:targetLocale%}%} with considerable depth that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.",
       "greeting": "Hi!",
       "button-go_back": "Go back",
       "button-reset": "Reset",
@@ -1513,6 +1309,7 @@
       "button-answer": "Answer",
       "button-reply": "Reply",
       "button-ask": "Ask",
+      "credits-link": "Made by {%name%}",
       "setup-source_language": "So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.",
       "setup-target_language": "Now the next step, which language would you like to learn?",
       "setup-proficiency_leven": "How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
@@ -1535,6 +1332,8 @@
       "overview-statistics-description": "Take a look at the number of activities you have completed.",
       "overview-options-title": "Adjust options",
       "overview-options-description": "Change the language you want to learn, the topics you find interesting, or the LLM used.",
+      "overview-vocabulary-title": "Learn new words",
+      "overview-vocabulary-description": "You'll receive a word and definition in {%t:{%s:targetLanguage%}%}, respond with a scentence using the word in{%t:{%s:targetLanguage%}%}.",
       "options-source_language": "Which language do you already know?",
       "options-target_language": "Which language would you like to learn?",
       "options-proficiency_leven": "How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
@@ -1544,15 +1343,16 @@
       "options-test_api_credentials": "Test key",
       "options-api_credentials_untested": "Test the credentials before proceeding.",
       "options-api_credentials_tested": 'The provided key works. Choose a "Large Language Model" to use, we recommend "{%preferredModel%}".',
-      "statistics-activity_per_category": "In total, you have answered {%s:statisticComprehensionActivity%} questions about texts, sent {%s:statisticConversationActivity%} messages in practice conversations, and asked {%s:statisticClarificationActivity%} questions.",
+      "statistics-activity_per_category": "In total, you have answered {%s:statisticComprehensionActivity%} questions about texts, sent {%s:statisticConversationActivity%} messages in practice conversations, {%s:statisticVocabularyActivity%} words practised, and asked {%s:statisticClarificationActivity%} questions.",
       "statistics-no_activity": "Unfortunately, you haven't completed enough activities yet to display here. Go to the overview and choose an exercise to start. Your progress will be tracked in the background.",
       "statistics-no_activity_streak": "You currently have no ongoing activity streak. You can build one by completing at least one exercise on multiple consecutive days.",
       "statistics-current_activity_streak": "Your current activity streak is {%s:statisticCurrentActivityStreak%} days long.",
       "statistics-longest_activity_streak": "Your longest activity streak ever was {%s:statisticLongestActivityStreak%} days long.",
       "clarification-intro": "What would you like more information about?",
-      "clarification-placeholder": "I wondering...",
-      "comprehension-intro": "You will soon read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You will then receive some feedback regarding your answer.",
-      "conversation-intro": "You will soon simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way."
+      "clarification-placeholder": "I'm wondering about...",
+      "comprehension-intro": "In a moment you'll read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer.",
+      "conversation-intro": "In a moment you'll simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.",
+      "vocabulary-intro": "In a moment you'll read a word together with its definition in {%t:{%s:targetLanguage%}%}. Answer with a scentence that uses the word in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer."
     },
     [LOCALES.nld]: {
       [LOCALES.dan]: "Deens",
@@ -1609,6 +1409,8 @@
       "prompt-conversation-follow_up": "Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
       "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
+      "prompt-vocabulary": "Schrijf een woord samen met een definitie er achter in het {%t:{%s:targetLocale%}%}. De gebruiker zal vervolgens een zin in het {%t:{%s:targetLocale%}%} schrijven waarin dit woord verwerkt moeten worden. Hou hierbij rekening met de vaardigheid en taalniveau van de gebruiker. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
+      "prompt-vocabulary-follow_up": "Geef feedback op de zin waarmee de gebruik antwoord heeft gegeven. Controleer of de woord juist gebruikt is in de zin. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "greeting": "Hoi!",
       "button-go_back": "Ga terug",
       "button-reset": "Resetten",
@@ -1616,6 +1418,7 @@
       "button-answer": "Antwoorden",
       "button-reply": "Antwoorden",
       "button-ask": "Vragen",
+      "credits-link": "Gemaakt door {%name%}",
       "setup-source_language": "Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.",
       "setup-target_language": "Nu het volgende probleem, welke taal wil je leren?",
       "setup-proficiency_leven": "Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
@@ -1638,6 +1441,8 @@
       "overview-statistics-description": "Neem een kijkje in het aantal activiteiten dat je gedaan hebt.",
       "overview-options-title": "Opties aanpassen",
       "overview-options-description": "Pas aan welke taal je wilt leren, welke onderwerpen je interessant vind of welke LLM gebruikt wordt.",
+      "overview-vocabulary-title": "Nieuwe woorden leren",
+      "overview-vocabulary-description": "Je krijgt een woord en definitie in het {%t:{%s:targetLanguage%}%}, schrijf vervolgens een zin het {%t:{%s:targetLanguage%}%} dat dit woord gebruikt.",
       "options-source_language": "Welke taal ken je al?",
       "options-target_language": "Welke taal wil je leren?",
       "options-proficiency_leven": "Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
@@ -1647,7 +1452,7 @@
       "options-test_api_credentials": "Sleutel testen",
       "options-api_credentials_untested": "Test de gegevens eerst voordat je verder gaat.",
       "options-api_credentials_tested": 'De opgegeven sleutel werkt. Kies een "Large Language Model" dat je wilt gebruiken, wij raden "{%preferredModel%}" aan.',
-      "statistics-activity_per_category": " In totaal heb je {%s:statisticComprehensionActivity%} vragen over teksten beantwoord, {%s:statisticConversationActivity%} berichten verstuurd in oefen gesprekken, en {%s:statisticClarificationActivity%} vragen gesteld.",
+      "statistics-activity_per_category": " In totaal heb je {%s:statisticComprehensionActivity%} vragen over teksten beantwoord, {%s:statisticConversationActivity%} berichten verstuurd in oefen gesprekken, {%s:statisticVocabularyActivity%} woorden geoefened, en {%s:statisticClarificationActivity%} vragen gesteld.",
       "statistics-no_activity": "Je hebt helaas nog niet genoeg activiteiten gedaan om hier weer te geven. Ga naar het overzicht en kies een oefening om te beginnen, op de achtergrond zal bijgehouden worden hoeveel je er al voltooid hebt.",
       "statistics-no_activity_streak": "Je hebt op dit momenten geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal \xE9\xE9n oefening te doen.",
       "statistics-current_activity_streak": "Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang.",
@@ -1655,13 +1460,297 @@
       "clarification-intro": "Waar wil je meer over weten?",
       "clarification-placeholder": "Ik vraag mij af...",
       "comprehension-intro": "Je leest straks een tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag erover, beantwoord de vraag in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord.",
-      "conversation-intro": "Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen."
+      "conversation-intro": "Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
+      "vocabulary-intro": "Je leest straks een woord samen met de definitie ervan in het {%t:{%s:targetLanguage%}%}. Antwoord met een zin waar het woord ingebruikt wordt in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord."
     }
   });
   var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
-  // src/screens/setup.js
+  // src/screens/options.js
   var isReady = (state) => {
+    return state.apiCode && APIS[state.apiCode] && (!APIS[state.apiCode].requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiCode].preferredModel);
+  };
+  var options = (state) => [
+    node("b", translate(state, "greeting")),
+    node("label", {
+      for: "select_source_language"
+    }, translate(state, "options-source_language")),
+    node("select", {
+      id: "select_source_language",
+      change: (event) => {
+        if (state.sourceLocale !== event.target.selectedOptions[0].value) {
+          state.sourceLocale = event.target.selectedOptions[0].value;
+          state.sourceLanguage = getLanguageFromLocale(state.sourceLocale);
+        }
+      }
+    }, TRANSLATABLE_CODES.map(
+      (localeCode) => node("option", {
+        selected: state.sourceLocale === localeCode ? "selected" : false,
+        value: localeCode
+      }, translate(state, localeCode, localeCode))
+    )),
+    node("label", {
+      for: "select_target_language"
+    }, translate(state, "options-target_language")),
+    node("select", {
+      id: "select_target_language",
+      change: (event) => {
+        if (state.targetLocale !== event.target.selectedOptions[0].value) {
+          state.targetLocale = event.target.selectedOptions[0].value;
+          state.targetLanguage = getLanguageFromLocale(state.targetLocale);
+        }
+      }
+    }, LOCALE_CODES.map(
+      (localeCode) => node("option", {
+        selected: state.targetLocale === localeCode ? "selected" : false,
+        value: localeCode
+      }, translate(state, localeCode))
+    )),
+    node("label", {
+      for: "select_proficiency_level"
+    }, translate(state, "options-proficiency_leven")),
+    node("select", {
+      id: "select_proficiency_level",
+      change: (event) => {
+        if (state.proficiencyLevel !== event.target.selectedOptions[0].value) {
+          state.proficiencyLevel = event.target.selectedOptions[0].value;
+        }
+      }
+    }, PROFICIENCY_LEVEL_CODES.map(
+      (proficiencyLevel) => node("option", {
+        selected: state.proficiencyLevel === proficiencyLevel ? "selected" : false,
+        value: proficiencyLevel
+      }, translate(state, "proficiency_name-" + proficiencyLevel))
+    )),
+    node(
+      "ul",
+      translate(state, "proficiency_description-" + state.proficiencyLevel).map((text) => node("li", text))
+    ),
+    node(
+      "blockquote",
+      node("p", conditional(
+        TRANSLATABLE_CODES.includes(state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel)
+      ))
+    ),
+    node("label", {
+      for: "input_topics_of_interest"
+    }, translate(state, "options-topics_of_interest")),
+    ...state.topicsOfInterest.map(
+      (topic, index) => node("input", {
+        keyup: (event) => {
+          if (!event.target.value) {
+            state.topicsOfInterest.splice(index, 1);
+          } else {
+            state.topicsOfInterest[index] = event.target.value;
+          }
+        },
+        value: topic
+      })
+    ),
+    node("input", {
+      keyup: (event) => {
+        if (event.target.value) {
+          state.topicsOfInterest.push(event.target.value);
+        }
+      },
+      id: "input_topics_of_interest"
+    }),
+    node("label", {
+      for: "select_api_code"
+    }, translate(state, "options-api_code")),
+    node("select", {
+      id: "select_api_code",
+      change: (event) => {
+        if (state.apiCode !== event.target.selectedOptions[0].value) {
+          state.apiCode = event.target.selectedOptions[0].value;
+          state.apiCredentialsTested = false;
+        }
+      }
+    }, Object.keys(APIS).map(
+      (apiCode) => node("option", {
+        selected: state.apiCode === apiCode ? "selected" : false,
+        value: apiCode
+      }, APIS[apiCode].name)
+    )),
+    ...APIS[state.apiCode].requireCredentials ? [
+      node("label", {
+        for: "input-api_credentials"
+      }, translate(state, "options-api_credentials")),
+      node("textarea", {
+        id: "input-api_credentials",
+        keyup: (event) => {
+          console.log("update api cred", event.target.value);
+          state.apiCredentials = event.target.value;
+        }
+      }, state.apiCredentials)
+    ] : [],
+    node("button", {
+      click: () => {
+        state.apiCredentialsPending = true;
+        getModels3(state).then(([error, response, result]) => {
+          state.apiCredentialsPending = false;
+          if (error) {
+            state.apiCredentialsTested = false;
+            state.apiCredentialsError = error.toString();
+            state.apiModels = null;
+          } else {
+            state.apiCredentialsTested = true;
+            state.apiCredentialsError = false;
+            state.apiModels = result;
+          }
+        });
+      },
+      type: "button"
+    }, [
+      translate(state, "options-test_api_credentials"),
+      node("span", {
+        class: state.apiCredentialsPending ? "pending" : ""
+      })
+    ]),
+    ...state.apiCredentialsError ? [node("p", state.apiCredentialsError)] : [],
+    ...!state.apiCredentialsTested ? [node("p", translate(state, "options-api_credentials_untested"))] : [
+      node("label", {
+        for: "select_api_model"
+      }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
+      node(
+        "select",
+        {
+          id: "select_api_model",
+          change: (event) => {
+            if (state.apiModel !== event.target.selectedOptions[0].value) {
+              state.apiModel = event.target.selectedOptions[0].value;
+            }
+          }
+        },
+        state.apiModels.data.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true)).sort((a, b) => a.id.localeCompare(b.id)).map((model) => node("option", {
+          selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
+          value: model.id
+        }, model.name ?? model.id))
+      )
+    ],
+    node("button", {
+      click: () => {
+        if (isReady(state)) {
+          state.screen = SCREENS.overview;
+        }
+      },
+      disabled: !isReady(state),
+      type: "button"
+    }, translate(state, "button-go_back"))
+  ];
+
+  // src/screens/overview.js
+  var overview = (state) => [
+    node("p", [
+      node("b", translate(state, "greeting")),
+      node("br"),
+      translate(state, "overview-intro")
+    ]),
+    node("div", {
+      class: "vertical-layout"
+    }, [
+      node("button", {
+        class: "card",
+        click: () => {
+          state.screen = SCREENS.comprehension;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F4D6}"),
+        node("b", translate(state, "overview-comprehension-title")),
+        node("br"),
+        translate(state, "overview-comprehension-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: () => {
+          state.screen = SCREENS.vocabulary;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F50E}"),
+        node("b", translate(state, "overview-vocabulary-title")),
+        node("br"),
+        translate(state, "overview-vocabulary-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: () => {
+          state.screen = SCREENS.conversation;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F4AC}"),
+        node("b", translate(state, "overview-conversation-title")),
+        node("br"),
+        translate(state, "overview-conversation-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: () => {
+          state.screen = SCREENS.clarification;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F64B}"),
+        node("b", translate(state, "overview-clarification-title")),
+        node("br"),
+        translate(state, "overview-clarification-description")
+      ]),
+      // Story 🎭
+      node("div", {
+        class: "margin"
+      }),
+      node("button", {
+        class: "card",
+        click: () => {
+          state.screen = SCREENS.statistics;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F4C8}"),
+        node("b", translate(state, "overview-statistics-title")),
+        node("br"),
+        translate(state, "overview-statistics-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: () => {
+          state.screen = SCREENS.options;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u2699\uFE0F"),
+        node("b", translate(state, "overview-options-title")),
+        node("br"),
+        translate(state, "overview-options-description")
+      ]),
+      node("p", {
+        class: "text-right"
+      }, node("a", {
+        href: "https://rondekker.com/",
+        target: "_blank",
+        rel: "noopener me"
+      }, translate(state, "credits-link").replace("{%name%}", "Ron Dekker")))
+    ])
+  ];
+
+  // src/screens/setup.js
+  var isReady2 = (state) => {
     return state.apiCode && APIS[state.apiCode] && (!APIS[state.apiCode].requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiCode].preferredModel);
   };
   var setup = (state) => [
@@ -1823,80 +1912,54 @@
         }, model.name ?? model.id))
       )
     ],
-    ...isReady(state) ? [node("p", translate(state, "setup-outro"))] : [],
+    ...isReady2(state) ? [node("p", translate(state, "setup-outro"))] : [],
     node("button", {
       click: () => {
-        if (isReady(state)) {
+        if (isReady2(state)) {
           state.screen = SCREENS.overview;
         }
       },
-      disabled: !isReady(state),
+      disabled: !isReady2(state),
       type: "button"
     }, translate(state, "setup-next"))
   ];
 
-  // src/screens/overview.js
-  var overview = (state) => [
+  // src/screens/statistics.js
+  var statistics = (state) => [
     node("p", [
-      node("b", translate(state, "greeting")),
-      node("br"),
-      translate(state, "overview-intro")
+      node("b", translate(state, "greeting"))
     ]),
+    ...conditional(
+      state.statisticComprehensionActivity > 1 || state.statisticConversationActivity > 1 || state.statisticClarificationActivity > 1 || state.statisticVocabularyActivity > 1,
+      node("p", translate(state, "statistics-activity_per_category")),
+      node("p", translate(state, "statistics-no_activity"))
+    ),
+    node(
+      "p",
+      conditional(
+        state.statisticCurrentActivityStreak > 1 && new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
+        [
+          translate(state, "statistics-current_activity_streak"),
+          ...conditional(
+            state.statisticLongestActivityStreak > state.statisticCurrentActivityStreak,
+            translate(state, "statistics-longest_activity_streak")
+          )
+        ],
+        [
+          translate(state, "statistics-no_activity_streak"),
+          ...conditional(
+            state.statisticLongestActivityStreak > 1,
+            translate(state, "statistics-longest_activity_streak")
+          )
+        ]
+      )
+    ),
     node("button", {
-      class: "card",
       click: () => {
-        state.screen = SCREENS.comprehension;
+        state.screen = SCREENS.overview;
       },
       type: "button"
-    }, [
-      node("b", translate(state, "overview-comprehension-title")),
-      node("br"),
-      translate(state, "overview-comprehension-description")
-    ]),
-    node("button", {
-      class: "card",
-      click: () => {
-        state.screen = SCREENS.conversation;
-      },
-      type: "button"
-    }, [
-      node("b", translate(state, "overview-conversation-title")),
-      node("br"),
-      translate(state, "overview-conversation-description")
-    ]),
-    node("button", {
-      class: "card",
-      click: () => {
-        state.screen = SCREENS.clarification;
-      },
-      type: "button"
-    }, [
-      node("b", translate(state, "overview-clarification-title")),
-      node("br"),
-      translate(state, "overview-clarification-description")
-    ]),
-    node("button", {
-      class: "card",
-      click: () => {
-        state.screen = SCREENS.statistics;
-      },
-      type: "button"
-    }, [
-      node("b", translate(state, "overview-statistics-title")),
-      node("br"),
-      translate(state, "overview-statistics-description")
-    ]),
-    node("button", {
-      class: "card",
-      click: () => {
-        state.screen = SCREENS.options;
-      },
-      type: "button"
-    }, [
-      node("b", translate(state, "overview-options-title")),
-      node("br"),
-      translate(state, "overview-options-description")
-    ])
+    }, translate(state, "button-go_back"))
   ];
 
   // src/utilities/streak.js
@@ -1917,11 +1980,11 @@
       today.getDate()
     );
     const deltaTime = todayUTC - lastActivityUTC;
-    if (deltaTime > ONE_DAY) {
-      state.statisticCurrentActivityStreak++;
-      state.statisticLastActivityOn = today.toISOString();
-    } else if (deltaTime > TWO_DAYS) {
+    if (deltaTime > TWO_DAYS) {
       state.statisticCurrentActivityStreak = 1;
+      state.statisticLastActivityOn = today.toISOString();
+    } else if (deltaTime > ONE_DAY) {
+      state.statisticCurrentActivityStreak++;
       state.statisticLastActivityOn = today.toISOString();
     }
     if (state.statisticCurrentActivityStreak > state.statisticLongestActivityStreak) {
@@ -2286,217 +2349,127 @@
     ])
   ];
 
-  // src/screens/options.js
-  var isReady2 = (state) => {
-    return state.apiCode && APIS[state.apiCode] && (!APIS[state.apiCode].requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiCode].preferredModel);
-  };
-  var options = (state) => [
-    node("b", translate(state, "greeting")),
-    node("label", {
-      for: "select_source_language"
-    }, translate(state, "options-source_language")),
-    node("select", {
-      id: "select_source_language",
-      change: (event) => {
-        if (state.sourceLocale !== event.target.selectedOptions[0].value) {
-          state.sourceLocale = event.target.selectedOptions[0].value;
-          state.sourceLanguage = getLanguageFromLocale(state.sourceLocale);
-        }
-      }
-    }, TRANSLATABLE_CODES.map(
-      (localeCode) => node("option", {
-        selected: state.sourceLocale === localeCode ? "selected" : false,
-        value: localeCode
-      }, translate(state, localeCode, localeCode))
-    )),
-    node("label", {
-      for: "select_target_language"
-    }, translate(state, "options-target_language")),
-    node("select", {
-      id: "select_target_language",
-      change: (event) => {
-        if (state.targetLocale !== event.target.selectedOptions[0].value) {
-          state.targetLocale = event.target.selectedOptions[0].value;
-          state.targetLanguage = getLanguageFromLocale(state.targetLocale);
-        }
-      }
-    }, LOCALE_CODES.map(
-      (localeCode) => node("option", {
-        selected: state.targetLocale === localeCode ? "selected" : false,
-        value: localeCode
-      }, translate(state, localeCode))
-    )),
-    node("label", {
-      for: "select_proficiency_level"
-    }, translate(state, "options-proficiency_leven")),
-    node("select", {
-      id: "select_proficiency_level",
-      change: (event) => {
-        if (state.proficiencyLevel !== event.target.selectedOptions[0].value) {
-          state.proficiencyLevel = event.target.selectedOptions[0].value;
-        }
-      }
-    }, PROFICIENCY_LEVEL_CODES.map(
-      (proficiencyLevel) => node("option", {
-        selected: state.proficiencyLevel === proficiencyLevel ? "selected" : false,
-        value: proficiencyLevel
-      }, translate(state, "proficiency_name-" + proficiencyLevel))
-    )),
-    node(
-      "ul",
-      translate(state, "proficiency_description-" + state.proficiencyLevel).map((text) => node("li", text))
-    ),
-    node(
-      "blockquote",
-      node("p", conditional(
-        TRANSLATABLE_CODES.includes(state.targetLocale),
-        translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale),
-        translate(state, "proficiency_example-" + state.proficiencyLevel)
-      ))
-    ),
-    node("label", {
-      for: "input_topics_of_interest"
-    }, translate(state, "options-topics_of_interest")),
-    ...state.topicsOfInterest.map(
-      (topic, index) => node("input", {
-        keyup: (event) => {
-          if (!event.target.value) {
-            state.topicsOfInterest.splice(index, 1);
-          } else {
-            state.topicsOfInterest[index] = event.target.value;
-          }
-        },
-        value: topic
-      })
-    ),
-    node("input", {
-      keyup: (event) => {
-        if (event.target.value) {
-          state.topicsOfInterest.push(event.target.value);
-        }
-      },
-      id: "input_topics_of_interest"
-    }),
-    node("label", {
-      for: "select_api_code"
-    }, translate(state, "options-api_code")),
-    node("select", {
-      id: "select_api_code",
-      change: (event) => {
-        if (state.apiCode !== event.target.selectedOptions[0].value) {
-          state.apiCode = event.target.selectedOptions[0].value;
-          state.apiCredentialsTested = false;
-        }
-      }
-    }, Object.keys(APIS).map(
-      (apiCode) => node("option", {
-        selected: state.apiCode === apiCode ? "selected" : false,
-        value: apiCode
-      }, APIS[apiCode].name)
-    )),
-    ...APIS[state.apiCode].requireCredentials ? [
-      node("label", {
-        for: "input-api_credentials"
-      }, translate(state, "options-api_credentials")),
-      node("textarea", {
-        id: "input-api_credentials",
-        keyup: (event) => {
-          console.log("update api cred", event.target.value);
-          state.apiCredentials = event.target.value;
-        }
-      }, state.apiCredentials)
-    ] : [],
-    node("button", {
-      click: () => {
-        state.apiCredentialsPending = true;
-        getModels3(state).then(([error, response, result]) => {
-          state.apiCredentialsPending = false;
-          if (error) {
-            state.apiCredentialsTested = false;
-            state.apiCredentialsError = error.toString();
-            state.apiModels = null;
-          } else {
-            state.apiCredentialsTested = true;
-            state.apiCredentialsError = false;
-            state.apiModels = result;
-          }
-        });
-      },
-      type: "button"
-    }, [
-      translate(state, "options-test_api_credentials"),
-      node("span", {
-        class: state.apiCredentialsPending ? "pending" : ""
-      })
-    ]),
-    ...state.apiCredentialsError ? [node("p", state.apiCredentialsError)] : [],
-    ...!state.apiCredentialsTested ? [node("p", translate(state, "options-api_credentials_untested"))] : [
-      node("label", {
-        for: "select_api_model"
-      }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
-      node(
-        "select",
-        {
-          id: "select_api_model",
-          change: (event) => {
-            if (state.apiModel !== event.target.selectedOptions[0].value) {
-              state.apiModel = event.target.selectedOptions[0].value;
-            }
-          }
-        },
-        state.apiModels.data.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true)).sort((a, b) => a.id.localeCompare(b.id)).map((model) => node("option", {
-          selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
-          value: model.id
-        }, model.name ?? model.id))
-      )
-    ],
-    node("button", {
-      click: () => {
-        if (isReady2(state)) {
-          state.screen = SCREENS.overview;
-        }
-      },
-      disabled: !isReady2(state),
-      type: "button"
-    }, translate(state, "button-go_back"))
-  ];
-
-  // src/screens/statistics.js
-  var statistics = (state) => [
+  // src/screens/vocabulary.js
+  var vocabulary = (state) => [
     node("p", [
-      node("b", translate(state, "greeting"))
+      node("b", translate(state, "greeting")),
+      node("br"),
+      translate(state, "vocabulary-intro")
     ]),
     ...conditional(
-      state.statisticComprehensionActivity > 1 || state.statisticConversationActivity > 1 || state.statisticClarificationActivity > 1,
-      node("p", translate(state, "statistics-activity_per_category")),
-      node("p", translate(state, "statistics-no_activity"))
+      state.vocabularyMessages && state.vocabularyMessages.length > 0,
+      node("div", {
+        class: "messages"
+      }, state.vocabularyMessages.map(
+        (message) => node("p", {
+          class: "message-" + message.role
+        }, message.content.split("\n").flatMap(
+          (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+        ))
+      ))
     ),
-    node(
-      "p",
+    ...conditional(
+      state.vocabularyError,
+      node("p", state.vocabularyError)
+    ),
+    ...conditional(
+      state.vocabularyPending,
+      node("p", {
+        class: "pending"
+      }),
       conditional(
-        state.statisticCurrentActivityStreak > 1 && new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
-        [
-          translate(state, "statistics-current_activity_streak"),
-          ...conditional(
-            state.statisticLongestActivityStreak > state.statisticCurrentActivityStreak,
-            translate(state, "statistics-longest_activity_streak")
-          )
-        ],
-        [
-          translate(state, "statistics-no_activity_streak"),
-          ...conditional(
-            state.statisticLongestActivityStreak > 1,
-            translate(state, "statistics-longest_activity_streak")
-          )
-        ]
+        state.vocabularyMessages && state.vocabularyMessages.length > 0 && state.vocabularyMessages.length < 3,
+        node("textarea", {
+          class: "message-user",
+          id: "input-question",
+          keyup: (event) => {
+            state.vocabularyInput = event.target.value;
+          }
+        }, state.vocabularyInput)
       )
     ),
-    node("button", {
-      click: () => {
-        state.screen = SCREENS.overview;
-      },
-      type: "button"
-    }, translate(state, "button-go_back"))
+    node("div", {
+      class: "row reverse"
+    }, [
+      ...conditional(
+        state.vocabularyMessages && state.vocabularyMessages.length > 0 && state.vocabularyMessages.length < 3,
+        node("button", {
+          disabled: state.vocabularyPending || !state.vocabularyInput || state.vocabularyInput.trim().length === 0,
+          type: "button",
+          click: () => {
+            if (!state.vocabularyPending && state.vocabularyInput && state.vocabularyInput.trim().length > 0) {
+              state.vocabularyError = false;
+              state.vocabularyPending = true;
+              state.vocabularyMessages.push({
+                role: "user",
+                content: state.vocabularyInput.trim()
+              });
+              state.vocabularyInput = "";
+              createMessage3(
+                state,
+                state.vocabularyMessages,
+                translate(state, "prompt-context"),
+                translate(state, "prompt-vocabulary-follow_up")
+              ).then(([error, response, result]) => {
+                state.vocabularyPending = false;
+                if (error) {
+                  state.vocabularyError = error.toString();
+                  const message = state.vocabularyMessages.pop();
+                  state.vocabularyInput = message.content;
+                  return;
+                }
+                state.vocabularyMessages.push(result);
+                state.statisticVocabularyActivity++;
+                onActivity2(state);
+              });
+            }
+          }
+        }, translate(state, "button-answer")),
+        node("button", {
+          disabled: state.vocabularyPending,
+          type: "button",
+          click: () => {
+            if (!state.vocabularyPending) {
+              state.vocabularyError = false;
+              state.vocabularyMessages = [];
+              state.vocabularyPending = true;
+              createMessage3(
+                state,
+                [],
+                translate(state, "prompt-context"),
+                translate(state, "prompt-vocabulary") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
+                  state.topicsOfInterest.filter((topic) => topic)
+                )) : "")
+              ).then(([error, response, result]) => {
+                state.vocabularyPending = false;
+                if (error) {
+                  state.vocabularyError = error.toString();
+                  return;
+                }
+                state.vocabularyMessages.push(result);
+              });
+            }
+          }
+        }, translate(state, "button-generate"))
+      ),
+      ...conditional(
+        state.vocabularyPending || state.vocabularyMessages && state.vocabularyMessages.length > 0,
+        node("button", {
+          click: () => {
+            state.vocabularyError = false;
+            state.vocabularyMessages = [];
+            state.vocabularyPending = false;
+          },
+          type: "button"
+        }, translate(state, "button-reset"))
+      ),
+      node("button", {
+        click: () => {
+          state.screen = SCREENS.overview;
+        },
+        type: "button"
+      }, translate(state, "button-go_back"))
+    ])
   ];
 
   // src/utilities/identifiers.js
@@ -2524,18 +2497,19 @@
       let screen = null;
       switch (state.screen) {
         default:
-        case SCREENS.setup:
-          screen = setup(state);
+        case SCREENS.options:
+          screen = options(state);
           break;
         case SCREENS.overview:
           screen = overview(state);
           break;
-        case SCREENS.options:
-          screen = options(state);
+        case SCREENS.setup:
+          screen = setup(state);
           break;
         case SCREENS.statistics:
           screen = statistics(state);
           break;
+        // Games:
         case SCREENS.clarification:
           screen = clarification(state);
           break;
@@ -2544,6 +2518,9 @@
           break;
         case SCREENS.conversation:
           screen = conversation(state);
+          break;
+        case SCREENS.vocabulary:
+          screen = vocabulary(state);
           break;
       }
       return node("div", {
@@ -2568,6 +2545,7 @@
       statisticComprehensionActivity: 0,
       statisticConversationActivity: 0,
       statisticClarificationActivity: 0,
+      statisticVocabularyActivity: 0,
       statisticLastActivityOn: null,
       statisticCurrentActivityStreak: 0,
       statisticLongestActivityStreak: 0,
@@ -2584,7 +2562,12 @@
       conversationStopped: false,
       conversationError: false,
       conversationPending: false,
-      conversationMessages: []
+      conversationMessages: [],
+      vocabularyInput: "",
+      vocabularyReviewed: false,
+      vocabularyError: false,
+      vocabularyPending: false,
+      vocabularyMessages: []
     }, localStorage.getItem(STATE_KEY) ? JSON.parse(localStorage.getItem(STATE_KEY)) : {})
   );
 })();

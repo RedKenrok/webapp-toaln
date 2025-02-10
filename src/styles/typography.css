@@ -48,3 +48,35 @@ ol {
     text-align: justify;
   }
 }
+
+a {
+  color: var(--color-unvisited, blue);
+  --color: var(--color-unvisited, blue);
+  text-decoration: underline;
+}
+
+a:visited {
+  color: var(--color-visited, purple);
+  --color: var(--color-visited, purple);
+}
+
+a:visited::selection {
+  background-color: var(--color-visited, purple);
+}
+
+a:active,
+a:focus,
+a:focus-within,
+a:hover,
+a::selection {
+  color: var(--background);
+  background-color: var(--color-unvisited, blue);
+}
+
+a:visited {
+  background-color: var(--color-visited, blue);
+}
+
+.icon {
+  filter: grayscale(1);
+}

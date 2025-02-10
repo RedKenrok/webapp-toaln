@@ -19,4 +19,13 @@ The Dutch and English translations are written and checked by [myself](https://g
 
 ## Future ideas
 
-- Add a screen for learning new vocabulary.
+- Add an interactive narrative story where the LLM and user go back and forth adding parts to the story.
+
+## Scrapped ideas
+
+| Idea                                                                                                                                                               | Reason                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| Generate a word and definition and the user has to write down an antonym or synonym.                                                                               | Too short and relies on the fact that the user already knows the antonym or synonym.         |
+| Generate a paragraph and the user has to fill in a missing sentence in between.                                                                                    | User will probably draw a blank on what to respond.                                          |
+| Generate a sentence with a mistake the user has to correct them.                                                                                                   | Nice role reversal, but the user might just not simply know enough to point out the mistake. |
+| Generate a word and definition and the user has to play a game of word association where they answer with a thematically similar word and definition of their own. | Already have a similar option for practising vocabulary. Perhaps this can be added later.    |

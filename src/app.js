@@ -12,13 +12,15 @@ import {
 } from './data/locales.js'
 import { SCREENS } from './data/screens.js'
 
-import { setup } from './screens/setup.js'
+import { options } from './screens/options.js'
 import { overview } from './screens/overview.js'
+import { setup } from './screens/setup.js'
+import { statistics } from './screens/statistics.js'
+
 import { conversation } from './screens/conversation.js'
 import { clarification } from './screens/clarification.js'
 import { comprehension } from './screens/comprehension.js'
-import { options } from './screens/options.js'
-import { statistics } from './screens/statistics.js'
+import { vocabulary } from './screens/vocabulary.js'
 
 import { createIdentifier } from './utilities/identifiers.js'
 
@@ -37,32 +39,31 @@ mount(
     let screen = null
     switch (state.screen) {
       default:
-      case SCREENS.setup:
-        screen = setup(state)
-        break
-
-      case SCREENS.overview:
-        screen = overview(state)
-        break
-
       case SCREENS.options:
         screen = options(state)
         break
-
+      case SCREENS.overview:
+        screen = overview(state)
+        break
+      case SCREENS.setup:
+        screen = setup(state)
+        break
       case SCREENS.statistics:
         screen = statistics(state)
         break
 
+      // Games:
       case SCREENS.clarification:
         screen = clarification(state)
         break
-
       case SCREENS.comprehension:
         screen = comprehension(state)
         break
-
       case SCREENS.conversation:
         screen = conversation(state)
+        break
+      case SCREENS.vocabulary:
+        screen = vocabulary(state)
         break
     }
 
@@ -91,6 +92,7 @@ mount(
     statisticComprehensionActivity: 0,
     statisticConversationActivity: 0,
     statisticClarificationActivity: 0,
+    statisticVocabularyActivity: 0,
     statisticLastActivityOn: null,
     statisticCurrentActivityStreak: 0,
     statisticLongestActivityStreak: 0,
@@ -111,6 +113,12 @@ mount(
     conversationError: false,
     conversationPending: false,
     conversationMessages: [],
+
+    vocabularyInput: '',
+    vocabularyReviewed: false,
+    vocabularyError: false,
+    vocabularyPending: false,
+    vocabularyMessages: [],
   }, (
     localStorage.getItem(STATE_KEY)
       ? JSON.parse(localStorage.getItem(STATE_KEY))

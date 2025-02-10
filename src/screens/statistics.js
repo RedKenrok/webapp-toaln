@@ -15,7 +15,8 @@ export const statistics = (
     ...c(
       state.statisticComprehensionActivity > 1
       || state.statisticConversationActivity > 1
-      || state.statisticClarificationActivity > 1,
+      || state.statisticClarificationActivity > 1
+      || state.statisticVocabularyActivity > 1,
       n('p', t(state, 'statistics-activity_per_category')),
       n('p', t(state, 'statistics-no_activity')),
     ),

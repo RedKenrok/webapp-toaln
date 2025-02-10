@@ -69,237 +69,6 @@ export const translate = (
 }
 
 export const TRANSLATIONS = Object.freeze({
-  [LOCALES.dan]: {
-    [LOCALES.dan]: 'Dansk',
-    [LOCALES.deu]: 'Tysk',
-    [LOCALES.eng]: 'Engelsk (Storbritannien)',
-    [LOCALES.epo]: 'Esperanto',
-    [LOCALES.fry]: 'Frisisk (West)',
-    [LOCALES.isl]: 'Islandsk',
-    [LOCALES.nld]: 'Hollandsk',
-    [LOCALES.nno]: 'Norsk (nynorsk)',
-    [LOCALES.nob]: 'Norsk (bokmål)',
-    [LOCALES.swe]: 'Svensk',
-    [LOCALES.vls]: 'Flamsk',
-
-    'proficiency_name-a1': 'A1: Begynder',
-    'proficiency_description-a1': [
-      'Læsning: Du kan forstå velkendte navne, ord og meget enkle sætninger, for eksempel på skilte, plakater eller i kataloger.',
-      'Skrivning: Du kan skrive et kort, enkelt postkort, for eksempel sende en feriehilsen. Du kan udfylde formularer med personlige oplysninger, for eksempel indtaste dit navn, nationalitet og adresse på en hotelregistreringsformular.',
-    ],
-    'proficiency_example-a1': '"Hej! Mit navn er Maria. Jeg bor i et lille hus i London med min familie. Jeg har en bror og en søster. Jeg kan godt lide at spise æbler og pærer. Hvad er din yndlingsfrugt?"',
-    'proficiency_name-a2': 'A2: Let øvet',
-    'proficiency_description-a2': [
-      'Læsning: Du kan læse meget korte, enkle tekster. Du kan finde specifikke, forudsigelige oplysninger i enkle hverdagstekster såsom annoncer, brochurer, menuer og køreplaner, og du kan forstå korte, simple personlige breve.',
-      'Skrivning: Du kan skrive korte, enkle noter og beskeder om emner, der vedrører umiddelbare behov. Du kan skrive et meget simpelt personligt brev, for eksempel takke nogen for noget.',
-    ],
-    'proficiency_example-a2': '"Sidste weekend gik jeg i parken med mine venner. Vi havde en picnic med sandwiches og juice. Vejret var solrigt, og vi spillede fodbold. Derefter gik vi på café og fik is. Det var en sjov dag!"',
-    'proficiency_name-b1': 'B1: Mellem',
-    'proficiency_description-b1': [
-      'Læsning: Du kan forstå tekster, der hovedsageligt består af hverdags- eller jobrelateret sprog med høj frekvens. Du kan forstå beskrivelser af begivenheder, følelser og ønsker i personlige breve.',
-      'Skrivning: Du kan skrive enkle sammenhængende tekster om emner, der er velkendte eller af personlig interesse. Du kan skrive personlige breve, der beskriver oplevelser og indtryk.',
-    ],
-    'proficiency_example-b1': '"Jeg nyder at læse bøger, især krimier. For nylig læste jeg en historie om en detektiv, der løste en vanskelig sag. Det var meget spændende, og jeg kunne ikke stoppe med at læse. Jeg kan godt lide krimier, fordi de får mig til at tænke og prøve at gætte slutningen."',
-    'proficiency_name-b2': 'B2: Over middel',
-    'proficiency_description-b2': [
-      'Læsning: Du kan læse artikler og rapporter om aktuelle problemer, hvor skribenterne indtager bestemte holdninger eller synspunkter. Du kan forstå moderne litterær prosa.',
-      'Skrivning: Du kan skrive klar, detaljeret tekst om en bred vifte af emner, der er relateret til dine interesser. Du kan skrive et essay eller en rapport, hvor du videregiver information eller giver grunde for eller imod et bestemt synspunkt. Du kan skrive breve, der fremhæver den personlige betydning af begivenheder og oplevelser.',
-    ],
-    'proficiency_example-b2': '"Konceptet om fjernarbejde er blevet stadig mere populært i de seneste år. Det giver fleksibilitet og bekvemmelighed for medarbejdere, så de kan arbejde hvor som helst fra. Dog medfører det også udfordringer som opretholdelse af produktivitet og kommunikation med kollegaer. Samlet set synes jeg, at fordelene opvejer ulemperne."',
-    'proficiency_name-c1': 'C1: Avanceret',
-    'proficiency_description-c1': [
-      'Læsning: Du kan forstå lange og komplekse faktuelle og litterære tekster og værdsætte stilistiske forskelle. Du kan forstå specialiserede artikler og længere tekniske instruktioner, selv når de ikke er relateret til dit fagområde.',
-      'Skrivning: Du kan udtrykke dig klart i velstruktureret tekst og uddybe synspunkter. Du kan skrive om komplekse emner i et brev, essay eller rapport og understrege de væsentligste punkter. Du kan vælge en stil, der passer til læseren.',
-    ],
-    'proficiency_example-c1': '"Klimaændringer er et af de mest presserende problemer i vor tid. Selvom vedvarende energikilder som vind- og solenergi bliver stadig vigtigere, er overgangen væk fra fossile brændstoffer stadig en stor udfordring. Regeringerne skal samarbejde med industrien og lokalsamfundene om at skabe bæredygtige politikker, der balancerer økonomisk vækst med miljøbeskyttelse."',
-    'proficiency_name-c2': 'C2: Kompetent',
-    'proficiency_description-c2': [
-      'Læsning: Du kan uden besvær læse næsten alle former for skrevet sprog, inklusive abstrakte, strukturelt eller sprogligt komplekse tekster såsom manualer, specialartikler og litterære værker.',
-      'Skrivning: Du kan skrive klar, flydende tekst i en passende stil. Du kan skrive komplekse breve, rapporter eller artikler, der præsenterer en sag med en effektiv logisk struktur, som hjælper modtageren med at bemærke og huske væsentlige punkter. Du kan skrive resuméer og anmeldelser af professionelle eller litterære værker.',
-    ],
-    'proficiency_example-c2': '"Nuancerne i den sproglige udvikling afslører meget om kulturelle og samfundsmæssige skift over tid. For eksempel signalerer optagelsen af låneord ofte en periode med kulturel udveksling eller indflydelse. Analyse af sådanne mønstre forbedrer ikke kun vores forståelse af sprogudvikling, men giver også dybe indsigter i historiske forhold mellem civilisationer. Dette dynamiske samspil understreger kompleksiteten og sammenhængen i menneskelig kommunikation."',
-
-    'prompt-context': 'Du er ekspert i og underviser i {%t:{%s:targetLocale%}%}. Brugeren studerer {%t:{%s:targetLocale%}%}. Brugeren behersker allerede sproget på CEFR-niveau {%s:proficiencyLevel%}. Dette betyder, at brugeren allerede har følgende færdigheder: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Dog ønsker brugeren at forbedre sine færdigheder yderligere.',
-    'prompt-comprehension': 'Lav en læse- og skriveøvelse, hvor brugeren modtager en tekst på {%t:{%s:targetLocale%}%} sammen med et spørgsmål på {%t:{%s:sourceLocale%}%} om teksten, som brugeren skal besvare på {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner, forklaringer eller svar til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.',
-    'prompt-comprehension-follow_up': 'Giv feedback på den stillede læse- og skriveøvelse. Giv kort feedback på {%t:{%s:targetLocale%}%} med en dybdegående analyse, der er klar nok til brugerens vidensniveau i {%t:{%s:sourceLocale%}%}. Fokuser udelukkende på sproglige aspekter og ignorér indholdsmæssige vurderinger eller fortolkninger af beskeden. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter.',
-    'prompt-conversation': 'Du vil simulere en samtale med brugeren på {%t:{%s:targetLocale%}%}. Giv ikke yderligere instruktioner eller forklaringer til brugeren. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Skriv den første besked i samtalen og introducer straks et emne at diskutere.',
-    'prompt-conversation-follow_up': 'Du simulerer en samtale med brugeren i {%t:{%s:targetLocale%}%}. Som svar på en besked, giv først en kortfattet feedback med stor dybde, som er tydelig nok for brugerens vidensniveau i {%t:{%s:sourceLocale%}%}. Fokuser udelukkende på sproglige aspekter og ignorer indholdsmæssige evalueringer eller fortolkninger af beskeden. Fortsæt derefter med at svare på beskeden i {%t:{%s:targetLocale%}%}. Giv ingen yderligere instruktioner eller forklaringer til brugeren. Skriv altid i almindelig tekst uden nogen form for formatering, labels eller overskrifter.',
-    'prompt-clarification': 'Brugeren har et spørgsmål nedenfor, svar kortfattet med dybdegående feedback, passende til brugerens sprogniveau. Skriv altid i ren tekst uden formatering, etiketter eller overskrifter. Besvar ikke spørgsmålet, hvis det ikke er sprogligt relateret.',
-    'prompt-topic': ' Inkorporér følgende emne i din besked "{%topic%}".',
-
-    'greeting': 'Hej!',
-    'button-go_back': 'Tilbage',
-    'button-reset': 'Nulstil',
-    'button-generate': 'Generér',
-    'button-answer': 'Svar',
-    'button-reply': 'Svar',
-    'button-ask': 'Spørg',
-
-    'setup-source_language': 'Så, du vil forbedre dine færdigheder i et sprog? Lad denne app hjælpe dig med at øve. Vi skal starte med at vælge et sprog, du allerede kender.',
-    'setup-target_language': 'Nu til næste trin, hvilket sprog vil du gerne lære?',
-    'setup-proficiency_leven': 'Hvor god vil du sige, du allerede er i sproget? Se forklaringen nedenfor sammen med en eksempeltekst for at få en idé om, hvilken slags tekster du kan forvente.',
-    'setup-topics_of_interest': 'Det er meget sjovere, hvis øvelserne nogle gange indeholder et emne, du finder interessant. Udfyld derfor et par emner nedenfor, som jævnligt kan dukke op. Tænk især på hobbyer eller andre interesser. Jo flere, jo bedre!',
-    'setup-api_code': 'Denne app bruger en "stor sprogmodel" til at generere og vurdere øvelser. Du har måske hørt om det, alle i tech-sektoren taler om udviklingen inden for kunstig intelligens. Appen bruger en LLM, men leveres ikke med en, så vi skal linke den til en LLM-udbyder. Hvilken udbyder vil du bruge?',
-    'setup-api_credentials': 'Nu er det vigtige spørgsmål nøglen. Du kan få den fra udviklerens dashboard. Der står sandsynligvis, at du ikke bør dele den med tredjeparter. Heldigvis sender denne app aldrig nøglen videre. Stadig ikke overbevist? Tjek appens kildekode eller vent på en version, der ikke længere kræver dette.',
-    'setup-test_api_credentials': 'Test nøgle',
-    'setup-api_credentials_untested': 'Test legitimationsoplysningerne, før du fortsætter.',
-    'setup-api_credentials_tested': 'Den angivne nøgle virker. Nu kan du vælge, hvilken "stor sprogmodel" du vil bruge. Ikke sikker på forskellene? Intet problem, vi anbefaler at vælge "{%preferredModel%}". Det bør være fint.',
-    'setup-outro': 'Held og lykke, og hav det sjovt!',
-    'setup-next': 'Begynd at øve',
-
-    'overview-intro': 'Hvad vil du gerne gøre?',
-    'overview-comprehension-title': 'Besvar spørgsmål om tekster',
-    'overview-comprehension-description': 'Du modtager en kort tekst på {%t:{%s:targetLanguage%}%} sammen med et spørgsmål, der skal besvares på {%t:{%s:targetLanguage%}%}.',
-    'overview-conversation-title': 'Øv samtaler',
-    'overview-conversation-description': 'En kort samtale vil blive simuleret på {%t:{%s:targetLanguage%}%}, for eksempel om at bestille mad eller diskutere en hobby.',
-    'overview-clarification-title': 'Bed om afklaring',
-    'overview-clarification-description': 'Få forklaringer om {%t:{%s:targetLanguage%}%}, såsom en grammatisk regel som bøjninger eller kasus.',
-    'overview-statistics-title': 'Se statistik',
-    'overview-statistics-description': 'Se antallet af aktiviteter, du har gennemført.',
-    'overview-options-title': 'Justér indstillinger',
-    'overview-options-description': 'Skift det sprog, du vil lære, de emner, du finder interessante, eller den anvendte LLM.',
-
-    'options-source_language': 'Hvilket sprog kender du allerede?',
-    'options-target_language': 'Hvilket sprog vil du gerne lære?',
-    'options-proficiency_leven': 'Hvor god er du til sproget? Se forklaringen nedenfor sammen med en eksempeltekst for at få en idé om, hvilken slags tekster du kan forvente.',
-    'options-topics_of_interest': 'Udfyld et par emner nedenfor, som jævnligt kan dukke op i øvelserne.',
-    'options-api_code': 'Denne app bruger en "stor sprogmodel" til at generere og vurdere øvelser. Hvilken udbyder vil du linke?',
-    'options-api_credentials': 'Indtast nøglen fra udviklerens dashboard.',
-    'options-test_api_credentials': 'Test nøgle',
-    'options-api_credentials_untested': 'Test legitimationsoplysningerne, før du fortsætter.',
-    'options-api_credentials_tested': 'Den angivne nøgle virker. Vælg en "stor sprogmodel" at bruge, vi anbefaler "{%preferredModel%}".',
-
-    'statistics-activity_per_category': 'I alt har du besvaret {%s:statisticComprehensionActivity%} spørgsmål om tekster, sendt {%s:statisticConversationActivity%} beskeder i øvelsessamtaler og stillet {%s:statisticClarificationActivity%} spørgsmål.',
-    'statistics-no_activity': 'Desværre har du endnu ikke gennemført nok aktiviteter til at blive vist her. Gå til oversigten, og vælg en øvelse for at komme i gang. Din fremgang vil blive sporet i baggrunden.',
-    'statistics-no_activity_streak': 'Du har i øjeblikket ingen igangværende aktivitetsrække. Du kan opbygge en ved at gennemføre mindst én øvelse på flere på hinanden følgende dage.',
-    'statistics-current_activity_streak': 'Din nuværende aktivitetsrække er {%s:statisticCurrentActivityStreak%} dage lang.',
-    'statistics-longest_activity_streak': 'Din længste aktivitetsrække nogensinde var {%s:statisticLongestActivityStreak%} dage lang.',
-
-    'clarification-intro': 'Hvad vil du gerne have mere information om?',
-    'clarification-placeholder': 'Jeg undrer mig over...',
-
-    'comprehension-intro': 'Du vil snart læse en tekst på {%t:{%s:targetLanguage%}%} sammen med et spørgsmål om den. Besvar spørgsmålet på {%t:{%s:targetLanguage%}%}. Derefter vil du modtage noget feedback om dit svar.',
-
-    'conversation-intro': 'Du vil snart simulere en samtale på {%t:{%s:targetLanguage%}%}, så svar altid på {%t:{%s:targetLanguage%}%}. Du kan modtage feedback undervejs.',
-  },
-  [LOCALES.deu]: {
-    [LOCALES.dan]: 'Dänisch',
-    [LOCALES.deu]: 'Deutsch',
-    [LOCALES.eng]: 'Englisch (Vereinigtes Königreich)',
-    [LOCALES.epo]: 'Esperanto',
-    [LOCALES.fry]: 'Friesisch (West)',
-    [LOCALES.isl]: 'Isländisch',
-    [LOCALES.nld]: 'Niederländisch',
-    [LOCALES.nno]: 'Norwegisch (Nynorsk)',
-    [LOCALES.nob]: 'Norwegisch (Bokmål)',
-    [LOCALES.swe]: 'Schwedisch',
-    [LOCALES.vls]: 'Flämisch',
-
-    'proficiency_name-a1': 'A1: Anfänger',
-    'proficiency_description-a1': [
-      'Lesen: Sie können vertraute Namen, Wörter und sehr einfache Sätze verstehen, zum Beispiel auf Schildern, Plakaten oder in Katalogen.',
-      'Schreiben: Sie können eine kurze, einfache Postkarte schreiben, zum Beispiel Urlaubsgrüße verschicken. Sie können Formulare mit persönlichen Angaben ausfüllen, z. B. Name, Staatsangehörigkeit und Adresse in einem Hotelanmeldeformular eintragen.',
-    ],
-    'proficiency_example-a1': '"Hallo! Mein Name ist Maria. Ich wohne mit meiner Familie in einem kleinen Haus in London. Ich habe einen Bruder und eine Schwester. Ich esse gerne Äpfel und Birnen. Was ist dein Lieblingsobst?"',
-
-    'proficiency_name-a2': 'A2: Grundlegende Kenntnisse',
-    'proficiency_description-a2': [
-      'Lesen: Sie können sehr kurze, einfache Texte lesen. Sie können spezifische, vorhersehbare Informationen in einfachen Alltagsmaterialien wie Anzeigen, Prospekten, Speisekarten und Fahrplänen finden und kurze einfache persönliche Briefe verstehen.',
-      'Schreiben: Sie können kurze, einfache Notizen und Mitteilungen zu unmittelbaren Bedürfnissen schreiben. Sie können einen sehr einfachen persönlichen Brief schreiben, zum Beispiel, um jemandem für etwas zu danken.',
-    ],
-    'proficiency_example-a2': '"Letztes Wochenende bin ich mit meinen Freunden in den Park gegangen. Wir hatten ein Picknick mit Sandwiches und Saft. Das Wetter war sonnig und wir haben Fußball gespielt. Danach sind wir in ein Café gegangen und haben Eis gegessen. Es war ein schöner Tag!"',
-
-    'proficiency_name-b1': 'B1: Mittelstufe',
-    'proficiency_description-b1': [
-      'Lesen: Sie können Texte verstehen, die hauptsächlich aus häufig gebrauchten Alltags- oder beruflichen Ausdrücken bestehen. Sie können Beschreibungen von Ereignissen, Gefühlen und Wünschen in persönlichen Briefen verstehen.',
-      'Schreiben: Sie können einfache, zusammenhängende Texte zu vertrauten Themen oder Themen von persönlichem Interesse schreiben. Sie können persönliche Briefe schreiben, in denen Erfahrungen und Eindrücke beschrieben werden.',
-    ],
-    'proficiency_example-b1': '"Ich lese gerne Bücher, besonders Krimis. Kürzlich habe ich eine Geschichte über einen Detektiv gelesen, der einen schwierigen Fall gelöst hat. Es war sehr spannend, und ich konnte nicht aufhören zu lesen. Ich mag Krimis, weil sie mich zum Nachdenken bringen und ich das Ende erraten möchte."',
-
-    'proficiency_name-b2': 'B2: Fortgeschrittene Kenntnisse',
-    'proficiency_description-b2': [
-      'Lesen: Sie können Artikel und Berichte lesen, die sich mit aktuellen Problemen befassen, bei denen die Verfasser bestimmte Haltungen oder Standpunkte einnehmen. Sie können moderne literarische Texte verstehen.',
-      'Schreiben: Sie können klare, detaillierte Texte zu einer Vielzahl von Themen schreiben, die mit Ihren Interessen zusammenhängen. Sie können Aufsätze oder Berichte schreiben, in denen Sie Informationen weitergeben oder Gründe für oder gegen einen bestimmten Standpunkt darlegen. Sie können Briefe schreiben, in denen die persönliche Bedeutung von Ereignissen und Erfahrungen hervorgehoben wird.',
-    ],
-    'proficiency_example-b2': '"Das Konzept des Remote-Arbeitens wird in den letzten Jahren immer beliebter. Es bietet Flexibilität und Komfort für Mitarbeiter, da sie von überall aus arbeiten können. Allerdings gibt es auch Herausforderungen, wie zum Beispiel die Aufrechterhaltung der Produktivität und der Kommunikation mit Kollegen. Insgesamt denke ich, dass die Vorteile die Nachteile überwiegen."',
-
-    'proficiency_name-c1': 'C1: Fortgeschritten',
-    'proficiency_description-c1': [
-      'Lesen: Sie können lange und komplexe Sach- und literarische Texte verstehen und Stilunterschiede würdigen. Sie können spezialisierte Artikel und längere technische Anweisungen verstehen, selbst wenn sie nicht in Ihrem Fachgebiet liegen.',
-      'Schreiben: Sie können sich in klaren, gut strukturierten Texten ausdrücken und Standpunkte ausführlich darlegen. Sie können über komplexe Themen in einem Brief, Aufsatz oder Bericht schreiben und dabei hervorheben, was Sie für besonders wichtig halten. Sie können den Stil an die Zielgruppe anpassen.',
-    ],
-    'proficiency_example-c1': '"Der Klimawandel ist eines der drängendsten Probleme unserer Zeit. Während erneuerbare Energiequellen wie Wind- und Solarenergie an Bedeutung gewinnen, bleibt der Übergang weg von fossilen Brennstoffen eine große Herausforderung. Regierungen müssen mit Industrien und Gemeinschaften zusammenarbeiten, um nachhaltige Richtlinien zu schaffen, die wirtschaftliches Wachstum mit Umweltschutz in Einklang bringen."',
-
-    'proficiency_name-c2': 'C2: Kompetente Sprachverwendung',
-    'proficiency_description-c2': [
-      'Lesen: Sie können nahezu alle Formen der geschriebenen Sprache mühelos lesen, einschließlich abstrakter, strukturell oder sprachlich komplexer Texte wie Handbücher, spezialisierte Artikel und literarische Werke.',
-      'Schreiben: Sie können klar und flüssig schreiben und dabei einen Stil verwenden, der dem jeweiligen Kontext entspricht. Sie können komplexe Briefe, Berichte oder Artikel verfassen, die einen Sachverhalt effektiv darstellen und eine logische Struktur aufweisen, die dem Leser hilft, wichtige Punkte zu erkennen und sich zu merken. Sie können Zusammenfassungen und Rezensionen professioneller oder literarischer Werke schreiben.',
-    ],
-    'proficiency_example-c2': '"Die Nuancen der sprachlichen Evolution offenbaren viel über kulturelle und gesellschaftliche Veränderungen im Laufe der Zeit. Beispielsweise signalisiert die Übernahme von Lehnwörtern oft eine Phase kulturellen Austauschs oder Einflusses. Die Analyse solcher Muster erweitert nicht nur unser Verständnis der Sprachentwicklung, sondern bietet auch tiefgehende Einblicke in historische Beziehungen zwischen Zivilisationen. Dieses dynamische Zusammenspiel unterstreicht die Komplexität und Vernetzung menschlicher Kommunikation."',
-
-    'prompt-context': 'Sie sind ein Experte in und Lehrer für {%t:{%s:targetLocale%}%}. Der Benutzer lernt {%t:{%s:targetLocale%}%}. Der Benutzer beherrscht die Sprache bereits auf dem GER-Niveau {%s:proficiencyLevel%}. Das bedeutet, dass der Benutzer bereits über die folgenden Fähigkeiten verfügt: "{%t:proficiency_description-{%s:proficiencyLevel%}%}". Allerdings möchte der Benutzer seine Sprachkenntnisse weiter verbessern.',
-    'prompt-comprehension': 'Erstelle eine Lese- und Schreibübung, bei der der Benutzer einen Text in {%t:{%s:targetLocale%}%} erhält, zusammen mit einer Frage in {%t:{%s:sourceLocale%}%} über den Text, auf die der Benutzer in {%t:{%s:targetLocale%}%} antworten muss. Gib dem Benutzer keine weiteren Anweisungen, Erklärungen oder Antworten. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder Überschriften.',
-    'prompt-comprehension-follow_up': 'Gib Feedback zur gestellten Lese- und Schreibübung. Gib kurzes Feedback zum {%t:{%s:targetLocale%}%} mit einer detaillierten Analyse, die dem Kenntnisstand des Benutzers im {%t:{%s:sourceLocale%}%} angemessen ist. Konzentriere dich ausschließlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Schreibe immer im Klartext, ohne jegliche Formatierung, Beschriftungen oder Überschriften.',
-    'prompt-conversation': 'Sie werden eine Konversation mit dem Benutzer in {%t:{%s:targetLocale%}%} simulieren. Geben Sie dem Benutzer keine weiteren Anweisungen oder Erklärungen. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder Überschriften. Schreiben Sie die erste Nachricht der Konversation, indem Sie sofort ein Gesprächsthema einführen.',
-    'prompt-conversation-follow_up': 'Du simulierst ein Gespräch mit dem Benutzer in {%t:{%s:targetLocale%}%}. Gib als Antwort auf eine Nachricht zunächst ein knappes, aber tiefgründiges Feedback, das für das Wissensniveau des Benutzers in {%t:{%s:sourceLocale%}%} klar genug ist. Konzentriere dich dabei ausschließlich auf sprachliche Aspekte und ignoriere inhaltliche Bewertungen oder Interpretationen der Nachricht. Fahre anschließend damit fort, auf die Nachricht in {%t:{%s:targetLocale%}%} zu antworten. Gib dem Benutzer keine weiteren Anweisungen oder Erklärungen. Schreibe immer in einfachem Text ohne jegliche Formatierung, Labels oder Überschriften.',
-    'prompt-clarification': 'Der Benutzer hat eine Frage unten gestellt, beantworten Sie diese präzise mit einem tiefgehenden Feedback, das der Sprachkompetenz des Benutzers entspricht. Schreiben Sie immer im Klartext ohne Formatierungen, Labels oder Überschriften. Beantworten Sie die Frage nicht, wenn sie nicht sprachbezogen ist.',
-    'prompt-topic': ' Integrieren Sie das folgende Thema in Ihre Nachricht: "{%topic%}".',
-
-    'greeting': 'Hallo!',
-    'button-go_back': 'Zurück',
-    'button-reset': 'Zurücksetzen',
-    'button-generate': 'Generieren',
-    'button-answer': 'Antworten',
-    'button-reply': 'Antworten',
-    'button-ask': 'Fragen',
-
-    'setup-source_language': 'Sie möchten also Ihre Sprachkenntnisse verbessern? Lassen Sie diese App Ihnen beim Üben helfen. Wir müssen zunächst eine Sprache auswählen, die Sie bereits beherrschen.',
-    'setup-target_language': 'Nun der nächste Schritt: Welche Sprache möchten Sie lernen?',
-    'setup-proficiency_leven': 'Wie gut schätzen Sie Ihre Kenntnisse in der Sprache ein? Siehe die Erklärung unten zusammen mit einem Beispieltext, um eine Vorstellung davon zu bekommen, welche Art von Texten Sie erwarten können.',
-    'setup-topics_of_interest': 'Es macht viel mehr Spaß, wenn die Übungen manchmal ein Thema behandeln, das Sie interessant finden. Füllen Sie daher unten einige Themen ein, die regelmäßig vorkommen können. Denken Sie vor allem an Hobbys oder andere Interessen. Je mehr, desto besser!',
-    'setup-api_code': 'Diese App verwendet ein "Large Language Model", um Übungen zu generieren und zu bewerten. Vielleicht haben Sie schon davon gehört, jeder in der Tech-Branche spricht über die Entwicklungen in der künstlichen Intelligenz. Die App nutzt ein LLM, bringt jedoch keines mit, daher müssen wir es mit einem LLM-Anbieter verknüpfen. Welchen Anbieter möchten Sie verwenden?',
-    'setup-api_credentials': 'Nun die wichtige Frage: der Schlüssel. Sie können ihn im Entwickler-Dashboard erhalten. Dort steht wahrscheinlich, dass Sie ihn nicht mit Dritten teilen sollen. Zum Glück sendet diese App den Schlüssel niemals weiter. Immer noch nicht überzeugt? Schauen Sie sich den Quellcode der App an oder warten Sie auf eine Version, die diesen nicht mehr benötigt.',
-    'setup-test_api_credentials': 'Schlüssel testen',
-    'setup-api_credentials_untested': 'Testen Sie die Zugangsdaten, bevor Sie fortfahren.',
-    'setup-api_credentials_tested': 'Der angegebene Schlüssel funktioniert. Jetzt können Sie auswählen, welches "Large Language Model" Sie verwenden möchten. Nicht sicher, welche Unterschiede es gibt? Kein Problem, wir empfehlen Ihnen die Auswahl von "{%preferredModel%}". Das sollte passen.',
-    'setup-outro': 'Viel Erfolg und viel Spaß!',
-    'setup-next': 'Mit dem Üben beginnen',
-
-    'overview-intro': 'Was möchten Sie tun?',
-    'overview-comprehension-title': 'Fragen zu Texten beantworten',
-    'overview-comprehension-description': 'Sie erhalten einen kurzen Text in {%t:{%s:targetLanguage%}%} zusammen mit einer Frage, die in {%t:{%s:targetLanguage%}%} beantwortet werden soll.',
-    'overview-conversation-title': 'Konversationen üben',
-    'overview-conversation-description': 'Es wird eine kurze Konversation in {%t:{%s:targetLanguage%}%} simuliert, beispielsweise über das Bestellen von Essen oder das Diskutieren eines Hobbys.',
-    'overview-clarification-title': 'Erklärung anfordern',
-    'overview-clarification-description': 'Erhalten Sie Erklärungen zu {%t:{%s:targetLanguage%}%}, z. B. zu einer Grammatikregel wie Konjugationen oder Fällen.',
-    'overview-statistics-title': 'Statistiken ansehen',
-    'overview-statistics-description': 'Werfen Sie einen Blick auf die Anzahl der abgeschlossenen Aktivitäten.',
-    'overview-options-title': 'Optionen anpassen',
-    'overview-options-description': 'Ändern Sie die Sprache, die Sie lernen möchten, die Themen, die Sie interessieren, oder das verwendete LLM.',
-
-    'options-source_language': 'Welche Sprache beherrschen Sie bereits?',
-    'options-target_language': 'Welche Sprache möchten Sie lernen?',
-    'options-proficiency_leven': 'Wie gut sind Sie in der Sprache? Siehe die Erklärung unten zusammen mit einem Beispieltext, um eine Vorstellung davon zu bekommen, welche Art von Texten Sie erwarten können.',
-    'options-topics_of_interest': 'Füllen Sie unten einige Themen ein, die regelmäßig in den Übungen vorkommen können.',
-    'options-api_code': 'Diese App verwendet ein "Large Language Model", um Übungen zu generieren und zu bewerten. Welchen Anbieter möchten Sie verknüpfen?',
-    'options-api_credentials': 'Geben Sie den Schlüssel aus dem Entwickler-Dashboard ein.',
-    'options-test_api_credentials': 'Schlüssel testen',
-    'options-api_credentials_untested': 'Testen Sie die Zugangsdaten, bevor Sie fortfahren.',
-    'options-api_credentials_tested': 'Der angegebene Schlüssel funktioniert. Wählen Sie ein "Large Language Model", das Sie verwenden möchten. Wir empfehlen "{%preferredModel%}".',
-
-    'statistics-activity_per_category': 'Insgesamt haben Sie {%s:statisticComprehensionActivity%} Fragen zu Texten beantwortet, {%s:statisticConversationActivity%} Nachrichten in Übungsgesprächen gesendet und {%s:statisticClarificationActivity%} Fragen gestellt.',
-    'statistics-no_activity': 'Leider haben Sie noch nicht genügend Aktivitäten abgeschlossen, um hier angezeigt zu werden. Gehen Sie zur Übersicht und wählen Sie eine Übung, um zu beginnen. Ihr Fortschritt wird im Hintergrund verfolgt.',
-    'statistics-no_activity_streak': 'Sie haben derzeit keine laufende Aktivitätsserie. Sie können eine aufbauen, indem Sie an mehreren aufeinanderfolgenden Tagen mindestens eine Übung abschließen.',
-    'statistics-current_activity_streak': 'Ihre aktuelle Aktivitätsserie beträgt {%s:statisticCurrentActivityStreak%} Tage.',
-    'statistics-longest_activity_streak': 'Ihre längste Aktivitätsserie war jemals {%s:statisticLongestActivityStreak%} Tage lang.',
-
-    'clarification-intro': 'Wozu möchten Sie mehr Informationen?',
-    'clarification-placeholder': 'Ich frage mich...',
-
-    'comprehension-intro': 'Sie werden gleich einen Text in {%t:{%s:targetLanguage%}%} lesen, zusammen mit einer Frage dazu. Beantworten Sie die Frage in {%t:{%s:targetLanguage%}%}. Anschließend erhalten Sie ein Feedback zu Ihrer Antwort.',
-
-    'conversation-intro': 'Sie werden gleich eine Konversation in {%t:{%s:targetLanguage%}%} simulieren. Antworten Sie stets in {%t:{%s:targetLanguage%}%}. Möglicherweise erhalten Sie zwischendurch Feedback.',
-  },
   [LOCALES.eng]: {
     [LOCALES.dan]: 'Danish',
     [LOCALES.deu]: 'German',
@@ -375,6 +144,8 @@ export const TRANSLATIONS = Object.freeze({
     'prompt-conversation-follow_up': 'You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message in {%t:{%s:sourceLocale%}%}, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.',
     'prompt-clarification': 'The user has a question below, answer it concisely with in-depth feedback, appropriate to the user\'s proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.',
     'prompt-topic': ' Incorporate the following topic into your message "{%topic%}".',
+    'prompt-vocabulary': 'Write a word along with a definition in {%t:{%s:targetLocale%}%}. The user will then write a sentence in {%t:{%s:targetLocale%}%} in which this word must be used. Take into account the user\'s skill and language level. Do not provide any additional instructions, explanations, or the answer to the user. Always write in plain text without any formatting, labels, or headings.',
+    'prompt-vocabulary-follow_up': 'Provide feedback on the sentence in which the user has answered. Check whether the word has been used correctly in the sentence. Provide concise feedback on the {%t:{%s:targetLocale%}%} with considerable depth that is clear enough for the user\'s level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.',
 
     'greeting': 'Hi!',
     'button-go_back': 'Go back',
@@ -383,6 +154,7 @@ export const TRANSLATIONS = Object.freeze({
     'button-answer': 'Answer',
     'button-reply': 'Reply',
     'button-ask': 'Ask',
+    'credits-link': 'Made by {%name%}',
 
     'setup-source_language': 'So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.',
     'setup-target_language': 'Now the next step, which language would you like to learn?',
@@ -407,6 +179,8 @@ export const TRANSLATIONS = Object.freeze({
     'overview-statistics-description': 'Take a look at the number of activities you have completed.',
     'overview-options-title': 'Adjust options',
     'overview-options-description': 'Change the language you want to learn, the topics you find interesting, or the LLM used.',
+    'overview-vocabulary-title': 'Learn new words',
+    'overview-vocabulary-description': 'You\'ll receive a word and definition in {%t:{%s:targetLanguage%}%}, respond with a scentence using the word in{%t:{%s:targetLanguage%}%}.',
 
     'options-source_language': 'Which language do you already know?',
     'options-target_language': 'Which language would you like to learn?',
@@ -418,18 +192,17 @@ export const TRANSLATIONS = Object.freeze({
     'options-api_credentials_untested': 'Test the credentials before proceeding.',
     'options-api_credentials_tested': 'The provided key works. Choose a "Large Language Model" to use, we recommend "{%preferredModel%}".',
 
-    'statistics-activity_per_category': 'In total, you have answered {%s:statisticComprehensionActivity%} questions about texts, sent {%s:statisticConversationActivity%} messages in practice conversations, and asked {%s:statisticClarificationActivity%} questions.',
+    'statistics-activity_per_category': 'In total, you have answered {%s:statisticComprehensionActivity%} questions about texts, sent {%s:statisticConversationActivity%} messages in practice conversations, {%s:statisticVocabularyActivity%} words practised, and asked {%s:statisticClarificationActivity%} questions.',
     'statistics-no_activity': 'Unfortunately, you haven\'t completed enough activities yet to display here. Go to the overview and choose an exercise to start. Your progress will be tracked in the background.',
     'statistics-no_activity_streak': 'You currently have no ongoing activity streak. You can build one by completing at least one exercise on multiple consecutive days.',
     'statistics-current_activity_streak': 'Your current activity streak is {%s:statisticCurrentActivityStreak%} days long.',
     'statistics-longest_activity_streak': 'Your longest activity streak ever was {%s:statisticLongestActivityStreak%} days long.',
 
     'clarification-intro': 'What would you like more information about?',
-    'clarification-placeholder': 'I wondering...',
-
-    'comprehension-intro': 'You will soon read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You will then receive some feedback regarding your answer.',
-
-    'conversation-intro': 'You will soon simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.',
+    'clarification-placeholder': 'I\'m wondering about...',
+    'comprehension-intro': 'In a moment you\'ll read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You\'ll then receive some feedback regarding your answer.',
+    'conversation-intro': 'In a moment you\'ll simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.',
+    'vocabulary-intro': 'In a moment you\'ll read a word together with its definition in {%t:{%s:targetLanguage%}%}. Answer with a scentence that uses the word in {%t:{%s:targetLanguage%}%}. You\'ll then receive some feedback regarding your answer.',
   },
   [LOCALES.nld]: {
     [LOCALES.dan]: 'Deens',
@@ -488,6 +261,8 @@ export const TRANSLATIONS = Object.freeze({
     'prompt-conversation-follow_up': 'Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
     'prompt-clarification': 'De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.',
     'prompt-topic': ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
+    'prompt-vocabulary': 'Schrijf een woord samen met een definitie er achter in het {%t:{%s:targetLocale%}%}. De gebruiker zal vervolgens een zin in het {%t:{%s:targetLocale%}%} schrijven waarin dit woord verwerkt moeten worden. Hou hierbij rekening met de vaardigheid en taalniveau van de gebruiker. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
+    'prompt-vocabulary-follow_up': 'Geef feedback op de zin waarmee de gebruik antwoord heeft gegeven. Controleer of de woord juist gebruikt is in de zin. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.',
 
     'greeting': 'Hoi!',
     'button-go_back': 'Ga terug',
@@ -496,6 +271,7 @@ export const TRANSLATIONS = Object.freeze({
     'button-answer': 'Antwoorden',
     'button-reply': 'Antwoorden',
     'button-ask': 'Vragen',
+    'credits-link': 'Gemaakt door {%name%}',
 
     'setup-source_language': 'Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.',
     'setup-target_language': 'Nu het volgende probleem, welke taal wil je leren?',
@@ -520,6 +296,8 @@ export const TRANSLATIONS = Object.freeze({
     'overview-statistics-description': 'Neem een kijkje in het aantal activiteiten dat je gedaan hebt.',
     'overview-options-title': 'Opties aanpassen',
     'overview-options-description': 'Pas aan welke taal je wilt leren, welke onderwerpen je interessant vind of welke LLM gebruikt wordt.',
+    'overview-vocabulary-title': 'Nieuwe woorden leren',
+    'overview-vocabulary-description': 'Je krijgt een woord en definitie in het {%t:{%s:targetLanguage%}%}, schrijf vervolgens een zin het {%t:{%s:targetLanguage%}%} dat dit woord gebruikt.',
 
     'options-source_language': 'Welke taal ken je al?',
     'options-target_language': 'Welke taal wil je leren?',
@@ -531,7 +309,7 @@ export const TRANSLATIONS = Object.freeze({
     'options-api_credentials_untested': 'Test de gegevens eerst voordat je verder gaat.',
     'options-api_credentials_tested': 'De opgegeven sleutel werkt. Kies een "Large Language Model" dat je wilt gebruiken, wij raden "{%preferredModel%}" aan.',
 
-    'statistics-activity_per_category': ' In totaal heb je {%s:statisticComprehensionActivity%} vragen over teksten beantwoord, {%s:statisticConversationActivity%} berichten verstuurd in oefen gesprekken, en {%s:statisticClarificationActivity%} vragen gesteld.',
+    'statistics-activity_per_category': ' In totaal heb je {%s:statisticComprehensionActivity%} vragen over teksten beantwoord, {%s:statisticConversationActivity%} berichten verstuurd in oefen gesprekken, {%s:statisticVocabularyActivity%} woorden geoefened, en {%s:statisticClarificationActivity%} vragen gesteld.',
     'statistics-no_activity': 'Je hebt helaas nog niet genoeg activiteiten gedaan om hier weer te geven. Ga naar het overzicht en kies een oefening om te beginnen, op de achtergrond zal bijgehouden worden hoeveel je er al voltooid hebt.',
     'statistics-no_activity_streak': 'Je hebt op dit momenten geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal één oefening te doen.',
     'statistics-current_activity_streak': 'Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang.',
@@ -539,10 +317,9 @@ export const TRANSLATIONS = Object.freeze({
 
     'clarification-intro': 'Waar wil je meer over weten?',
     'clarification-placeholder': 'Ik vraag mij af...',
-
     'comprehension-intro': 'Je leest straks een tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag erover, beantwoord de vraag in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord.',
-
     'conversation-intro': 'Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.',
+    'vocabulary-intro': 'Je leest straks een woord samen met de definitie ervan in het {%t:{%s:targetLanguage%}%}. Antwoord met een zin waar het woord ingebruikt wordt in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord.',
   },
 })
 
