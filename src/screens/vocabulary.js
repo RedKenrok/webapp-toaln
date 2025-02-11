@@ -118,14 +118,7 @@ export const vocabulary = (
                 state,
                 [],
                 t(state, 'prompt-context'),
-                t(state, 'prompt-vocabulary') + (
-                  randomBool(10)
-                    ? t(state, 'prompt-topic')
-                      .replace('{%topic%}', randomItem(
-                        state.topicsOfInterest.filter(topic => topic)
-                      ))
-                    : ''
-                ),
+                t(state, 'prompt-vocabulary'),
               ).then(([error, response, result]) => {
                 state.vocabularyPending = false
                 if (error) {

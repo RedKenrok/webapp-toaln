@@ -49,19 +49,14 @@ ol {
   }
 }
 
+::selection {
+  color: var(--background);
+  background-color: var(--foreground);
+}
+
 a {
   color: var(--color-unvisited, blue);
-  --color: var(--color-unvisited, blue);
   text-decoration: underline;
-}
-
-a:visited {
-  color: var(--color-visited, purple);
-  --color: var(--color-visited, purple);
-}
-
-a:visited::selection {
-  background-color: var(--color-visited, purple);
 }
 
 a:active,
@@ -74,7 +69,16 @@ a::selection {
 }
 
 a:visited {
-  background-color: var(--color-visited, blue);
+  color: var(--color-visited, purple);
+}
+
+a:visited:active,
+a:visited:focus,
+a:visited:focus-within,
+a:visited:hover,
+a:visited::selection {
+  background-color: var(--color-visited, purple);
+  color: var(--background);
 }
 
 .icon {

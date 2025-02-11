@@ -1168,10 +1168,10 @@
     setup: "setup",
     overview: "overview",
     options: "options",
-    statistics: "statistics",
     clarification: "clarification",
     comprehension: "comprehension",
     conversation: "conversation",
+    story: "story",
     vocabulary: "vocabulary"
   });
 
@@ -1299,6 +1299,8 @@
       "prompt-conversation": "You will simulate a conversation with the user in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings. Write the first message in the conversation, immediately introducing a topic to discuss.",
       "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message in {%t:{%s:sourceLocale%}%}, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
       "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
+      "prompt-story": "You and the user will collaboratively write a story by taking turns adding sections. Begin by writing the first section of the story in {%t:{%s:targetLocale%}%}, introducing an engaging theme or setting. Focus on having fun and practicing the language. Do not include any additional instructions, explanations, formatting, labels, or headings.",
+      "prompt-story-follow_up": "You are continuing the collaborative story-writing session with the user. First, provide concise, in-depth feedback in {%t:{%s:sourceLocale%}%} on the user's latest section, focusing solely on linguistic aspects and suggesting improvements. Avoid any comments about the story's plot, logic, or content. Then, add your next section of the story in {%t:{%s:targetLocale%}%}. Write your response in plain text without any formatting, labels, or headings.",
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
       "prompt-vocabulary": "Write a word along with a definition in {%t:{%s:targetLocale%}%}. The user will then write a sentence in {%t:{%s:targetLocale%}%} in which this word must be used. Take into account the user's skill and language level. Do not provide any additional instructions, explanations, or the answer to the user. Always write in plain text without any formatting, labels, or headings.",
       "prompt-vocabulary-follow_up": "Provide feedback on the sentence in which the user has answered. Check whether the word has been used correctly in the sentence. Provide concise feedback on the {%t:{%s:targetLocale%}%} with considerable depth that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, or headings.",
@@ -1322,18 +1324,18 @@
       "setup-outro": "Good luck and have fun!",
       "setup-next": "Start practising",
       "overview-intro": "What would you like to do?",
-      "overview-comprehension-title": "Answer questions about texts",
-      "overview-comprehension-description": "You'll receive a short text in {%t:{%s:targetLanguage%}%} along with a question to be answered in {%t:{%s:targetLanguage%}%}.",
+      "overview-comprehension-title": "Answer questions",
+      "overview-comprehension-description": "You'll receive a short text in {%t:{%s:targetLanguage%}%} along with a question you can answer.",
       "overview-conversation-title": "Practise conversations",
       "overview-conversation-description": "A short conversation will be simulated in {%t:{%s:targetLanguage%}%}, for example, about ordering food or discussing a hobby.",
       "overview-clarification-title": "Ask for clarification",
       "overview-clarification-description": "Get explanations about {%t:{%s:targetLanguage%}%}, such as a grammar rule like conjugations or cases.",
-      "overview-statistics-title": "View statistics",
-      "overview-statistics-description": "Take a look at the number of activities you have completed.",
-      "overview-options-title": "Adjust options",
+      "overview-story-title": "Write a story",
+      "overview-story-description": "You'll take turns writing a story piece by piece in {%t:{%s:targetLanguage%}%}.",
+      "overview-options-title": "Change settings",
       "overview-options-description": "Change the language you want to learn, the topics you find interesting, or the LLM used.",
-      "overview-vocabulary-title": "Learn new words",
-      "overview-vocabulary-description": "You'll receive a word and definition in {%t:{%s:targetLanguage%}%}, respond with a scentence using the word in{%t:{%s:targetLanguage%}%}.",
+      "overview-vocabulary-title": "Learn words",
+      "overview-vocabulary-description": "You'll receive a word and definition in {%t:{%s:targetLanguage%}%} to which you can respond with a scentence using that word.",
       "options-source_language": "Which language do you already know?",
       "options-target_language": "Which language would you like to learn?",
       "options-proficiency_leven": "How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
@@ -1343,15 +1345,17 @@
       "options-test_api_credentials": "Test key",
       "options-api_credentials_untested": "Test the credentials before proceeding.",
       "options-api_credentials_tested": 'The provided key works. Choose a "Large Language Model" to use, we recommend "{%preferredModel%}".',
-      "statistics-activity_per_category": "In total, you have answered {%s:statisticComprehensionActivity%} questions about texts, sent {%s:statisticConversationActivity%} messages in practice conversations, {%s:statisticVocabularyActivity%} words practised, and asked {%s:statisticClarificationActivity%} questions.",
+      "statistics-activity_per_category": "You have already answered {%s:statisticComprehensionActivity%} questions,  {%s:statisticVocabularyActivity%} words practised, sent {%s:statisticConversationActivity%} messages, told {%s:statisticStoryActivity%} stories, and asked {%s:statisticClarificationActivity%} questions.",
       "statistics-no_activity": "Unfortunately, you haven't completed enough activities yet to display here. Go to the overview and choose an exercise to start. Your progress will be tracked in the background.",
       "statistics-no_activity_streak": "You currently have no ongoing activity streak. You can build one by completing at least one exercise on multiple consecutive days.",
-      "statistics-current_activity_streak": "Your current activity streak is {%s:statisticCurrentActivityStreak%} days long.",
+      "statistics-current_activity_streak": "Your current activity streak is {%s:statisticCurrentActivityStreak%} days long. Don't loose it and practise before midnight to extend it!",
+      "statistics-extended_activity_streak": "Good job, you extended your streak for today! Your current activity streak is {%s:statisticCurrentActivityStreak%} days long.",
       "statistics-longest_activity_streak": "Your longest activity streak ever was {%s:statisticLongestActivityStreak%} days long.",
       "clarification-intro": "What would you like more information about?",
       "clarification-placeholder": "I'm wondering about...",
       "comprehension-intro": "In a moment you'll read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer.",
       "conversation-intro": "In a moment you'll simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.",
+      "story-intro": "You're about to write a story in {%t:{%s:targetLanguage%}%} where, in turns, you add a piece. Don't worry about whether the story is good, logical, or well-founded; just make sure you practice the language. Therefore, always respond in {%t:{%s:targetLanguage%}%}. In between, you might receive some feedback on your writing.",
       "vocabulary-intro": "In a moment you'll read a word together with its definition in {%t:{%s:targetLanguage%}%}. Answer with a scentence that uses the word in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer."
     },
     [LOCALES.nld]: {
@@ -1408,6 +1412,8 @@
       "prompt-conversation": "Je gaat met de gebruiker een gesprek simuleren in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Schrijf het eerste bericht in een gesprek dat al gelijk een onderwerp introduceert om het over te hebben.",
       "prompt-conversation-follow_up": "Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
+      "prompt-story": "Jij en de gebruiker gaan samen een verhaal schrijven door om de beurt een gedeelte toe te voegen. Begin met het schrijven van de eerste sectie van het verhaal in {%t:{%s:targetLocale%}%}, waarin je een boeiend thema of een interessante setting introduceert. Richt je op plezier hebben en het oefenen van de taal. Voeg geen extra instructies, uitleg, opmaak, labels of koppen toe.",
+      "prompt-story-follow_up": "Je zet de gezamenlijke sessie voor het schrijven van een verhaal met de gebruiker voort. Geef eerst korte, diepgaande feedback in {%t:{%s:sourceLocale%}%} op de laatste bijdrage van de gebruiker, waarbij je je uitsluitend richt op taalkundige aspecten en suggesties voor verbetering geeft. Maak geen opmerkingen over de plot, logica of inhoud van het verhaal. Voeg daarna jouw volgende gedeelte van het verhaal toe in {%t:{%s:targetLocale%}%}. Schrijf je antwoord in platte tekst zonder opmaak, labels of koppen.",
       "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
       "prompt-vocabulary": "Schrijf een woord samen met een definitie er achter in het {%t:{%s:targetLocale%}%}. De gebruiker zal vervolgens een zin in het {%t:{%s:targetLocale%}%} schrijven waarin dit woord verwerkt moeten worden. Hou hierbij rekening met de vaardigheid en taalniveau van de gebruiker. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-vocabulary-follow_up": "Geef feedback op de zin waarmee de gebruik antwoord heeft gegeven. Controleer of de woord juist gebruikt is in de zin. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
@@ -1431,18 +1437,18 @@
       "setup-outro": "Heel veel succes en plezier!",
       "setup-next": "Begin met oefenen",
       "overview-intro": "Wat wil je gaan doen?",
-      "overview-comprehension-title": "Vragen over teksten beantwoorden",
-      "overview-comprehension-description": "Je krijgt een korte tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag die kan beantwoorden in natuurlijk het {%t:{%s:targetLanguage%}%}.",
-      "overview-conversation-title": "Gesprekken oefenen",
+      "overview-comprehension-title": "Beantwoord vragen",
+      "overview-comprehension-description": "Je krijgt een korte tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag die je kan beantwoorden.",
+      "overview-conversation-title": "Oefen gesprekken",
       "overview-conversation-description": "Er zal een kort gesprekje gespeeld worden in het {%t:{%s:targetLanguage%}%} over bijvoorbeeld het bestellen van eten of over een hobby.",
-      "overview-clarification-title": "Uitleg vragen",
+      "overview-clarification-title": "Vraag om uitleg",
       "overview-clarification-description": "Krijg verduidelijk over het {%t:{%s:targetLanguage%}%}, bijvoorbeeld een grammatica regel zoals vervoegingen en naamvallen.",
-      "overview-statistics-title": "Statistieken inzien",
-      "overview-statistics-description": "Neem een kijkje in het aantal activiteiten dat je gedaan hebt.",
-      "overview-options-title": "Opties aanpassen",
+      "overview-options-title": "Pas instellingen aan",
       "overview-options-description": "Pas aan welke taal je wilt leren, welke onderwerpen je interessant vind of welke LLM gebruikt wordt.",
-      "overview-vocabulary-title": "Nieuwe woorden leren",
-      "overview-vocabulary-description": "Je krijgt een woord en definitie in het {%t:{%s:targetLanguage%}%}, schrijf vervolgens een zin het {%t:{%s:targetLanguage%}%} dat dit woord gebruikt.",
+      "overview-story-title": "Schrijf een verhaal",
+      "overview-story-description": "Je gaat omste beurten stukje voor stukje een verhaal in het {%t:{%s:targetLanguage%}%} schrijven.",
+      "overview-vocabulary-title": "Leer woorden",
+      "overview-vocabulary-description": "Je krijgt een woord en definitie in het {%t:{%s:targetLanguage%}%} vervolgens schrijf je een zin dat dit woord gebruikt.",
       "options-source_language": "Welke taal ken je al?",
       "options-target_language": "Welke taal wil je leren?",
       "options-proficiency_leven": "Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
@@ -1452,15 +1458,17 @@
       "options-test_api_credentials": "Sleutel testen",
       "options-api_credentials_untested": "Test de gegevens eerst voordat je verder gaat.",
       "options-api_credentials_tested": 'De opgegeven sleutel werkt. Kies een "Large Language Model" dat je wilt gebruiken, wij raden "{%preferredModel%}" aan.',
-      "statistics-activity_per_category": " In totaal heb je {%s:statisticComprehensionActivity%} vragen over teksten beantwoord, {%s:statisticConversationActivity%} berichten verstuurd in oefen gesprekken, {%s:statisticVocabularyActivity%} woorden geoefened, en {%s:statisticClarificationActivity%} vragen gesteld.",
+      "statistics-activity_per_category": " Je hebt al {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.",
       "statistics-no_activity": "Je hebt helaas nog niet genoeg activiteiten gedaan om hier weer te geven. Ga naar het overzicht en kies een oefening om te beginnen, op de achtergrond zal bijgehouden worden hoeveel je er al voltooid hebt.",
       "statistics-no_activity_streak": "Je hebt op dit momenten geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal \xE9\xE9n oefening te doen.",
-      "statistics-current_activity_streak": "Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang.",
+      "statistics-current_activity_streak": "Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang. Verlies het niet en zorg ervoor dat je voor middernacht oefend!",
+      "statistics-extended_activity_streak": "Goed gedaan, je hebt jouw reeks voor vandaag verlengt! Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang.",
       "statistics-longest_activity_streak": " Jouw langste activiteitenreeks ooit was {%s:statisticLongestActivityStreak%} dagen lang.",
       "clarification-intro": "Waar wil je meer over weten?",
       "clarification-placeholder": "Ik vraag mij af...",
       "comprehension-intro": "Je leest straks een tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag erover, beantwoord de vraag in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord.",
       "conversation-intro": "Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
+      "story-intro": "Je gaat straks een verhaal schrijven in het {%t:{%s:targetLanguage%}%} waarbij je omste beurten een stuk toevoegd. Maak je geen zorgen of het verhaal een goed, logisch en gegrond verhaal is, maar zorg vooral dat je de taal oefened. Zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
       "vocabulary-intro": "Je leest straks een woord samen met de definitie ervan in het {%t:{%s:targetLanguage%}%}. Antwoord met een zin waar het woord ingebruikt wordt in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord."
     }
   });
@@ -1646,7 +1654,35 @@
     node("p", [
       node("b", translate(state, "greeting")),
       node("br"),
-      translate(state, "overview-intro")
+      ...conditional(
+        state.statisticComprehensionActivity > 1 || state.statisticConversationActivity > 1 || state.statisticClarificationActivity > 1 || state.statisticStoryActivity > 1 || state.statisticVocabularyActivity > 1,
+        translate(state, "statistics-activity_per_category"),
+        translate(state, "statistics-no_activity")
+      )
+    ]),
+    node("p", [
+      ...conditional(
+        state.statisticCurrentActivityStreak > 1 && (new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10) || new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === new Date((/* @__PURE__ */ new Date()).setDate((/* @__PURE__ */ new Date()).getDate() - 1)).toISOString().slice(0, 10)),
+        [
+          ...conditional(
+            new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
+            translate(state, "statistics-extended_activity_streak"),
+            translate(state, "statistics-current_activity_streak")
+          ),
+          ...conditional(
+            state.statisticLongestActivityStreak > state.statisticCurrentActivityStreak,
+            " " + translate(state, "statistics-longest_activity_streak")
+          )
+        ],
+        [
+          translate(state, "statistics-no_activity_streak"),
+          ...conditional(
+            state.statisticLongestActivityStreak > 1,
+            " " + translate(state, "statistics-longest_activity_streak")
+          )
+        ]
+      ),
+      " " + translate(state, "overview-intro")
     ]),
     node("div", {
       class: "vertical-layout"
@@ -1696,6 +1732,20 @@
       node("button", {
         class: "card",
         click: () => {
+          state.screen = SCREENS.story;
+        },
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F3AD}"),
+        node("b", translate(state, "overview-story-title")),
+        node("br"),
+        translate(state, "overview-story-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: () => {
           state.screen = SCREENS.clarification;
         },
         type: "button"
@@ -1707,24 +1757,9 @@
         node("br"),
         translate(state, "overview-clarification-description")
       ]),
-      // Story 🎭
       node("div", {
         class: "margin"
       }),
-      node("button", {
-        class: "card",
-        click: () => {
-          state.screen = SCREENS.statistics;
-        },
-        type: "button"
-      }, [
-        node("span", {
-          class: "icon"
-        }, "\u{1F4C8}"),
-        node("b", translate(state, "overview-statistics-title")),
-        node("br"),
-        translate(state, "overview-statistics-description")
-      ]),
       node("button", {
         class: "card",
         click: () => {
@@ -1924,48 +1959,11 @@
     }, translate(state, "setup-next"))
   ];
 
-  // src/screens/statistics.js
-  var statistics = (state) => [
-    node("p", [
-      node("b", translate(state, "greeting"))
-    ]),
-    ...conditional(
-      state.statisticComprehensionActivity > 1 || state.statisticConversationActivity > 1 || state.statisticClarificationActivity > 1 || state.statisticVocabularyActivity > 1,
-      node("p", translate(state, "statistics-activity_per_category")),
-      node("p", translate(state, "statistics-no_activity"))
-    ),
-    node(
-      "p",
-      conditional(
-        state.statisticCurrentActivityStreak > 1 && new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
-        [
-          translate(state, "statistics-current_activity_streak"),
-          ...conditional(
-            state.statisticLongestActivityStreak > state.statisticCurrentActivityStreak,
-            translate(state, "statistics-longest_activity_streak")
-          )
-        ],
-        [
-          translate(state, "statistics-no_activity_streak"),
-          ...conditional(
-            state.statisticLongestActivityStreak > 1,
-            translate(state, "statistics-longest_activity_streak")
-          )
-        ]
-      )
-    ),
-    node("button", {
-      click: () => {
-        state.screen = SCREENS.overview;
-      },
-      type: "button"
-    }, translate(state, "button-go_back"))
-  ];
-
   // src/utilities/streak.js
   var ONE_HOUR = 60 * 60 * 1e3;
   var ONE_DAY = ONE_HOUR * 24;
   var TWO_DAYS = ONE_DAY * 2;
+  var GRACE_PERIOD = ONE_HOUR;
   var onActivity2 = (state) => {
     const lastActivityOn = new Date(state.statisticLastActivityOn);
     const lastActivityUTC = Date.UTC(
@@ -1980,10 +1978,10 @@
       today.getDate()
     );
     const deltaTime = todayUTC - lastActivityUTC;
-    if (deltaTime > TWO_DAYS) {
+    if (deltaTime >= TWO_DAYS + GRACE_PERIOD) {
       state.statisticCurrentActivityStreak = 1;
       state.statisticLastActivityOn = today.toISOString();
-    } else if (deltaTime > ONE_DAY) {
+    } else if (deltaTime >= ONE_DAY) {
       state.statisticCurrentActivityStreak++;
       state.statisticLastActivityOn = today.toISOString();
     }
@@ -2349,6 +2347,133 @@
     ])
   ];
 
+  // src/screens/story.js
+  var story = (state) => [
+    node("p", [
+      node("b", translate(state, "greeting")),
+      node("br"),
+      translate(state, "story-intro")
+    ]),
+    ...conditional(
+      state.storyMessages && state.storyMessages.length > 0,
+      node("div", {
+        class: "messages"
+      }, state.storyMessages.map(
+        (message) => node("p", {
+          class: "message-" + message.role
+        }, message.content.split("\n").flatMap(
+          (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+        ))
+      ))
+    ),
+    ...conditional(
+      state.storyError,
+      node("p", state.storyError)
+    ),
+    ...conditional(
+      state.storyPending,
+      node("p", {
+        class: "pending"
+      }),
+      conditional(
+        state.storyMessages && state.storyMessages.length > 0,
+        node("textarea", {
+          class: "message-user",
+          id: "input-question",
+          keyup: (event) => {
+            state.storyInput = event.target.value;
+          }
+        }, state.storyInput)
+      )
+    ),
+    node("div", {
+      class: "row reverse"
+    }, [
+      ...conditional(
+        state.storyMessages && state.storyMessages.length > 0 && !state.storyStopped,
+        node("button", {
+          disabled: state.storyPending || !state.storyInput || state.storyInput.trim().length === 0,
+          type: "button",
+          click: () => {
+            if (!state.storyPending && state.storyInput && state.storyInput.trim().length > 0) {
+              state.storyError = false;
+              state.storyPending = true;
+              state.storyMessages.push({
+                role: "user",
+                content: state.storyInput.trim()
+              });
+              state.storyInput = "";
+              createMessage3(
+                state,
+                state.storyMessages,
+                translate(state, "prompt-context"),
+                translate(state, "prompt-story-follow_up")
+              ).then(([error, response, result]) => {
+                state.storyPending = false;
+                if (error) {
+                  state.storyError = error.toString();
+                  const message = state.storyMessages.pop();
+                  state.storyInput = message.content;
+                  return;
+                }
+                if (result.content.endsWith("STOP")) {
+                  state.storyStopped = true;
+                }
+                state.storyMessages.push(result);
+                state.statisticStoryActivity++;
+                onActivity2(state);
+              });
+            }
+          }
+        }, translate(state, "button-reply")),
+        node("button", {
+          disabled: state.storyPending,
+          type: "button",
+          click: () => {
+            if (!state.storyPending) {
+              state.storyError = false;
+              state.storyMessages = [];
+              state.storyPending = true;
+              createMessage3(
+                state,
+                [],
+                translate(state, "prompt-context"),
+                translate(state, "prompt-story") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
+                  state.topicsOfInterest.filter((topic) => topic)
+                )) : "")
+              ).then(([error, response, result]) => {
+                state.storyPending = false;
+                if (error) {
+                  state.storyError = error.toString();
+                  return;
+                }
+                state.storyMessages.push(result);
+              });
+            }
+          }
+        }, translate(state, "button-generate"))
+      ),
+      ...conditional(
+        state.storyPending || state.storyMessages && state.storyMessages.length > 0,
+        node("button", {
+          click: () => {
+            state.storyError = false;
+            state.storyMessages = [];
+            state.storyPending = false;
+            state.storyStopped = false;
+          },
+          type: "button"
+        }, translate(state, "button-reset"))
+      ),
+      node("button", {
+        click: () => {
+          state.screen = SCREENS.overview;
+        },
+        type: "button"
+      }, translate(state, "button-go_back"))
+    ])
+  ];
+
   // src/screens/vocabulary.js
   var vocabulary = (state) => [
     node("p", [
@@ -2437,9 +2562,7 @@
                 state,
                 [],
                 translate(state, "prompt-context"),
-                translate(state, "prompt-vocabulary") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
-                  state.topicsOfInterest.filter((topic) => topic)
-                )) : "")
+                translate(state, "prompt-vocabulary")
               ).then(([error, response, result]) => {
                 state.vocabularyPending = false;
                 if (error) {
@@ -2493,7 +2616,6 @@
     (state) => {
       localStorage.setItem(STATE_KEY, JSON.stringify(state));
       document.documentElement.setAttribute("lang", state.sourceLocale);
-      console.log("state", state);
       let screen = null;
       switch (state.screen) {
         default:
@@ -2506,9 +2628,6 @@
         case SCREENS.setup:
           screen = setup(state);
           break;
-        case SCREENS.statistics:
-          screen = statistics(state);
-          break;
         // Games:
         case SCREENS.clarification:
           screen = clarification(state);
@@ -2518,6 +2637,9 @@
           break;
         case SCREENS.conversation:
           screen = conversation(state);
+          break;
+        case SCREENS.story:
+          screen = story(state);
           break;
         case SCREENS.vocabulary:
           screen = vocabulary(state);
@@ -2545,6 +2667,7 @@
       statisticComprehensionActivity: 0,
       statisticConversationActivity: 0,
       statisticClarificationActivity: 0,
+      statisticStoryActivity: 0,
       statisticVocabularyActivity: 0,
       statisticLastActivityOn: null,
       statisticCurrentActivityStreak: 0,
@@ -2563,6 +2686,11 @@
       conversationError: false,
       conversationPending: false,
       conversationMessages: [],
+      storyInput: "",
+      storyReviewed: false,
+      storyError: false,
+      storyPending: false,
+      storyMessages: [],
       vocabularyInput: "",
       vocabularyReviewed: false,
       vocabularyError: false,

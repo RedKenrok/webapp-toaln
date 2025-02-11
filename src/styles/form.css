@@ -18,6 +18,22 @@ textarea {
   background-color: var(--highlight);
 }
 
+button:active,
+button:focus,
+button:hover,
+input:active,
+input:focus,
+input:hover,
+select:active,
+select:focus,
+select:hover,
+textarea:active,
+textarea:focus,
+textarea:hover {
+  background-color: transparent;
+}
+
+
 textarea {
   resize: vertical;
   min-height: 6.625em;

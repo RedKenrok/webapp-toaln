@@ -15,11 +15,11 @@ import { SCREENS } from './data/screens.js'
 import { options } from './screens/options.js'
 import { overview } from './screens/overview.js'
 import { setup } from './screens/setup.js'
-import { statistics } from './screens/statistics.js'
 
 import { conversation } from './screens/conversation.js'
 import { clarification } from './screens/clarification.js'
 import { comprehension } from './screens/comprehension.js'
+import { story } from './screens/story.js'
 import { vocabulary } from './screens/vocabulary.js'
 
 import { createIdentifier } from './utilities/identifiers.js'
@@ -34,8 +34,6 @@ mount(
     localStorage.setItem(STATE_KEY, JSON.stringify(state))
     document.documentElement.setAttribute('lang', state.sourceLocale)
 
-    console.log('state', state)
-
     let screen = null
     switch (state.screen) {
       default:
@@ -48,9 +46,6 @@ mount(
       case SCREENS.setup:
         screen = setup(state)
         break
-      case SCREENS.statistics:
-        screen = statistics(state)
-        break
 
       // Games:
       case SCREENS.clarification:
@@ -61,6 +56,9 @@ mount(
         break
       case SCREENS.conversation:
         screen = conversation(state)
+        break
+      case SCREENS.story:
+        screen = story(state)
         break
       case SCREENS.vocabulary:
         screen = vocabulary(state)
@@ -92,6 +90,7 @@ mount(
     statisticComprehensionActivity: 0,
     statisticConversationActivity: 0,
     statisticClarificationActivity: 0,
+    statisticStoryActivity: 0,
     statisticVocabularyActivity: 0,
     statisticLastActivityOn: null,
     statisticCurrentActivityStreak: 0,
@@ -113,6 +112,12 @@ mount(
     conversationError: false,
     conversationPending: false,
     conversationMessages: [],
+
+    storyInput: '',
+    storyReviewed: false,
+    storyError: false,
+    storyPending: false,
+    storyMessages: [],
 
     vocabularyInput: '',
     vocabularyReviewed: false,
