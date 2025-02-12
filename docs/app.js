@@ -1916,6 +1916,7 @@
             state.apiCredentialsTested = true;
             state.apiCredentialsError = false;
             state.apiModels = result;
+            state.apiModel ??= result?.data.length > 0 ? result.data[0].id : null;
           }
         });
       },
