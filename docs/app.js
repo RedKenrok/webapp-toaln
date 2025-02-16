@@ -226,14 +226,9 @@
     return abstractChildNodes;
   };
   var proxify = (root, onChange) => {
-    const map = /* @__PURE__ */ new WeakMap();
     const handler = {
       deleteProperty: (target, key) => {
         if (Reflect.has(target, key)) {
-          const value = target[key];
-          if (typeof value === "object" && value && map.has(value)) {
-            map.get(value).revoke();
-          }
           const deleted = Reflect.deleteProperty(target, key);
           if (deleted) {
             onChange();
@@ -245,38 +240,32 @@
       set: (target, key, value) => {
         const existingValue = target[key];
         if (existingValue !== value) {
-          if (typeof existingValue === "object" && existingValue && map.has(existingValue)) {
-            map.get(existingValue).revoke();
+          if (value && typeof value === "object") {
+            value = add(value);
           }
-          target[key] = typeof value === "object" && value ? map.has(value) ? map.get(value).proxy : createProxy(value) : value;
+          target[key] = value;
           onChange();
         }
         return true;
       }
     };
-    const createProxy = (target) => {
-      if (map.has(target)) {
-        return map.get(target).proxy;
-      }
+    const add = (target) => {
       for (const key in target) {
-        const value = target[key];
-        if (value && typeof value === "object") {
-          target[key] = createProxy(value);
+        if (target[key] && typeof target[key] === "object") {
+          target[key] = add(target[key]);
         }
       }
-      const revocable = Proxy.revocable(target, handler);
-      map.set(target, revocable);
-      return revocable.proxy;
+      return new Proxy(target, handler);
     };
-    return createProxy(root);
+    return add(root);
   };
-  var MATCH_CAPITALS = /[A-Z]+(?![a-z])|[A-Z]/g;
-  var HYPHENATE = (part, offset) => (offset ? "-" : "") + part;
   var mount = (rootElement, renderView, initialState, oldAbstractTree) => {
     if (typeof initialState === "string") {
       initialState = JSON.parse(initialState);
     }
-    initialState != null ? initialState : initialState = {};
+    if (!initialState) {
+      initialState = {};
+    }
     let updatePromise = null;
     const triggerUpdate = () => {
       if (!updatePromise) {
@@ -331,22 +320,25 @@
               } else if (name === "style" && typeof value === "object") {
                 for (let styleName in value) {
                   let styleValue = value[styleName];
-                  styleName = styleName.replace(MATCH_CAPITALS, HYPHENATE).toLowerCase();
-                  if (Array.isArray(styleValue)) {
-                    styleValue = styleValue.join(" ");
+                  if (styleName.includes("-", 1)) {
+                    element.style.setProperty(
+                      styleName,
+                      styleValue
+                    );
+                  } else {
+                    element.style[styleName] = styleValue;
                   }
-                  element.style.setProperty(
-                    styleName,
-                    styleValue
-                  );
                 }
                 if (oldAttributes && oldAttributes[name] && typeof oldAttributes[name] === "object" && !Array.isArray(oldAttributes[name])) {
                   for (let styleName in oldAttributes[name]) {
                     if (!(styleName in value)) {
-                      styleName = styleName.replace(MATCH_CAPITALS, HYPHENATE).toLowerCase();
-                      element.style.removeProperty(
-                        styleName
-                      );
+                      if (styleName.includes("-")) {
+                        element.style.removeProperty(
+                          styleName
+                        );
+                      } else {
+                        delete element.style[styleName];
+                      }
                     }
                   }
                 }
@@ -375,6 +367,8 @@
               element.className = "";
             } else if (name === "style") {
               element.style.cssText = "";
+            } else if (name === "value") {
+              element.value = "";
             } else {
               element.removeAttribute(name);
             }
@@ -384,8 +378,7 @@
     };
     let oldMemoMap = /* @__PURE__ */ new WeakMap();
     let newMemoMap = /* @__PURE__ */ new WeakMap();
-    const updateElementTree = (element, newChildAbstracts, oldChildAbstracts, elementAbstract) => {
-      var _a, _b, _c;
+    const updateChildren = (element, newChildAbstracts, oldChildAbstracts) => {
       let newIndex = 0;
       let newCount = 0;
       if (newChildAbstracts) {
@@ -432,10 +425,10 @@
                   oldChildAbstracts.splice(
                     newIndex - newCount,
                     0,
-                    ...oldChildAbstracts.splice(
+                    oldChildAbstracts.splice(
                       oldIndex,
                       1
-                    )
+                    )[0]
                   );
                 }
                 if (newAbstract.t) {
@@ -444,113 +437,51 @@
                     newAbstract.a,
                     oldAbstract.a
                   );
-                  updateElementTree(
+                  updateChildren(
                     element.childNodes[newIndex],
                     newAbstract.c,
-                    oldAbstract.c,
-                    oldAbstract
+                    oldAbstract.c
                   );
-                } else {
-                  if (oldAbstract !== newAbstract) {
-                    element.childNodes[newIndex].textContent = newAbstract;
-                  }
+                } else if (oldAbstract !== newAbstract) {
+                  element.childNodes[newIndex].textContent = newAbstract;
                 }
                 break;
               }
             }
           }
           if (!matched) {
-            let childElement;
+            let newNode;
             if (newAbstract.t) {
-              childElement = document.createElement(
+              newNode = document.createElement(
                 newAbstract.t
               );
-              if (newAbstract.a) {
-                updateAttributes(
-                  childElement,
-                  newAbstract.a
-                );
-              }
-              if (newAbstract.c) {
-                updateElementTree(
-                  childElement,
-                  newAbstract.c
-                );
-              }
-              const insertAdjacentElement = (element2, elementAbstract2, position) => {
-                if (position && (!elementAbstract2 || elementAbstract2.t)) {
-                  element2.insertAdjacentElement(
-                    position,
-                    childElement
-                  );
-                } else {
-                  element2.parentNode.insertBefore(
-                    childElement,
-                    element2
-                  );
-                }
-              };
-              if (newIndex === 0) {
-                insertAdjacentElement(
-                  element,
-                  elementAbstract,
-                  "afterbegin"
-                );
-              } else if (((_a = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _a : 0) + newCount > newIndex) {
-                insertAdjacentElement(
-                  element.childNodes[newIndex]
-                  // (oldChildAbstracts as NodeContent[])[newIndex + newCount],
-                  // 'beforebegin',
-                );
-              } else {
-                insertAdjacentElement(
-                  element,
-                  elementAbstract,
-                  "beforeend"
-                );
-              }
+              updateAttributes(
+                newNode,
+                newAbstract.a
+              );
+              updateChildren(
+                newNode,
+                newAbstract.c
+              );
             } else {
-              const insertAdjacentText = (element2, elementAbstract2, position) => {
-                if (position && (!elementAbstract2 || elementAbstract2.t)) {
-                  element2.insertAdjacentText(
-                    position,
-                    newAbstract
-                  );
-                } else {
-                  element2.parentNode.insertBefore(
-                    document.createTextNode(newAbstract),
-                    element2
-                  );
-                }
-              };
-              if (newIndex === 0) {
-                insertAdjacentText(
-                  element,
-                  elementAbstract,
-                  "afterbegin"
-                );
-              } else if (((_b = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _b : 0) + newCount > newIndex) {
-                insertAdjacentText(
-                  element.childNodes[newIndex]
-                  // (oldChildAbstracts as NodeContent[])[newIndex + newCount],
-                  // 'beforebegin',
-                );
-              } else {
-                insertAdjacentText(
-                  element,
-                  elementAbstract,
-                  "beforeend"
-                );
-              }
+              newNode = document.createTextNode(
+                newAbstract
+              );
             }
+            element.insertBefore(
+              newNode,
+              element.childNodes[newIndex]
+            );
             newCount++;
           }
         }
       }
-      const elementLength = ((_c = oldChildAbstracts == null ? void 0 : oldChildAbstracts.length) != null ? _c : 0) + newCount;
-      if (elementLength >= newIndex) {
-        for (let i = elementLength - 1; i >= newIndex; i--) {
-          element.childNodes[i].remove();
+      if (oldChildAbstracts) {
+        const elementLength = oldChildAbstracts.length + newCount;
+        if (elementLength >= newIndex) {
+          for (let i = elementLength - 1; i >= newIndex; i--) {
+            element.childNodes[i].remove();
+          }
         }
       }
     };
@@ -561,10 +492,12 @@
       try {
         oldAbstractTree = JSON.parse(oldAbstractTree);
       } catch (error) {
-        oldAbstractTree = void 0;
+        oldAbstractTree = null;
       }
     }
-    oldAbstractTree != null ? oldAbstractTree : oldAbstractTree = childrenToNodes(_rootElement);
+    if (!oldAbstractTree) {
+      oldAbstractTree = childrenToNodes(_rootElement);
+    }
     let active = true, updating = false;
     const updateAbstracts = () => {
       if (active && !updating && updatePromise) {
@@ -573,7 +506,7 @@
         let newAbstractTree = arrayifyOrUndefined(
           renderView(state)
         );
-        updateElementTree(
+        updateChildren(
           _rootElement,
           newAbstractTree,
           oldAbstractTree

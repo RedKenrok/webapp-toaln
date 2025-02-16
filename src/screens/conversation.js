@@ -98,7 +98,7 @@ export const conversation = (
                   state.conversationInput = message.content
                   return
                 }
-                if (result.content.endsWith('STOP')) {
+                if (result.content.trim().endsWith('STOP')) {
                   state.conversationStopped = true
                 }
                 state.conversationMessages.push(result)
