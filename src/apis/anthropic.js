@@ -2,6 +2,18 @@ import { create } from '@doars/vroagn'
 import { cloneRecursive } from '../utilities/clone.js'
 import { createSingleton } from '../utilities/singleton.js'
 
+export const apiSettings = Object.freeze({
+  code: 'anthropic',
+  name: 'Anthropic',
+  preferredModel: 'claude-3-5-haiku-20241022',
+  preferredModelName: 'Claude 3.5 Haiku',
+  requireCredentials: true,
+  modelOptionsFilter: model =>
+    ![
+      '(old)',
+    ].some(keyword => model.name.toLowerCase().includes(keyword))
+})
+
 const _createMessage = createSingleton(
   () => create({
     credentials: 'same-origin',

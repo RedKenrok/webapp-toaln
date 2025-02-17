@@ -1,42 +1,17 @@
 import {
+  apiSettings as apiSettingsOpenAI,
   createMessage as createMessageOpenAI,
   getModels as getModelsOpenAI,
 } from './open-ai.js'
 import {
+  apiSettings as apiSettingsAnthropic,
   createMessage as createMessageAnthropic,
   getModels as getModelsAnthropic,
 } from './anthropic.js'
 
 export const APIS = Object.freeze({
-  open_ai: {
-    code: 'open_ai',
-    name: 'OpenAI',
-    preferredModel: 'gpt-4o-mini',
-    requireCredentials: true,
-    modelOptionsFilter: model =>
-      ![
-        'babbage-',
-        'dall-e-',
-        'davinci-',
-        'embedding-',
-        'moderation-',
-        'tts-',
-        'whisper-',
-      ].some(keyword => model.id.toLowerCase().includes(keyword))
-      && !model.id.match(/-(?:\d){4,}-(?:\d){2,}-(?:\d){2,}$/)
-      && !model.id.match(/-(?:\d){4,}$$/)
-  },
-  anthropic: {
-    code: 'anthropic',
-    name: 'Anthropic',
-    preferredModel: 'claude-3-5-haiku-20241022',
-    preferredModelName: 'Claude 3.5 Haiku',
-    requireCredentials: true,
-    modelOptionsFilter: model =>
-      ![
-        '(old)',
-      ].some(keyword => model.name.toLowerCase().includes(keyword))
-  },
+  open_ai: apiSettingsOpenAI,
+  anthropic: apiSettingsAnthropic,
 })
 
 const callApi = (

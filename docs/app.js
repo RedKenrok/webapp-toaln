@@ -856,6 +856,21 @@
   };
 
   // src/apis/open-ai.js
+  var apiSettings = Object.freeze({
+    code: "open_ai",
+    name: "OpenAI",
+    preferredModel: "gpt-4o-mini",
+    requireCredentials: true,
+    modelOptionsFilter: (model) => ![
+      "babbage-",
+      "dall-e-",
+      "davinci-",
+      "embedding-",
+      "moderation-",
+      "tts-",
+      "whisper-"
+    ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4,}-(?:\d){2,}-(?:\d){2,}$/) && !model.id.match(/-(?:\d){4,}$/)
+  });
   var _createMessage = createSingleton(
     () => create({
       method: "post",
@@ -916,6 +931,16 @@
   });
 
   // src/apis/anthropic.js
+  var apiSettings2 = Object.freeze({
+    code: "anthropic",
+    name: "Anthropic",
+    preferredModel: "claude-3-5-haiku-20241022",
+    preferredModelName: "Claude 3.5 Haiku",
+    requireCredentials: true,
+    modelOptionsFilter: (model) => ![
+      "(old)"
+    ].some((keyword) => model.name.toLowerCase().includes(keyword))
+  });
   var _createMessage2 = createSingleton(
     () => create({
       credentials: "same-origin",
@@ -993,31 +1018,8 @@
 
   // src/apis/apis.js
   var APIS = Object.freeze({
-    open_ai: {
-      code: "open_ai",
-      name: "OpenAI",
-      preferredModel: "gpt-4o-mini",
-      requireCredentials: true,
-      modelOptionsFilter: (model) => ![
-        "babbage-",
-        "dall-e-",
-        "davinci-",
-        "embedding-",
-        "moderation-",
-        "tts-",
-        "whisper-"
-      ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4,}-(?:\d){2,}-(?:\d){2,}$/) && !model.id.match(/-(?:\d){4,}$$/)
-    },
-    anthropic: {
-      code: "anthropic",
-      name: "Anthropic",
-      preferredModel: "claude-3-5-haiku-20241022",
-      preferredModelName: "Claude 3.5 Haiku",
-      requireCredentials: true,
-      modelOptionsFilter: (model) => ![
-        "(old)"
-      ].some((keyword) => model.name.toLowerCase().includes(keyword))
-    }
+    open_ai: apiSettings,
+    anthropic: apiSettings2
   });
   var callApi = (lookupTable, state, ...parameters) => {
     let method = null;
@@ -2006,7 +2008,7 @@
                   state.conversationInput = message.content;
                   return;
                 }
-                if (result.content.endsWith("STOP")) {
+                if (result.content.trim().endsWith("STOP")) {
                   state.conversationStopped = true;
                 }
                 state.conversationMessages.push(result);
