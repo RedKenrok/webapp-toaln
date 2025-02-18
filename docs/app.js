@@ -177,6 +177,18 @@
       };
     }
   });
+  var match = (pattern, lookup, fallback) => {
+    let result;
+    if (lookup && pattern in lookup && lookup[pattern]) {
+      result = lookup[pattern];
+    } else {
+      result = fallback;
+    }
+    if (typeof result === "function") {
+      result = result();
+    }
+    return arrayify(result);
+  };
   var cloneRecursive = (value) => {
     if (typeof value === "object") {
       const clone = Array.isArray(value) ? [] : {};
@@ -590,8 +602,8 @@
   });
   var normalizeContentType = (contentType) => contentType.split(";")[0].trim().toLowerCase();
   var getFileExtension = (url) => {
-    const match = url.match(/\.([^./?]+)(?:[?#]|$)/);
-    return match ? match[1].toLowerCase() : null;
+    const match2 = url.match(/\.([^./?]+)(?:[?#]|$)/);
+    return match2 ? match2[1].toLowerCase() : null;
   };
   var getType = function(url, responseHeaders, requestHeaders) {
     const contentType = responseHeaders.get("Content-Type");
@@ -1130,7 +1142,7 @@
       }
       return text.replace(
         /{%s:([^%]+)%}/g,
-        (match, key2) => {
+        (match2, key2) => {
           let value = key2.split(".").reduce(
             (innerState, keySegment) => innerState?.[keySegment],
             state
@@ -1141,11 +1153,11 @@
             }
             return value.toString();
           }
-          return match;
+          return match2;
         }
       ).replace(
         /{%t:([^%]+)%}/g,
-        (match, key2) => {
+        (match2, key2) => {
           if (key2 in TRANSLATIONS[locale]) {
             let value = TRANSLATIONS[locale][key2];
             if (value !== void 0 && value !== null) {
@@ -1155,7 +1167,7 @@
               return value.toString();
             }
           }
-          return match;
+          return match2;
         }
       );
     };
@@ -2552,38 +2564,17 @@
     (state) => {
       localStorage.setItem(STATE_KEY, JSON.stringify(state));
       document.documentElement.setAttribute("lang", state.sourceLocale);
-      let screen = null;
-      switch (state.screen) {
-        default:
-        case SCREENS.options:
-          screen = options(state);
-          break;
-        case SCREENS.overview:
-          screen = overview(state);
-          break;
-        case SCREENS.setup:
-          screen = setup(state);
-          break;
-        // Games:
-        case SCREENS.clarification:
-          screen = clarification(state);
-          break;
-        case SCREENS.comprehension:
-          screen = comprehension(state);
-          break;
-        case SCREENS.conversation:
-          screen = conversation(state);
-          break;
-        case SCREENS.story:
-          screen = story(state);
-          break;
-        case SCREENS.vocabulary:
-          screen = vocabulary(state);
-          break;
-      }
       return node("div", {
         class: "screen"
-      }, screen);
+      }, match(state.screen, {
+        [SCREENS.options]: () => options(state),
+        [SCREENS.overview]: () => overview(state),
+        [SCREENS.clarification]: () => clarification(state),
+        [SCREENS.comprehension]: () => comprehension(state),
+        [SCREENS.conversation]: () => conversation(state),
+        [SCREENS.story]: () => story(state),
+        [SCREENS.vocabulary]: () => vocabulary(state)
+      }, () => setup(state)));
     },
     Object.assign({
       screen: SCREENS.setup,

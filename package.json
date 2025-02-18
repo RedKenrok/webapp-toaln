@@ -27,7 +27,7 @@
     "serve": "^14.2.4"
   },
   "dependencies": {
-    "@doars/staark": "^1.7.4",
+    "@doars/staark": "^1.7.5",
     "@doars/vroagn": "^1.4.1",
     "sanitize.css": "^13.0.0"
   }
