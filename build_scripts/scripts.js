@@ -1,4 +1,5 @@
 import { build, context } from 'esbuild'
+import { targets } from './targets.js'
 
 const run = async (
   options = {},
@@ -22,14 +23,11 @@ const run = async (
       platform: 'browser',
       plugins: [],
 
-      target: process.env.NODE_ENV === 'production' ? [
-        // ?? // Proxy object
-        'chrome51', // 'chrome49',
-        'edge20', // edge12
-        'firefox53', // 'firefox39',
-        'ios11', // 'ios10.2',
-        'safari11', // 'safari10',
-      ] : [],
+      target: (
+        process.env.NODE_ENV === 'production'
+          ? Object.keys(targets).map(key => key + targets[key])
+          : []
+      ),
     }, options, buildOptions)
     if (process.env.NODE_ENV === 'production') {
       buildOptions.drop = [

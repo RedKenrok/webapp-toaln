@@ -1,4 +1,4 @@
-import build from './build_scripts/esbuild.js'
+import build from './build_scripts/scripts.js'
 
 const files = [{
   format: 'iife',

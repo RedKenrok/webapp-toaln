@@ -1,4 +1,4 @@
-import build from './build_scripts/postcss.js'
+import build from './build_scripts/styles.js'
 
 const files = [{
   from: 'src/app.css',

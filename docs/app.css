@@ -1,357 +1,188 @@
-/* Document
- * ========================================================================== */
-
-/**
- * 1. Add border box sizing in all browsers (opinionated).
- * 2. Backgrounds do not repeat by default (opinionated).
- */
-
-*,
-::before,
-::after {
-  box-sizing: border-box; /* 1 */
-  background-repeat: no-repeat; /* 2 */
+* {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
 }
 
-/**
- * 1. Add text decoration inheritance in all browsers (opinionated).
- * 2. Add vertical alignment inheritance in all browsers (opinionated).
- */
-
-::before,
-::after {
-  text-decoration: inherit; /* 1 */
-  vertical-align: inherit; /* 2 */
+:before {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
 }
 
-/**
- * 1. Use the default cursor in all browsers (opinionated).
- * 2. Change the line height in all browsers (opinionated).
- * 3. Breaks words to prevent overflow in all browsers (opinionated).
- * 4. Use a 4-space tab width in all browsers (opinionated).
- * 5. Remove the grey highlight on links in iOS (opinionated).
- * 6. Prevent adjustments of font size after orientation changes in iOS.
- */
+:after {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+}
+
+:before {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+:after {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
 
 :where(:root) {
-  cursor: default; /* 1 */
-  line-height: 1.5; /* 2 */
-  overflow-wrap: break-word; /* 3 */
-  -moz-tab-size: 4; /* 4 */
-  tab-size: 4; /* 4 */
-  -webkit-tap-highlight-color: transparent; /* 5 */
-  -webkit-text-size-adjust: 100%; /* 6 */
+  cursor: default;
+  overflow-wrap: break-word;
+  tab-size: 4;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
 }
-
-/* Sections
- * ========================================================================== */
-
-/**
- * Remove the margin in all browsers (opinionated).
- */
 
 :where(body) {
   margin: 0;
 }
 
-/**
- * Correct the font size and margin on `h1` elements within `section` and
- * `article` contexts in Chrome, Edge, Firefox, and Safari.
- */
-
 :where(h1) {
+  margin: .67em 0;
   font-size: 2em;
-  margin: 0.67em 0;
 }
-
-/* Grouping content
- * ========================================================================== */
-
-/**
- * Remove the margin on nested lists in Chrome, Edge, and Safari.
- */
 
 :where(dl, ol, ul) :where(dl, ol, ul) {
   margin: 0;
 }
 
-/**
- * 1. Correct the inheritance of border color in Firefox.
- * 2. Add the correct box sizing in Firefox.
- */
-
 :where(hr) {
-  color: inherit; /* 1 */
-  height: 0; /* 2 */
+  color: inherit;
+  height: 0;
 }
-
-/**
- * Remove the list style on navigation lists in all browsers (opinionated).
- */
 
 :where(nav) :where(ol, ul) {
-  list-style-type: none;
   padding: 0;
+  list-style-type: none;
 }
 
-/**
- * Prevent VoiceOver from ignoring list semantics in Safari (opinionated).
- */
-
-:where(nav li)::before {
-  content: "\200B";
+:where(nav li):before {
+  content: "​";
   float: left;
 }
 
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- * 3. Prevent overflow of the container in all browsers (opinionated).
- */
-
 :where(pre) {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
-  overflow: auto; /* 3 */
+  font-family: monospace;
+  font-size: 1em;
+  overflow: auto;
 }
-
-/* Text-level semantics
- * ========================================================================== */
-
-/**
- * Add the correct text decoration in Safari.
- */
 
 :where(abbr[title]) {
-  text-decoration: underline;
   text-decoration: underline dotted;
 }
-
-/**
- * Add the correct font weight in Chrome, Edge, and Safari.
- */
 
 :where(b, strong) {
   font-weight: bolder;
 }
 
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
-
 :where(code, kbd, samp) {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
+  font-family: monospace;
+  font-size: 1em;
 }
-
-/**
- * Add the correct font size in all browsers.
- */
 
 :where(small) {
   font-size: 80%;
 }
 
-/* Embedded content
- * ========================================================================== */
-
-/*
- * Change the alignment on media elements in all browsers (opinionated).
- */
-
 :where(audio, canvas, iframe, img, svg, video) {
   vertical-align: middle;
 }
-
-/**
- * Remove the border on iframes in all browsers (opinionated).
- */
 
 :where(iframe) {
   border-style: none;
 }
 
-/**
- * Change the fill color to match the text color in all browsers (opinionated).
- */
-
 :where(svg:not([fill])) {
   fill: currentColor;
 }
 
-/* Tabular data
- * ========================================================================== */
-
-/**
- * 1. Collapse border spacing in all browsers (opinionated).
- * 2. Correct table border color inheritance in all Chrome, Edge, and Safari.
- * 3. Remove text indentation from table contents in Chrome, Edge, and Safari.
- */
-
 :where(table) {
-  border-collapse: collapse; /* 1 */
-  border-color: inherit; /* 2 */
-  text-indent: 0; /* 3 */
+  border-collapse: collapse;
+  border-color: inherit;
+  text-indent: 0;
 }
-
-/* Forms
- * ========================================================================== */
-
-/**
- * Remove the margin on controls in Safari.
- */
 
 :where(button, input, select) {
   margin: 0;
 }
 
-/**
- * Correct the inability to style buttons in iOS and Safari.
- */
-
 :where(button, [type="button" i], [type="reset" i], [type="submit" i]) {
   -webkit-appearance: button;
 }
-
-/**
- * Change the inconsistent appearance in all browsers (opinionated).
- */
 
 :where(fieldset) {
   border: 1px solid #a0a0a0;
 }
 
-/**
- * Add the correct vertical alignment in Chrome, Edge, and Firefox.
- */
-
 :where(progress) {
   vertical-align: baseline;
 }
 
-/**
- * 1. Remove the margin in Firefox and Safari.
- * 3. Change the resize direction in all browsers (opinionated).
- */
-
 :where(textarea) {
-  margin: 0; /* 1 */
-  resize: vertical; /* 3 */
+  resize: vertical;
+  margin: 0;
 }
-
-/**
- * 1. Correct the odd appearance in Chrome, Edge, and Safari.
- * 2. Correct the outline style in Safari.
- */
 
 :where([type="search" i]) {
-  -webkit-appearance: textfield; /* 1 */
-  outline-offset: -2px; /* 2 */
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
 }
 
-/**
- * Correct the cursor style of increment and decrement buttons in Safari.
- */
+::-webkit-inner-spin-button {
+  height: auto;
+}
 
-::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   height: auto;
 }
 
-/**
- * Correct the text style of placeholders in Chrome, Edge, and Safari.
- */
-
 ::-webkit-input-placeholder {
   color: inherit;
-  opacity: 0.54;
+  opacity: .54;
 }
-
-/**
- * Remove the inner padding in Chrome, Edge, and Safari on macOS.
- */
 
 ::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
-/**
- * 1. Correct the inability to style upload buttons in iOS and Safari.
- * 2. Change font properties to `inherit` in Safari.
- */
-
 ::-webkit-file-upload-button {
-  -webkit-appearance: button; /* 1 */
-  font: inherit; /* 2 */
+  -webkit-appearance: button;
+  font: inherit;
 }
 
-/* Interactive
- * ========================================================================== */
-
-/*
- * Add the correct styles in Safari.
- */
-
 :where(dialog) {
-  background-color: white;
-  border: solid;
-  color: black;
+  color: #000;
   height: -moz-fit-content;
+  width: -moz-fit-content;
   height: fit-content;
-  left: 0;
+  background-color: #fff;
+  border: solid;
+  width: fit-content;
   margin: auto;
   padding: 1em;
   position: absolute;
+  left: 0;
   right: 0;
-  width: -moz-fit-content;
-  width: fit-content;
 }
 
 :where(dialog:not([open])) {
   display: none;
 }
 
-/*
- * Add the correct display in Safari.
- */
-
 :where(details > summary:first-of-type) {
   display: list-item;
 }
-
-/* Accessibility
- * ========================================================================== */
-
-/**
- * Change the cursor on busy elements in all browsers (opinionated).
- */
 
 :where([aria-busy="true" i]) {
   cursor: progress;
 }
 
-/*
- * Change the cursor on control elements in all browsers (opinionated).
- */
-
 :where([aria-controls]) {
   cursor: pointer;
 }
 
-/*
- * Change the cursor on disabled, not-editable, or otherwise
- * inoperable elements in all browsers (opinionated).
- */
-
 :where([aria-disabled="true" i], [disabled]) {
   cursor: not-allowed;
 }
-
-/*
- * Change the display on visually hidden accessible elements
- * in all browsers (opinionated).
- */
 
 :where([aria-hidden="false" i][hidden]) {
   display: initial;
@@ -362,164 +193,97 @@
   position: absolute;
 }
 
-/* @import url('sanitize.css/reduce-motion.css'); */
-
-/**
- * Add the correct system-ui font-family in Firefox.
- */
-
 @font-face {
   font-family: system-ui;
-  src: local(".AppleSystemUIFont"), local("Segoe UI"), local("Ubuntu"), local("Roboto-Regular"), local("HelveticaNeue");
+  src: local(\.AppleSystemUIFont), local(Segoe UI), local(Ubuntu), local(Roboto-Regular), local(HelveticaNeue);
 }
 
 @font-face {
   font-family: system-ui;
   font-style: italic;
-  src: local(".AppleSystemUIFont"), local("Segoe UI Italic"), local("Ubuntu-Italic"), local("Roboto-Italic"), local("HelveticaNeue-Italic");
+  src: local(\.AppleSystemUIFont), local(Segoe UI Italic), local(Ubuntu-Italic), local(Roboto-Italic), local(HelveticaNeue-Italic);
 }
 
 @font-face {
   font-family: system-ui;
   font-weight: bold;
-  src: local(".AppleSystemUIFont"), local("Segoe UI Bold"), local("Ubuntu-Bold"), local("Roboto-Bold"), local("HelveticaNeue-Bold");
+  src: local(\.AppleSystemUIFont), local(Segoe UI Bold), local(Ubuntu-Bold), local(Roboto-Bold), local(HelveticaNeue-Bold);
 }
 
 @font-face {
   font-family: system-ui;
   font-style: italic;
   font-weight: bold;
-  src: local(".AppleSystemUIFont"), local("Segoe UI Bold Italic"), local("Ubuntu-BoldItalic"), local("Roboto-BoldItalic"), local("HelveticaNeue-BoldItalic");
+  src: local(\.AppleSystemUIFont), local(Segoe UI Bold Italic), local(Ubuntu-BoldItalic), local(Roboto-BoldItalic), local(HelveticaNeue-BoldItalic);
 }
-
-/**
- * 1. Change the inconsistent appearance in all browsers (opinionated).
- * 2. Add typography inheritance in all browsers (opinionated).
- */
 
 :where(button, input, select, textarea) {
-  background-color: transparent; /* 1 */
-  border: 1px solid WindowFrame; /* 1 */
-  color: inherit; /* 1 */
-  font: inherit; /* 2 */
-  letter-spacing: inherit; /* 2 */
-  padding: 0.25em 0.375em; /* 1 */
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid windowframe;
+  padding: .25em .375em;
 }
-
-/**
- * Change the inconsistent appearance in all browsers (opinionated).
- */
 
 :where(select) {
   appearance: none;
-  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E") no-repeat right center / 1em;
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E") 100% / 1em no-repeat;
+  -webkit-border-radius: 0;
   border-radius: 0;
   padding-right: 1em;
 }
 
-/**
- * Don't show the arrow for multiple choice selects
- */
-
 :where(select[multiple]) {
   background-image: none;
 }
-
-/**
- * Remove the border and padding in all browsers (opinionated).
- */
 
 :where([type="color" i], [type="range" i]) {
   border-width: 0;
   padding: 0;
 }
 
-/**
- * Add the correct system-ui font-family in Chrome, Edge, and Firefox.
- */
-
 @font-face {
   font-family: ui-monospace;
-  src: local(".AppleSystemUIFontMonospaced-Regular"), local("Segoe UI Mono"), local("UbuntuMono"), local("Roboto-Mono"), local("Menlo");
+  src: local(\.AppleSystemUIFontMonospaced-Regular), local(Segoe UI Mono), local(UbuntuMono), local(Roboto-Mono), local(Menlo);
 }
 
 @font-face {
   font-family: ui-monospace;
   font-style: italic;
-  src: local(".AppleSystemUIFontMonospaced-RegularItalic"), local("Segoe UI Mono Italic"), local("UbuntuMono-Italic"), local("Roboto-Mono-Italic"), local("Menlo-Italic");
+  src: local(\.AppleSystemUIFontMonospaced-RegularItalic), local(Segoe UI Mono Italic), local(UbuntuMono-Italic), local(Roboto-Mono-Italic), local(Menlo-Italic);
 }
 
 @font-face {
   font-family: ui-monospace;
   font-weight: bold;
-  src: local(".AppleSystemUIFontMonospaced-Bold"), local("Segoe UI Mono Bold"), local("UbuntuMono-Bold"), local("Roboto-Mono-Bold"), local("Menlo-Bold");
+  src: local(\.AppleSystemUIFontMonospaced-Bold), local(Segoe UI Mono Bold), local(UbuntuMono-Bold), local(Roboto-Mono-Bold), local(Menlo-Bold);
 }
 
 @font-face {
   font-family: ui-monospace;
   font-style: italic;
   font-weight: bold;
-  src: local(".AppleSystemUIFontMonospaced-BoldItalic"), local("Segoe UI Mono Bold Italic"), local("UbuntuMono-BoldItalic"), local("Roboto-Mono-BoldItalic"), local("Menlo-BoldItalic");
+  src: local(\.AppleSystemUIFontMonospaced-BoldItalic), local(Segoe UI Mono Bold Italic), local(UbuntuMono-BoldItalic), local(Roboto-Mono-BoldItalic), local(Menlo-BoldItalic);
 }
-
-/**
- * Use the default user interface font in all browsers (opinionated).
- */
 
 html {
-  font-family:
-    system-ui,
-    /* macOS 10.11-10.12 */ -apple-system,
-    /* Windows 6+ */ "Segoe UI",
-    /* Android 4+ */ "Roboto",
-    /* Ubuntu 10.10+ */ "Ubuntu",
-    /* Gnome 3+ */ "Cantarell",
-    /* KDE Plasma 5+ */ "Noto Sans",
-    /* fallback */ sans-serif,
-    /* macOS emoji */ "Apple Color Emoji",
-    /* Windows emoji */ "Segoe UI Emoji",
-    /* Windows emoji */ "Segoe UI Symbol",
-    /* Linux emoji */ "Noto Color Emoji";
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
 
-/**
- * Use the default monospace user interface font in all browsers (opinionated).
- */
-
-code,
-kbd,
-samp,
-pre {
-  font-family:
-    ui-monospace,
-    /* macOS 10.10+ */ "Menlo",
-    /* Windows 6+ */ "Consolas",
-    /* Android 4+ */ "Roboto Mono",
-    /* Ubuntu 10.10+ */ "Ubuntu Monospace",
-    /* KDE Plasma 5+ */ "Noto Mono",
-    /* KDE Plasma 4+ */ "Oxygen Mono",
-    /* Linux/OpenOffice fallback */ "Liberation Mono",
-    /* fallback */ monospace,
-    /* macOS emoji */ "Apple Color Emoji",
-    /* Windows emoji */ "Segoe UI Emoji",
-    /* Windows emoji */ "Segoe UI Symbol",
-    /* Linux emoji */ "Noto Color Emoji";
+code, kbd, samp, pre {
+  font-family: ui-monospace, Menlo, Consolas, Roboto Mono, Ubuntu Monospace, Noto Mono, Oxygen Mono, Liberation Mono, monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
-
-/**
- * Restrict sizing to the page width in all browsers (opinionated).
- */
 
 :where(iframe, img, input, video, select, textarea) {
-  height: auto;
   max-width: 100%;
+  height: auto;
 }
 
 :root {
   --background: #fff;
   --foreground: #000;
   --highlight: #111;
-
   --color-unvisited: #010154;
   --color-visited: #2c0055;
 }
@@ -529,7 +293,6 @@ pre {
     --background: #000;
     --foreground: #fff;
     --highlight: #111;
-
     --color-unvisited: #aad4ff;
     --color-visited: #e3aaff;
   }
@@ -541,13 +304,10 @@ body {
 }
 
 blockquote {
-  padding-left: 1rem;
-  margin-bottom: 1rem;
-  border-width: 0px;
+  border: 0 solid;
   border-left-width: 1px;
-  border-color: currentColor;
-  border-style: solid;
   margin: 0;
+  padding-left: 1rem;
 }
 
 .messages {
@@ -555,21 +315,23 @@ blockquote {
   margin-bottom: 1rem;
 }
 
-.message-assistant,
-.message-user {
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+.message-assistant, .message-user {
   background-color: var(--highlight);
+  -webkit-border-radius: .5rem;
+  border-radius: .5rem;
+  padding: .75rem 1rem;
 }
 
 .message-assistant {
-  margin-right: 2rem;
+  -webkit-border-bottom-left-radius: 0;
   border-bottom-left-radius: 0;
+  margin-right: 2rem;
 }
 
 .message-user {
-  margin-left: 2rem;
+  -webkit-border-bottom-right-radius: 0;
   border-bottom-right-radius: 0;
+  margin-left: 2rem;
 }
 
 textarea.message-user {
@@ -577,9 +339,9 @@ textarea.message-user {
 }
 
 .row {
-  display: flex;
   flex-direction: row;
   gap: 1rem;
+  display: flex;
 }
 
 .row.reverse {
@@ -587,36 +349,36 @@ textarea.message-user {
 }
 
 .screen {
-  display: block;
   max-width: 32rem;
   margin-left: auto;
   margin-right: auto;
   padding: 1rem;
+  display: block;
 }
 
 .vertical-layout {
-  height: 100%;
-  display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
+  display: flex;
 }
 
-.vertical-layout>* {
+.vertical-layout > * {
   margin: 0;
 }
 
 .margin {
-  height: 1px;
   opacity: 0;
+  height: 1px;
 }
 
 hr {
+  opacity: .5;
   display: block;
-  opacity: 0.5;
 }
 
 .card .icon {
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 
 .text-right {
@@ -633,67 +395,98 @@ html {
   }
 }
 
-.pending::after {
+.pending:after {
+  content: "";
+  animation: 1.5s step-end infinite ellipses;
   display: inline-block;
-  animation: ellipses steps(1, end) 1.5s infinite;
-  content: ''
 }
 
 @keyframes ellipses {
   0% {
-    content: '';
+    content: "";
   }
 
   25% {
-    content: '.';
+    content: ".";
   }
 
   50% {
-    content: '..';
+    content: "..";
   }
 
   75% {
-    content: '...';
+    content: "...";
   }
 
   100% {
-    content: '';
+    content: "";
   }
 }
 
 label {
-  display: block;
   width: 100%;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-button,
-input,
-select,
-textarea {
+  margin-bottom: .5rem;
   display: block;
-  width: 100%;
-  border-color: currentColor;
-  border-radius: 0.5rem;
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
-  background-color: var(--highlight);
 }
 
-button:active,
-button:focus,
-button:hover,
-input:active,
-input:focus,
-input:hover,
-select:active,
-select:focus,
-select:hover,
-textarea:active,
-textarea:focus,
+button, input, select, textarea {
+  background-color: var(--highlight);
+  border-color: currentColor;
+  -webkit-border-radius: .5rem;
+  border-radius: .5rem;
+  width: 100%;
+  margin-top: .25rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+button:active {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+button:focus {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input:active {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input:focus {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+select:active {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+select:focus {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+select:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+textarea:active {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+textarea:focus {
+  background-color: rgba(0, 0, 0, 0);
+}
+
 textarea:hover {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 textarea {
@@ -703,11 +496,11 @@ textarea {
 
 button.card {
   text-align: justify;
-  padding: 0.75rem 1rem;
+  padding: .75rem 1rem;
 }
 
 button[disabled] {
-  opacity: 0.625;
+  opacity: .625;
 }
 
 body {
@@ -717,45 +510,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
-label,
-li,
-p {
-  margin: 0;
+label, li, p {
   text-wrap: pretty;
+  margin: 0;
 }
 
 p {
   margin-bottom: 1rem;
 }
 
-ul,
-ol {
+ul, ol {
   padding-left: 1rem;
 }
 
 @media screen and (min-width: 28rem) {
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     hyphens: auto;
   }
 
-  label,
-  li,
-  p {
+  label, li, p {
     hyphens: auto;
     text-align: justify;
   }
@@ -771,10 +548,26 @@ a {
   text-decoration: underline;
 }
 
-a:active,
-a:focus,
-a:focus-within,
-a:hover,
+a:active {
+  color: var(--background);
+  background-color: var(--color-unvisited, blue);
+}
+
+a:focus {
+  color: var(--background);
+  background-color: var(--color-unvisited, blue);
+}
+
+a:focus-within {
+  color: var(--background);
+  background-color: var(--color-unvisited, blue);
+}
+
+a:hover {
+  color: var(--background);
+  background-color: var(--color-unvisited, blue);
+}
+
 a::selection {
   color: var(--background);
   background-color: var(--color-unvisited, blue);
@@ -784,16 +577,31 @@ a:visited {
   color: var(--color-visited, purple);
 }
 
-a:visited:active,
-a:visited:focus,
-a:visited:focus-within,
-a:visited:hover,
+a:visited:active {
+  background-color: var(--color-visited, purple);
+  color: var(--background);
+}
+
+a:visited:focus {
+  background-color: var(--color-visited, purple);
+  color: var(--background);
+}
+
+a:visited:focus-within {
+  background-color: var(--color-visited, purple);
+  color: var(--background);
+}
+
+a:visited:hover {
+  background-color: var(--color-visited, purple);
+  color: var(--background);
+}
+
 a:visited::selection {
   background-color: var(--color-visited, purple);
   color: var(--background);
 }
 
 .icon {
-  filter: grayscale(1);
+  filter: grayscale();
 }
-/*# sourceMappingURL=app.css.map */
