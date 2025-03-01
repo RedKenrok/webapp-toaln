@@ -54,8 +54,8 @@ mount(
     userIdentifier: createIdentifier(),
     sourceLocale: preferredLocale,
     sourceLanguage: getLanguageFromLocale(preferredLocale),
-    targetLocale: LOCALES.en_gb,
-    targetLanguage: getLanguageFromLocale(LOCALES.en_gb),
+    targetLocale: LOCALES.eng,
+    targetLanguage: getLanguageFromLocale(LOCALES.eng),
     proficiencyLevel: PROFICIENCY_LEVELS.a1,
     topicsOfInterest: [],
 

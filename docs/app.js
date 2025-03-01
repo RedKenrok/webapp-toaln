@@ -1126,11 +1126,11 @@
   var translate = (state, key, locale = null) => {
     locale ??= state.sourceLocale;
     if (!(locale in TRANSLATIONS)) {
-      console.warn('Er zijn geen vertalingen beschikbaar voor de taal "' + locale + '"');
+      console.warn('There are no translations available for the language "' + locale + '".');
       return key;
     }
     if (!(key in TRANSLATIONS[locale])) {
-      console.warn('Er is geen vertaling beschikbaar voor de taal "' + locale + '" met de sleutel "' + key + '".');
+      console.warn('There are no translations available for the language "' + locale + '" with the key "' + key + '".');
       return key;
     }
     const replace = (text) => {
@@ -2581,8 +2581,8 @@
       userIdentifier: createIdentifier(),
       sourceLocale: preferredLocale,
       sourceLanguage: getLanguageFromLocale(preferredLocale),
-      targetLocale: LOCALES.en_gb,
-      targetLanguage: getLanguageFromLocale(LOCALES.en_gb),
+      targetLocale: LOCALES.eng,
+      targetLanguage: getLanguageFromLocale(LOCALES.eng),
       proficiencyLevel: PROFICIENCY_LEVELS.a1,
       topicsOfInterest: [],
       apiCode: APIS.open_ai.code,

@@ -3,7 +3,7 @@
     "name": "Ron Dekker",
     "website": "https://rondekker.com"
   },
-  "name": "@redkenrok/learn-lang",
+  "name": "@redkenrok/webapp-toaln",
   "description": "",
   "keywords": [],
   "version": "0.0.0",
@@ -19,10 +19,8 @@
   },
   "devDependencies": {
     "chokidar": "^4.0.3",
-    "cssnano": "^7.0.6",
     "esbuild": "^0.25.0",
-    "lightningcss": "^1.29.1",
-    "serve": "^14.2.4"
+    "lightningcss": "^1.29.1"
   },
   "dependencies": {
     "@doars/staark": "^1.7.5",

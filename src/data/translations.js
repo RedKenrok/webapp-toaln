@@ -7,11 +7,11 @@ export const translate = (
 ) => {
   locale ??= state.sourceLocale
   if (!(locale in TRANSLATIONS)) {
-    console.warn('Er zijn geen vertalingen beschikbaar voor de taal "' + (locale) + '"')
+    console.warn('There are no translations available for the language "' + locale + '".')
     return key
   }
   if (!(key in TRANSLATIONS[locale])) {
-    console.warn('Er is geen vertaling beschikbaar voor de taal "' + (locale) + '" met de sleutel "' + key + '".')
+    console.warn('There are no translations available for the language "' + locale + '" with the key "' + key + '".')
     return key
   }
 
