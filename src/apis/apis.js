@@ -8,10 +8,16 @@ import {
   createMessage as createMessageAnthropic,
   getModels as getModelsAnthropic,
 } from './anthropic.js'
+import {
+  apiSettings as apiSettingsGoogle,
+  createMessage as createMessageGoogle,
+  getModels as getModelsGoogle,
+} from './google.js'
 
 export const APIS = Object.freeze({
   open_ai: apiSettingsOpenAI,
   anthropic: apiSettingsAnthropic,
+  google: apiSettingsGoogle,
 })
 
 const callApi = (
@@ -39,6 +45,7 @@ export const createMessage = (
 ) => callApi({
   [APIS.anthropic.code]: createMessageAnthropic,
   [APIS.open_ai.code]: createMessageOpenAI,
+  [APIS.google.code]: createMessageGoogle,
 }, state, messages, context, instructions)
 
 export const getModels = (
@@ -46,4 +53,5 @@ export const getModels = (
 ) => callApi({
   [APIS.anthropic.code]: getModelsAnthropic,
   [APIS.open_ai.code]: getModelsOpenAI,
+  [APIS.google.code]: getModelsGoogle,
 }, state)

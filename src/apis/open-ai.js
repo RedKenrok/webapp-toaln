@@ -6,6 +6,7 @@ export const apiSettings = Object.freeze({
   code: 'open_ai',
   name: 'OpenAI',
   preferredModel: 'gpt-4o-mini',
+  // preferredModelName: 'GPT 4o-mini',
   requireCredentials: true,
   modelOptionsFilter: model =>
     ![
@@ -17,8 +18,8 @@ export const apiSettings = Object.freeze({
       'tts-',
       'whisper-',
     ].some(keyword => model.id.toLowerCase().includes(keyword))
-    && !model.id.match(/-(?:\d){4,}-(?:\d){2,}-(?:\d){2,}$/)
-    && !model.id.match(/-(?:\d){4,}$/)
+    && !model.id.match(/-(?:\d){4}$/)
+    && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
 })
 
 const _createMessage = createSingleton(
@@ -38,12 +39,13 @@ export const createMessage = (
   context = null,
   instructions = null,
 ) => {
+  // Use 'system' role for OpenAI API models that contain '4o' or '3.5'.
   const appRole = (
-    state.apiModel.toLowerCase().includes('o1')
-      ? 'developer'
-      : 'system'
+    state.apiModel.toLowerCase().match(/4o|3\.5/)
+      ? 'system'
+      : 'developer'
   )
-  // Clone messages.
+
   messages = cloneRecursive(messages)
 
   const prependAppRole = (

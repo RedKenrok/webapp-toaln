@@ -12,11 +12,11 @@ export const overview = (
       n('b', t(state, 'greeting')),
       n('br'),
       ...c(
-        state.statisticComprehensionActivity > 1
-        || state.statisticConversationActivity > 1
-        || state.statisticClarificationActivity > 1
-        || state.statisticStoryActivity > 1
-        || state.statisticVocabularyActivity > 1,
+        state.statisticComprehensionActivity > 0
+        || state.statisticConversationActivity > 0
+        || state.statisticClarificationActivity > 0
+        || state.statisticStoryActivity > 0
+        || state.statisticVocabularyActivity > 0,
         t(state, 'statistics-activity_per_category'),
         t(state, 'statistics-no_activity'),
       ),

@@ -6,6 +6,9 @@ import {
 
 import { APIS } from './apis/apis.js'
 import {
+  apiSettings as apiSettingsGoogle,
+} from './apis/google.js'
+import {
   getPreferredLocale,
   LOCALES,
   PROFICIENCY_LEVELS,
@@ -59,8 +62,8 @@ mount(
     proficiencyLevel: PROFICIENCY_LEVELS.a1,
     topicsOfInterest: [],
 
-    apiCode: APIS.open_ai.code,
-    apiModel: null,
+    apiCode: APIS.google.code,
+    apiModel: apiSettingsGoogle.preferredModel,
     apiCredentials: null,
     apiCredentialsError: false,
     apiCredentialsTested: false,

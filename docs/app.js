@@ -872,6 +872,7 @@
     code: "open_ai",
     name: "OpenAI",
     preferredModel: "gpt-4o-mini",
+    // preferredModelName: 'GPT 4o-mini',
     requireCredentials: true,
     modelOptionsFilter: (model) => ![
       "babbage-",
@@ -881,7 +882,7 @@
       "moderation-",
       "tts-",
       "whisper-"
-    ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4,}-(?:\d){2,}-(?:\d){2,}$/) && !model.id.match(/-(?:\d){4,}$/)
+    ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4}$/) && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
   });
   var _createMessage = createSingleton(
     () => create({
@@ -895,7 +896,7 @@
     })
   );
   var createMessage = (state, messages, context = null, instructions = null) => {
-    const appRole = state.apiModel.toLowerCase().includes("o1") ? "developer" : "system";
+    const appRole = state.apiModel.toLowerCase().match(/4o|3\.5/) ? "system" : "developer";
     messages = cloneRecursive3(messages);
     const prependAppRole = (message) => {
       if (message) {
@@ -1028,10 +1029,90 @@
     });
   };
 
+  // src/apis/google.js
+  var apiSettings3 = Object.freeze({
+    code: "google",
+    name: "Google AI",
+    preferredModel: "gemini-2.0-flash",
+    preferredModelName: "Gemini 2.0 Flash",
+    requireCredentials: true,
+    modelOptionsFilter: (model) => ![
+      "aqa",
+      "bison",
+      "embedding",
+      "imagen",
+      "learnlm",
+      "vision",
+      "1.0",
+      "1.5"
+    ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){3,4}$/) && !model.id.match(/-(?:\d){2}-(?:\d){2}$/)
+  });
+  var _createMessage3 = createSingleton(
+    () => create({
+      domain: "https://generativelanguage.googleapis.com",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      method: "post"
+    })
+  );
+  var createMessage3 = (state, messages, context = null, instructions = null) => {
+    messages = cloneRecursive3(messages);
+    return _createMessage3()({
+      path: "/v1beta/models/" + state.apiModel + ":generateContent?key=" + state.apiCredentials,
+      body: {
+        system_instruction: context || instructions ? {
+          parts: [context, instructions].filter((text) => text).map((text) => ({
+            text
+          }))
+        } : void 0,
+        contents: messages.length > 0 ? messages.map((message) => ({
+          parts: [{
+            text: message.content
+          }],
+          role: message.role === "assistant" ? "model" : "user"
+        })) : { parts: { text: "" } }
+      }
+    }).then(([error, response, result]) => {
+      console.log("createMessage", error, response, result);
+      if (!error) {
+        result = {
+          content: result?.candidates?.[0]?.content?.parts?.map((part) => part.text).join(" "),
+          role: "assistant"
+        };
+      }
+      return [error, response, result];
+    });
+  };
+  var _getModels3 = createSingleton(
+    () => create({
+      domain: "https://generativelanguage.googleapis.com",
+      headers: {
+        "Accept": "application/json"
+      }
+    })
+  );
+  var getModels3 = (state) => _getModels3()({
+    path: "/v1beta/models?pageSize=1000&key=" + state.apiCredentials
+  }).then(([error, response, result]) => {
+    if (!error) {
+      result = {
+        data: result.models.map((model) => ({
+          ...model,
+          id: model.name.split("/").pop(),
+          name: model.displayName
+        }))
+      };
+    }
+    return [error, response, result];
+  });
+
   // src/apis/apis.js
   var APIS = Object.freeze({
     open_ai: apiSettings,
-    anthropic: apiSettings2
+    anthropic: apiSettings2,
+    google: apiSettings3
   });
   var callApi = (lookupTable, state, ...parameters) => {
     let method = null;
@@ -1045,13 +1126,15 @@
       [new Error("No api selected."), null, null]
     );
   };
-  var createMessage3 = (state, messages, context = null, instructions = null) => callApi({
+  var createMessage4 = (state, messages, context = null, instructions = null) => callApi({
     [APIS.anthropic.code]: createMessage2,
-    [APIS.open_ai.code]: createMessage
+    [APIS.open_ai.code]: createMessage,
+    [APIS.google.code]: createMessage3
   }, state, messages, context, instructions);
-  var getModels3 = (state) => callApi({
+  var getModels4 = (state) => callApi({
     [APIS.anthropic.code]: getModels2,
-    [APIS.open_ai.code]: getModels
+    [APIS.open_ai.code]: getModels,
+    [APIS.google.code]: getModels3
   }, state);
 
   // src/data/locales.js
@@ -1272,17 +1355,17 @@
       "setup-next": "Start practising",
       "overview-intro": "What would you like to do?",
       "overview-comprehension-title": "Answer questions",
-      "overview-comprehension-description": "You'll receive a short text in {%t:{%s:targetLanguage%}%} along with a question you can answer.",
+      "overview-comprehension-description": "You'll receive a short text along with a question to answer.",
       "overview-conversation-title": "Practise conversations",
-      "overview-conversation-description": "A short conversation will be simulated in {%t:{%s:targetLanguage%}%}, for example, about ordering food or discussing a hobby.",
+      "overview-conversation-description": "A short conversation will be simulated, for example about ordering food or discussing a hobby.",
       "overview-clarification-title": "Ask for clarification",
       "overview-clarification-description": "Get explanations about {%t:{%s:targetLanguage%}%}, such as a grammar rule like conjugations or cases.",
       "overview-story-title": "Write a story",
-      "overview-story-description": "You'll take turns writing a story piece by piece in {%t:{%s:targetLanguage%}%}.",
+      "overview-story-description": "You'll take turns writing a story piece by piece.",
       "overview-options-title": "Change settings",
       "overview-options-description": "Change the language you want to learn, the topics you find interesting, or the LLM used.",
       "overview-vocabulary-title": "Learn words",
-      "overview-vocabulary-description": "You'll receive a word and definition in {%t:{%s:targetLanguage%}%} to which you can respond with a scentence using that word.",
+      "overview-vocabulary-description": "You'll receive a word together with its definition, you then respond with a with a sentence using that word.",
       "options-source_language": "Which language do you already know?",
       "options-target_language": "Which language would you like to learn?",
       "options-proficiency_leven": "How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
@@ -1385,17 +1468,17 @@
       "setup-next": "Begin met oefenen",
       "overview-intro": "Wat wil je gaan doen?",
       "overview-comprehension-title": "Beantwoord vragen",
-      "overview-comprehension-description": "Je krijgt een korte tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag die je kan beantwoorden.",
+      "overview-comprehension-description": "Je krijgt een korte tekst samen met een vraag die je kan beantwoorden.",
       "overview-conversation-title": "Oefen gesprekken",
-      "overview-conversation-description": "Er zal een kort gesprekje gespeeld worden in het {%t:{%s:targetLanguage%}%} over bijvoorbeeld het bestellen van eten of over een hobby.",
+      "overview-conversation-description": "Er zal een kort gesprekje gespeeld worden over bijvoorbeeld het bestellen van eten of over een hobby.",
       "overview-clarification-title": "Vraag om uitleg",
       "overview-clarification-description": "Krijg verduidelijk over het {%t:{%s:targetLanguage%}%}, bijvoorbeeld een grammatica regel zoals vervoegingen en naamvallen.",
       "overview-options-title": "Pas instellingen aan",
       "overview-options-description": "Pas aan welke taal je wilt leren, welke onderwerpen je interessant vind of welke LLM gebruikt wordt.",
       "overview-story-title": "Schrijf een verhaal",
-      "overview-story-description": "Je gaat omste beurten stukje voor stukje een verhaal in het {%t:{%s:targetLanguage%}%} schrijven.",
+      "overview-story-description": "Je gaat omste beurten stukje voor stukje een verhaal schrijven.",
       "overview-vocabulary-title": "Leer woorden",
-      "overview-vocabulary-description": "Je krijgt een woord en definitie in het {%t:{%s:targetLanguage%}%} vervolgens schrijf je een zin dat dit woord gebruikt.",
+      "overview-vocabulary-description": "Je krijgt een woord samen met de definitie ervan vervolgens schrijf je een zin dat dit woord gebruikt.",
       "options-source_language": "Welke taal ken je al?",
       "options-target_language": "Welke taal wil je leren?",
       "options-proficiency_leven": "Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
@@ -1529,22 +1612,28 @@
         value: apiCode
       }, APIS[apiCode].name)
     )),
-    ...APIS[state.apiCode].requireCredentials ? [
-      node("label", {
-        for: "input-api_credentials"
-      }, translate(state, "options-api_credentials")),
-      node("textarea", {
-        id: "input-api_credentials",
-        keyup: (event) => {
-          console.log("update api cred", event.target.value);
-          state.apiCredentials = event.target.value;
-        }
-      }, state.apiCredentials)
-    ] : [],
+    ...conditional(
+      APIS[state.apiCode].requireCredentials,
+      [
+        node("label", {
+          for: "input-api_credentials"
+        }, translate(state, "options-api_credentials")),
+        node("input", {
+          id: "input-api_credentials",
+          keyup: (event) => {
+            if (state.apiCredentials !== event.target.value) {
+              state.apiCredentials = event.target.value;
+            }
+          },
+          type: "password",
+          value: state.apiCredentials
+        })
+      ]
+    ),
     node("button", {
       click: () => {
         state.apiCredentialsPending = true;
-        getModels3(state).then(([error, response, result]) => {
+        getModels4(state).then(([error, response, result]) => {
           state.apiCredentialsPending = false;
           if (error) {
             state.apiCredentialsTested = false;
@@ -1564,27 +1653,34 @@
         class: state.apiCredentialsPending ? "pending" : ""
       })
     ]),
-    ...state.apiCredentialsError ? [node("p", state.apiCredentialsError)] : [],
-    ...!state.apiCredentialsTested ? [node("p", translate(state, "options-api_credentials_untested"))] : [
-      node("label", {
-        for: "select_api_model"
-      }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
-      node(
-        "select",
-        {
-          id: "select_api_model",
-          change: (event) => {
-            if (state.apiModel !== event.target.selectedOptions[0].value) {
-              state.apiModel = event.target.selectedOptions[0].value;
+    ...conditional(
+      state.apiCredentialsError,
+      [node("p", state.apiCredentialsError)]
+    ),
+    ...conditional(
+      !state.apiCredentialsTested,
+      [node("p", translate(state, "options-api_credentials_untested"))],
+      [
+        node("label", {
+          for: "select_api_model"
+        }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
+        node(
+          "select",
+          {
+            id: "select_api_model",
+            change: (event) => {
+              if (state.apiModel !== event.target.selectedOptions[0].value) {
+                state.apiModel = event.target.selectedOptions[0].value;
+              }
             }
-          }
-        },
-        state.apiModels.data.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true)).sort((a, b) => a.id.localeCompare(b.id)).map((model) => node("option", {
-          selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
-          value: model.id
-        }, model.name ?? model.id))
-      )
-    ],
+          },
+          state.apiModels?.data?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+            selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
+            value: model.id
+          }, model.name ?? model.id))
+        )
+      ]
+    ),
     node("button", {
       click: () => {
         if (isReady(state)) {
@@ -1602,7 +1698,7 @@
       node("b", translate(state, "greeting")),
       node("br"),
       ...conditional(
-        state.statisticComprehensionActivity > 1 || state.statisticConversationActivity > 1 || state.statisticClarificationActivity > 1 || state.statisticStoryActivity > 1 || state.statisticVocabularyActivity > 1,
+        state.statisticComprehensionActivity > 0 || state.statisticConversationActivity > 0 || state.statisticClarificationActivity > 0 || state.statisticStoryActivity > 0 || state.statisticVocabularyActivity > 0,
         translate(state, "statistics-activity_per_category"),
         translate(state, "statistics-no_activity")
       )
@@ -1839,21 +1935,28 @@
         value: apiCode
       }, APIS[apiCode].name)
     )),
-    ...APIS[state.apiCode].requireCredentials ? [
-      node("label", {
-        for: "input-api_credentials"
-      }, translate(state, "setup-api_credentials")),
-      node("textarea", {
-        id: "input-api_credentials",
-        keyup: (event) => {
-          state.apiCredentials = event.target.value;
-        }
-      }, state.apiCredentials)
-    ] : [],
+    ...conditional(
+      APIS[state.apiCode].requireCredentials,
+      [
+        node("label", {
+          for: "input-api_credentials"
+        }, translate(state, "setup-api_credentials")),
+        node("input", {
+          id: "input-api_credentials",
+          keyup: (event) => {
+            if (state.apiCredentials !== event.target.value) {
+              state.apiCredentials = event.target.value;
+            }
+          },
+          type: "password",
+          value: state.apiCredentials
+        })
+      ]
+    ),
     node("button", {
       click: () => {
         state.apiCredentialsPending = true;
-        getModels3(state).then(([error, response, result]) => {
+        getModels4(state).then(([error, response, result]) => {
           state.apiCredentialsPending = false;
           if (error) {
             state.apiCredentialsTested = false;
@@ -1874,28 +1977,38 @@
         class: state.apiCredentialsPending ? "pending" : ""
       })
     ]),
-    ...state.apiCredentialsError ? [node("p", state.apiCredentialsError)] : [],
-    ...!state.apiCredentialsTested ? [node("p", translate(state, "setup-api_credentials_untested"))] : [
-      node("label", {
-        for: "select_api_model"
-      }, translate(state, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
-      node(
-        "select",
-        {
-          id: "select_api_model",
-          change: (event) => {
-            if (state.apiModel !== event.target.selectedOptions[0].value) {
-              state.apiModel = event.target.selectedOptions[0].value;
+    ...conditional(
+      state.apiCredentialsError,
+      [node("p", state.apiCredentialsError)]
+    ),
+    ...conditional(
+      !state.apiCredentialsTested,
+      [node("p", translate(state, "setup-api_credentials_untested"))],
+      [
+        node("label", {
+          for: "select_api_model"
+        }, translate(state, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
+        node(
+          "select",
+          {
+            id: "select_api_model",
+            change: (event) => {
+              if (state.apiModel !== event.target.selectedOptions[0].value) {
+                state.apiModel = event.target.selectedOptions[0].value;
+              }
             }
-          }
-        },
-        state.apiModels.data.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true)).sort((a, b) => a.id.localeCompare(b.id)).map((model) => node("option", {
-          selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
-          value: model.id
-        }, model.name ?? model.id))
-      )
-    ],
-    ...isReady2(state) ? [node("p", translate(state, "setup-outro"))] : [],
+          },
+          state.apiModels?.data?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+            selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
+            value: model.id
+          }, model.name ?? model.id))
+        )
+      ]
+    ),
+    ...conditional(
+      isReady2(state),
+      [node("p", translate(state, "setup-outro"))]
+    ),
     node("button", {
       click: () => {
         if (isReady2(state)) {
@@ -1964,8 +2077,8 @@
         class: "messages"
       }, state.conversationMessages.map(
         (message) => node("p", {
-          class: "message-" + message.role
-        }, message.content.split("\n").flatMap(
+          class: "message-" + message?.role
+        }, message?.content?.split("\n")?.flatMap(
           (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
         ))
       ))
@@ -2007,7 +2120,7 @@
                 content: state.conversationInput.trim()
               });
               state.conversationInput = "";
-              createMessage3(
+              createMessage4(
                 state,
                 state.conversationMessages,
                 translate(state, "prompt-context"),
@@ -2038,7 +2151,7 @@
               state.conversationError = false;
               state.conversationMessages = [];
               state.conversationPending = true;
-              createMessage3(
+              createMessage4(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2093,8 +2206,8 @@
         class: "messages"
       }, state.clarificationMessages.map(
         (message) => node("p", {
-          class: "message-" + message.role
-        }, message.content.split("\n").flatMap(
+          class: "message-" + message?.role
+        }, message?.content?.split("\n")?.flatMap(
           (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
         ))
       ))
@@ -2132,7 +2245,7 @@
               content: state.clarificationInput.trim()
             });
             state.clarificationInput = "";
-            createMessage3(
+            createMessage4(
               state,
               state.clarificationMessages,
               translate(state, "prompt-context"),
@@ -2185,8 +2298,8 @@
         class: "messages"
       }, state.comprehensionMessages.map(
         (message) => node("p", {
-          class: "message-" + message.role
-        }, message.content.split("\n").flatMap(
+          class: "message-" + message?.role
+        }, message?.content?.split("\n")?.flatMap(
           (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
         ))
       ))
@@ -2228,7 +2341,7 @@
                 content: state.comprehensionInput.trim()
               });
               state.comprehensionInput = "";
-              createMessage3(
+              createMessage4(
                 state,
                 state.comprehensionMessages,
                 translate(state, "prompt-context"),
@@ -2256,7 +2369,7 @@
               state.comprehensionError = false;
               state.comprehensionMessages = [];
               state.comprehensionPending = true;
-              createMessage3(
+              createMessage4(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2308,8 +2421,8 @@
         class: "messages"
       }, state.storyMessages.map(
         (message) => node("p", {
-          class: "message-" + message.role
-        }, message.content.split("\n").flatMap(
+          class: "message-" + message?.role
+        }, message?.content?.split("\n")?.flatMap(
           (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
         ))
       ))
@@ -2351,7 +2464,7 @@
                 content: state.storyInput.trim()
               });
               state.storyInput = "";
-              createMessage3(
+              createMessage4(
                 state,
                 state.storyMessages,
                 translate(state, "prompt-context"),
@@ -2382,7 +2495,7 @@
               state.storyError = false;
               state.storyMessages = [];
               state.storyPending = true;
-              createMessage3(
+              createMessage4(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2435,8 +2548,8 @@
         class: "messages"
       }, state.vocabularyMessages.map(
         (message) => node("p", {
-          class: "message-" + message.role
-        }, message.content.split("\n").flatMap(
+          class: "message-" + message?.role
+        }, message?.content?.split("\n")?.flatMap(
           (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
         ))
       ))
@@ -2478,7 +2591,7 @@
                 content: state.vocabularyInput.trim()
               });
               state.vocabularyInput = "";
-              createMessage3(
+              createMessage4(
                 state,
                 state.vocabularyMessages,
                 translate(state, "prompt-context"),
@@ -2506,7 +2619,7 @@
               state.vocabularyError = false;
               state.vocabularyMessages = [];
               state.vocabularyPending = true;
-              createMessage3(
+              createMessage4(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2585,8 +2698,8 @@
       targetLanguage: getLanguageFromLocale(LOCALES.eng),
       proficiencyLevel: PROFICIENCY_LEVELS.a1,
       topicsOfInterest: [],
-      apiCode: APIS.open_ai.code,
-      apiModel: null,
+      apiCode: APIS.google.code,
+      apiModel: apiSettings3.preferredModel,
       apiCredentials: null,
       apiCredentialsError: false,
       apiCredentialsTested: false,

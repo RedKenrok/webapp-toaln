@@ -21,8 +21,8 @@ export const clarification = (
         class: 'messages',
       }, state.clarificationMessages.map(
         (message) => n('p', {
-          class: 'message-' + message.role
-        }, message.content.split('\n').flatMap(
+          class: 'message-' + message?.role
+        }, message?.content?.split('\n')?.flatMap(
           (content, index, results) =>
             index === results.length - 1 ? [content] : [content, n('br')]
         )),

@@ -160,20 +160,23 @@ export const setup = (
       }, APIS[apiCode].name),
     )),
 
-    ...(
-      APIS[state.apiCode].requireCredentials
-        ? [
-          n('label', {
-            for: 'input-api_credentials',
-          }, t(state, 'setup-api_credentials')),
-          n('textarea', {
-            id: 'input-api_credentials',
-            keyup: (event) => {
+    ...c(
+      APIS[state.apiCode].requireCredentials,
+      [
+        n('label', {
+          for: 'input-api_credentials',
+        }, t(state, 'setup-api_credentials')),
+        n('input', {
+          id: 'input-api_credentials',
+          keyup: (event) => {
+            if (state.apiCredentials !== event.target.value) {
               state.apiCredentials = event.target.value
-            },
-          }, state.apiCredentials),
-        ]
-        : []
+            }
+          },
+          type: 'password',
+          value: state.apiCredentials,
+        }),
+      ],
     ),
 
     n('button', {
@@ -207,44 +210,43 @@ export const setup = (
       }),
     ]),
 
-    ...(
-      state.apiCredentialsError
-        ? [n('p', state.apiCredentialsError)]
-        : []
+    ...c(
+      state.apiCredentialsError,
+      [n('p', state.apiCredentialsError),],
     ),
 
-    ...(
-      !state.apiCredentialsTested
-        ? [n('p', t(state, 'setup-api_credentials_untested')),]
-        : [
-          n('label', {
-            for: 'select_api_model',
-          }, t(state, 'setup-api_credentials_tested').replace('{%preferredModel%}', APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
-          n('select', {
-            id: 'select_api_model',
-            change: (event) => {
-              if (state.apiModel !== event.target.selectedOptions[0].value) {
-                state.apiModel = event.target.selectedOptions[0].value
-              }
-            },
-          }, state.apiModels.data
-            .filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))
-            .sort((a, b) => a.id.localeCompare(b.id))
-            .map(model => n('option', {
-              selected: (
-                (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id
-                  ? 'selected'
-                  : false
-              ),
-              value: model.id,
-            }, model.name ?? model.id))
-          ),
-        ]
+    ...c(
+      !state.apiCredentialsTested,
+      [n('p', t(state, 'setup-api_credentials_untested')),],
+      [
+        n('label', {
+          for: 'select_api_model',
+        }, t(state, 'setup-api_credentials_tested').replace('{%preferredModel%}', APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
+        n('select', {
+          id: 'select_api_model',
+          change: (event) => {
+            if (state.apiModel !== event.target.selectedOptions[0].value) {
+              state.apiModel = event.target.selectedOptions[0].value
+            }
+          },
+        }, state.apiModels?.data
+          ?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))
+          ?.sort((a, b) => a.id.localeCompare(b.id))
+          ?.map(model => n('option', {
+            selected: (
+              (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id
+                ? 'selected'
+                : false
+            ),
+            value: model.id,
+          }, model.name ?? model.id))
+        ),
+      ],
     ),
 
-    ...(isReady(state)
-      ? [n('p', t(state, 'setup-outro')),]
-      : []
+    ...c(
+      isReady(state),
+      [n('p', t(state, 'setup-outro')),],
     ),
 
     n('button', {
