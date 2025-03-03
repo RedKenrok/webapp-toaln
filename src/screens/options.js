@@ -17,19 +17,8 @@ import {
 import {
   APIS,
   getModels,
+  isReady,
 } from '../apis/apis.js'
-
-const isReady = (state) => {
-  return (
-    state.apiCode
-    && APIS[state.apiCode]
-    && (
-      !APIS[state.apiCode].requireCredentials
-      || state.apiCredentialsTested
-    )
-    && (state.apiModel ?? APIS[state.apiCode].preferredModel)
-  )
-}
 
 export const options = (
   state,
@@ -82,7 +71,7 @@ export const options = (
 
     n('label', {
       for: 'select_proficiency_level',
-    }, t(state, 'options-proficiency_leven')),
+    }, t(state, 'options-proficiency_level')),
     n('select', {
       id: 'select_proficiency_level',
       change: (event) => {
@@ -161,7 +150,7 @@ export const options = (
     )),
 
     ...c(
-      APIS[state.apiCode].requireCredentials,
+      APIS[state.apiCode]?.requireCredentials,
       [
         n('label', {
           for: 'input-api_credentials',
@@ -220,7 +209,7 @@ export const options = (
       [
         n('label', {
           for: 'select_api_model',
-        }, t(state, 'options-api_credentials_tested').replace('{%preferredModel%}', APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
+        }, t(state, 'options-api_credentials_tested').replace('{%preferredModel%}', APIS[state.apiCode]?.preferredModelName ?? APIS[state.apiCode]?.preferredModel)),
         n('select', {
           id: 'select_api_model',
           change: (event) => {
@@ -228,18 +217,30 @@ export const options = (
               state.apiModel = event.target.selectedOptions[0].value
             }
           },
-        }, state.apiModels?.data
-          ?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))
-          ?.sort((a, b) => a.id.localeCompare(b.id))
-          ?.map(model => n('option', {
+        }, [
+          n('option', {
+            disabled: true,
             selected: (
-              (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id
+              !isReady(state)
                 ? 'selected'
                 : false
             ),
-            value: model.id,
-          }, model.name ?? model.id))
-        ),
+            value: null,
+          }, t(state, 'select_an_option')),
+
+          ...state.apiModels?.data
+            ?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))
+            ?.sort((a, b) => a.id.localeCompare(b.id))
+            ?.map(model => n('option', {
+              selected: (
+                (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id
+                  ? 'selected'
+                  : false
+              ),
+              value: model.id,
+            }, model.name ?? model.id))
+          ?? []
+        ]),
       ],
     ),
 

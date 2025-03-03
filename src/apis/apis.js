@@ -1,23 +1,30 @@
-import {
-  apiSettings as apiSettingsOpenAI,
-  createMessage as createMessageOpenAI,
-  getModels as getModelsOpenAI,
-} from './open-ai.js'
+
 import {
   apiSettings as apiSettingsAnthropic,
   createMessage as createMessageAnthropic,
   getModels as getModelsAnthropic,
 } from './anthropic.js'
 import {
+  apiSettings as apiSettingsDeepseek,
+  createMessage as createMessageDeepseek,
+  getModels as getModelsDeepseek,
+} from './deepseek.js'
+import {
   apiSettings as apiSettingsGoogle,
   createMessage as createMessageGoogle,
   getModels as getModelsGoogle,
 } from './google.js'
+import {
+  apiSettings as apiSettingsOpenAI,
+  createMessage as createMessageOpenAI,
+  getModels as getModelsOpenAI,
+} from './open-ai.js'
 
 export const APIS = Object.freeze({
-  open_ai: apiSettingsOpenAI,
   anthropic: apiSettingsAnthropic,
+  deepseek: apiSettingsDeepseek,
   google: apiSettingsGoogle,
+  open_ai: apiSettingsOpenAI,
 })
 
 const callApi = (
@@ -44,14 +51,33 @@ export const createMessage = (
   instructions = null,
 ) => callApi({
   [APIS.anthropic.code]: createMessageAnthropic,
-  [APIS.open_ai.code]: createMessageOpenAI,
+  [APIS.deepseek.code]: createMessageDeepseek,
   [APIS.google.code]: createMessageGoogle,
+  [APIS.open_ai.code]: createMessageOpenAI,
 }, state, messages, context, instructions)
 
 export const getModels = (
   state,
 ) => callApi({
   [APIS.anthropic.code]: getModelsAnthropic,
-  [APIS.open_ai.code]: getModelsOpenAI,
+  [APIS.deepseek.code]: getModelsDeepseek,
   [APIS.google.code]: getModelsGoogle,
+  [APIS.open_ai.code]: getModelsOpenAI,
 }, state)
+
+export const isReady = (
+  state,
+) => {
+  return (
+    state.apiCode
+    && APIS[state.apiCode]
+    && (
+      !APIS[state.apiCode]?.requireCredentials
+      || state.apiCredentialsTested
+    )
+    && (state.apiModel ?? APIS[state.apiCode].preferredModel)
+    && state.apiModels?.data?.some(
+      (model) => model.id === (state.apiModel ?? APIS[state.apiCode].preferredModel)
+    )
+  )
+}

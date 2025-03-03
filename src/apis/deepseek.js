@@ -3,29 +3,22 @@ import { cloneRecursive } from '../utilities/clone.js'
 import { createSingleton } from '../utilities/singleton.js'
 
 export const apiSettings = Object.freeze({
-  code: 'open_ai',
-  name: 'OpenAI',
-  preferredModel: 'gpt-4o-mini',
+  code: 'deepseek',
+  name: 'DeepSeek',
+  preferredModel: 'deepseek-chat',
   // preferredModelName: 'GPT 4o-mini',
   requireCredentials: true,
-  modelOptionsFilter: model =>
-    ![
-      'babbage-',
-      'dall-e-',
-      'davinci-',
-      'embedding-',
-      'moderation-',
-      'tts-',
-      'whisper-',
-    ].some(keyword => model.id.toLowerCase().includes(keyword))
-    && !model.id.match(/-(?:\d){4}$/)
-    && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
+  // modelOptionsFilter: model =>
+  //   ![
+  //   ].some(keyword => model.id.toLowerCase().includes(keyword))
+  //   && !model.id.match(/-(?:\d){4}$/)
+  //   && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
 })
 
 const _createMessage = createSingleton(
   () => create({
     method: 'post',
-    domain: 'https://api.openai.com',
+    domain: 'https://api.deepseek.com',
     path: '/v1/chat/completions',
     headers: {
       'Accept': 'application/json',
@@ -39,13 +32,6 @@ export const createMessage = (
   context = null,
   instructions = null,
 ) => {
-  // Use 'system' role for OpenAI API models that contain '4o' or '3.5'.
-  const appRole = (
-    (state.apiModel ?? apiSettings.preferredModel).toLowerCase().match(/4o|3\.5/)
-      ? 'system'
-      : 'developer'
-  )
-
   messages = cloneRecursive(messages)
 
   const prependAppRole = (
@@ -54,12 +40,12 @@ export const createMessage = (
     if (message) {
       if (
         messages.length > 0
-        && messages[0].role === appRole
+        && messages[0].role === 'system'
       ) {
         messages[0].content = message + ' ' + messages[0].content
       } else {
         messages.unshift({
-          role: appRole,
+          role: 'system',
           content: message,
         })
       }
@@ -88,7 +74,7 @@ export const createMessage = (
 
 const _getModels = createSingleton(
   () => create({
-    domain: 'https://api.openai.com',
+    domain: 'https://api.deepseek.com',
     path: '/v1/models',
     headers: {
       'Accept': 'application/json',

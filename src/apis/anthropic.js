@@ -49,7 +49,7 @@ export const createMessage = (
       'x-api-key': state.apiCredentials,
     },
     body: {
-      model: state.apiModel,
+      model: state.apiModel ?? apiSettings.preferredModel,
       messages: messages,
       system: context,
     },

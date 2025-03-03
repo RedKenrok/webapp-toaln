@@ -42,7 +42,7 @@ export const createMessage = (
   messages = cloneRecursive(messages)
 
   return _createMessage()({
-    path: '/v1beta/models/' + state.apiModel + ':generateContent?key=' + state.apiCredentials,
+    path: '/v1beta/models/' + (state.apiModel ?? apiSettings.preferredModel) + ':generateContent?key=' + state.apiCredentials,
     body: {
       system_instruction: (
         (context || instructions)

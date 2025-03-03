@@ -867,84 +867,8 @@
     };
   };
 
-  // src/apis/open-ai.js
-  var apiSettings = Object.freeze({
-    code: "open_ai",
-    name: "OpenAI",
-    preferredModel: "gpt-4o-mini",
-    // preferredModelName: 'GPT 4o-mini',
-    requireCredentials: true,
-    modelOptionsFilter: (model) => ![
-      "babbage-",
-      "dall-e-",
-      "davinci-",
-      "embedding-",
-      "moderation-",
-      "tts-",
-      "whisper-"
-    ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4}$/) && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
-  });
-  var _createMessage = createSingleton(
-    () => create({
-      method: "post",
-      domain: "https://api.openai.com",
-      path: "/v1/chat/completions",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-  );
-  var createMessage = (state, messages, context = null, instructions = null) => {
-    const appRole = state.apiModel.toLowerCase().match(/4o|3\.5/) ? "system" : "developer";
-    messages = cloneRecursive3(messages);
-    const prependAppRole = (message) => {
-      if (message) {
-        if (messages.length > 0 && messages[0].role === appRole) {
-          messages[0].content = message + " " + messages[0].content;
-        } else {
-          messages.unshift({
-            role: appRole,
-            content: message
-          });
-        }
-      }
-    };
-    prependAppRole(instructions);
-    prependAppRole(context);
-    return _createMessage()({
-      headers: {
-        Authorization: "Bearer " + state.apiCredentials
-      },
-      body: {
-        model: state.apiModel,
-        messages,
-        user: state.userIdentifier
-      }
-    }).then(([error, response, result]) => {
-      if (!error) {
-        result = result?.choices?.[0]?.message;
-      }
-      return [error, response, result];
-    });
-  };
-  var _getModels = createSingleton(
-    () => create({
-      domain: "https://api.openai.com",
-      path: "/v1/models",
-      headers: {
-        "Accept": "application/json"
-      }
-    })
-  );
-  var getModels = (state) => _getModels()({
-    headers: {
-      Authorization: "Bearer " + state.apiCredentials
-    }
-  });
-
   // src/apis/anthropic.js
-  var apiSettings2 = Object.freeze({
+  var apiSettings = Object.freeze({
     code: "anthropic",
     name: "Anthropic",
     preferredModel: "claude-3-5-haiku-20241022",
@@ -954,7 +878,7 @@
       "(old)"
     ].some((keyword) => model.name.toLowerCase().includes(keyword))
   });
-  var _createMessage2 = createSingleton(
+  var _createMessage = createSingleton(
     () => create({
       credentials: "same-origin",
       domain: "https://api.anthropic.com",
@@ -970,7 +894,7 @@
       }
     })
   );
-  var createMessage2 = (state, messages, context = null, instructions = null) => {
+  var createMessage = (state, messages, context = null, instructions = null) => {
     messages = cloneRecursive3(messages);
     if (instructions) {
       messages.unshift({
@@ -978,12 +902,12 @@
         content: instructions
       });
     }
-    return _createMessage2()({
+    return _createMessage()({
       headers: {
         "x-api-key": state.apiCredentials
       },
       body: {
-        model: state.apiModel,
+        model: state.apiModel ?? apiSettings.preferredModel,
         messages,
         system: context
       }
@@ -997,7 +921,7 @@
       return [error, response, result];
     });
   };
-  var _getModels2 = createSingleton(
+  var _getModels = createSingleton(
     () => create({
       credentials: "same-origin",
       domain: "https://api.anthropic.com",
@@ -1011,8 +935,8 @@
       }
     })
   );
-  var getModels2 = (state) => {
-    return _getModels2()({
+  var getModels = (state) => {
+    return _getModels()({
       headers: {
         "x-api-key": state.apiCredentials
       }
@@ -1028,6 +952,77 @@
       return [error, response, result];
     });
   };
+
+  // src/apis/deepseek.js
+  var apiSettings2 = Object.freeze({
+    code: "deepseek",
+    name: "DeepSeek",
+    preferredModel: "deepseek-chat",
+    // preferredModelName: 'GPT 4o-mini',
+    requireCredentials: true
+    // modelOptionsFilter: model =>
+    //   ![
+    //   ].some(keyword => model.id.toLowerCase().includes(keyword))
+    //   && !model.id.match(/-(?:\d){4}$/)
+    //   && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
+  });
+  var _createMessage2 = createSingleton(
+    () => create({
+      method: "post",
+      domain: "https://api.deepseek.com",
+      path: "/v1/chat/completions",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  );
+  var createMessage2 = (state, messages, context = null, instructions = null) => {
+    messages = cloneRecursive3(messages);
+    const prependAppRole = (message) => {
+      if (message) {
+        if (messages.length > 0 && messages[0].role === "system") {
+          messages[0].content = message + " " + messages[0].content;
+        } else {
+          messages.unshift({
+            role: "system",
+            content: message
+          });
+        }
+      }
+    };
+    prependAppRole(instructions);
+    prependAppRole(context);
+    return _createMessage2()({
+      headers: {
+        Authorization: "Bearer " + state.apiCredentials
+      },
+      body: {
+        model: state.apiModel ?? apiSettings2.preferredModel,
+        messages,
+        user: state.userIdentifier
+      }
+    }).then(([error, response, result]) => {
+      if (!error) {
+        result = result?.choices?.[0]?.message;
+      }
+      return [error, response, result];
+    });
+  };
+  var _getModels2 = createSingleton(
+    () => create({
+      domain: "https://api.deepseek.com",
+      path: "/v1/models",
+      headers: {
+        "Accept": "application/json"
+      }
+    })
+  );
+  var getModels2 = (state) => _getModels2()({
+    headers: {
+      Authorization: "Bearer " + state.apiCredentials
+    }
+  });
 
   // src/apis/google.js
   var apiSettings3 = Object.freeze({
@@ -1060,7 +1055,7 @@
   var createMessage3 = (state, messages, context = null, instructions = null) => {
     messages = cloneRecursive3(messages);
     return _createMessage3()({
-      path: "/v1beta/models/" + state.apiModel + ":generateContent?key=" + state.apiCredentials,
+      path: "/v1beta/models/" + (state.apiModel ?? apiSettings3.preferredModel) + ":generateContent?key=" + state.apiCredentials,
       body: {
         system_instruction: context || instructions ? {
           parts: [context, instructions].filter((text) => text).map((text) => ({
@@ -1108,11 +1103,88 @@
     return [error, response, result];
   });
 
+  // src/apis/open-ai.js
+  var apiSettings4 = Object.freeze({
+    code: "open_ai",
+    name: "OpenAI",
+    preferredModel: "gpt-4o-mini",
+    // preferredModelName: 'GPT 4o-mini',
+    requireCredentials: true,
+    modelOptionsFilter: (model) => ![
+      "babbage-",
+      "dall-e-",
+      "davinci-",
+      "embedding-",
+      "moderation-",
+      "tts-",
+      "whisper-"
+    ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4}$/) && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
+  });
+  var _createMessage4 = createSingleton(
+    () => create({
+      method: "post",
+      domain: "https://api.openai.com",
+      path: "/v1/chat/completions",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  );
+  var createMessage4 = (state, messages, context = null, instructions = null) => {
+    const appRole = (state.apiModel ?? apiSettings4.preferredModel).toLowerCase().match(/4o|3\.5/) ? "system" : "developer";
+    messages = cloneRecursive3(messages);
+    const prependAppRole = (message) => {
+      if (message) {
+        if (messages.length > 0 && messages[0].role === appRole) {
+          messages[0].content = message + " " + messages[0].content;
+        } else {
+          messages.unshift({
+            role: appRole,
+            content: message
+          });
+        }
+      }
+    };
+    prependAppRole(instructions);
+    prependAppRole(context);
+    return _createMessage4()({
+      headers: {
+        Authorization: "Bearer " + state.apiCredentials
+      },
+      body: {
+        model: state.apiModel ?? apiSettings4.preferredModel,
+        messages,
+        user: state.userIdentifier
+      }
+    }).then(([error, response, result]) => {
+      if (!error) {
+        result = result?.choices?.[0]?.message;
+      }
+      return [error, response, result];
+    });
+  };
+  var _getModels4 = createSingleton(
+    () => create({
+      domain: "https://api.openai.com",
+      path: "/v1/models",
+      headers: {
+        "Accept": "application/json"
+      }
+    })
+  );
+  var getModels4 = (state) => _getModels4()({
+    headers: {
+      Authorization: "Bearer " + state.apiCredentials
+    }
+  });
+
   // src/apis/apis.js
   var APIS = Object.freeze({
-    open_ai: apiSettings,
-    anthropic: apiSettings2,
-    google: apiSettings3
+    anthropic: apiSettings,
+    deepseek: apiSettings2,
+    google: apiSettings3,
+    open_ai: apiSettings4
   });
   var callApi = (lookupTable, state, ...parameters) => {
     let method = null;
@@ -1126,16 +1198,23 @@
       [new Error("No api selected."), null, null]
     );
   };
-  var createMessage4 = (state, messages, context = null, instructions = null) => callApi({
-    [APIS.anthropic.code]: createMessage2,
-    [APIS.open_ai.code]: createMessage,
-    [APIS.google.code]: createMessage3
+  var createMessage5 = (state, messages, context = null, instructions = null) => callApi({
+    [APIS.anthropic.code]: createMessage,
+    [APIS.deepseek.code]: createMessage2,
+    [APIS.google.code]: createMessage3,
+    [APIS.open_ai.code]: createMessage4
   }, state, messages, context, instructions);
-  var getModels4 = (state) => callApi({
-    [APIS.anthropic.code]: getModels2,
-    [APIS.open_ai.code]: getModels,
-    [APIS.google.code]: getModels3
+  var getModels5 = (state) => callApi({
+    [APIS.anthropic.code]: getModels,
+    [APIS.deepseek.code]: getModels2,
+    [APIS.google.code]: getModels3,
+    [APIS.open_ai.code]: getModels4
   }, state);
+  var isReady = (state) => {
+    return state.apiCode && APIS[state.apiCode] && (!APIS[state.apiCode]?.requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiCode].preferredModel) && state.apiModels?.data?.some(
+      (model) => model.id === (state.apiModel ?? APIS[state.apiCode].preferredModel)
+    );
+  };
 
   // src/data/locales.js
   var PROFICIENCY_LEVELS = Object.freeze({
@@ -1342,9 +1421,10 @@
       "button-reply": "Reply",
       "button-ask": "Ask",
       "credits-link": "Made by {%name%}",
+      "select_an_option": "Select an option",
       "setup-source_language": "So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.",
       "setup-target_language": "Now the next step, which language would you like to learn?",
-      "setup-proficiency_leven": "How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
+      "setup-proficiency_level": "How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
       "setup-topics_of_interest": "It's much more enjoyable if the exercises sometimes feature a topic you find interesting. Therefore, fill in a few topics below that can regularly appear. Think mainly of any hobbies or other interests. The more, the better!",
       "setup-api_code": `This app uses a "Large Language Model" to generate and assess exercises. You may have heard about it, everyone in the tech sector keeps talking about developments in artificial intelligence. The app uses an LLM, but doesn't come with one, so we need to link it to an LLM provider. Which provider would you like to use?`,
       "setup-api_credentials": "Now, the important question is the key. You can get it from the developer's dashboard. It probably states that you shouldn't share it with third parties. Fortunately, this app never sends the key elsewhere. Still not convinced? Check out the app's source code or wait for a version that no longer requires this.",
@@ -1368,7 +1448,7 @@
       "overview-vocabulary-description": "You'll receive a word together with its definition, you then respond with a with a sentence using that word.",
       "options-source_language": "Which language do you already know?",
       "options-target_language": "Which language would you like to learn?",
-      "options-proficiency_leven": "How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
+      "options-proficiency_level": "How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
       "options-topics_of_interest": "Fill in a few topics below that can regularly appear in the exercises.",
       "options-api_code": 'This app uses a "Large Language Model" to generate and assess exercises. Which provider would you like to link?',
       "options-api_credentials": "Enter the key from the developer's dashboard.",
@@ -1455,9 +1535,10 @@
       "button-reply": "Antwoorden",
       "button-ask": "Vragen",
       "credits-link": "Gemaakt door {%name%}",
+      "select_an_option": "Selecteer een optie",
       "setup-source_language": "Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.",
       "setup-target_language": "Nu het volgende probleem, welke taal wil je leren?",
-      "setup-proficiency_leven": "Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
+      "setup-proficiency_level": "Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
       "setup-topics_of_interest": "Het is natuurlijk veel leuker als er af en toe een onderwerp voorbij komt wat je interessant vind. Vul daarom hieronder een aantal onderwerpen in die regelmatig terug kunnen komen. Denk hierbij vooral aan enige hobbies of andere interesses. Des te meer des te beter!",
       "setup-api_code": 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model". Je hebt er vast wel van gehoord, iedereen in de technologie sector houdt maar niet op over de ontwikkelingen in kunstmatige intelligentie. De app maakt dus gebruik van een LLM om de oefening te maken en te beoordelen. Helaas komt de app niet zelf met een eentje, dus moeten we een koppeling maken met een LLM. Met welke aanbieder wil je een koppeling maken?',
       "setup-api_credentials": "Nu is de grote vraag nog de sleutel. Deze kun je bij het ontwikkelaars paneel. Er staat waarschijnlijk al bij vermeld dat je deze niet met derden moet delen. Gelukkig stuurt deze app nooit de sleutel door. Vertrouw je het toch niet? Bekijk dan de brondcode van deze app, of wacht wellicht tot er een variant gemaakt is waarbij dat niet meer nodig is.",
@@ -1481,7 +1562,7 @@
       "overview-vocabulary-description": "Je krijgt een woord samen met de definitie ervan vervolgens schrijf je een zin dat dit woord gebruikt.",
       "options-source_language": "Welke taal ken je al?",
       "options-target_language": "Welke taal wil je leren?",
-      "options-proficiency_leven": "Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
+      "options-proficiency_level": "Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
       "options-topics_of_interest": "Vul hieronder een aantal onderwerpen in die regelmatig terug kunnen komen in de oefening.",
       "options-api_code": 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model" om de oefening te maken en te beoordelen. Met welke aanbieder wil je een koppeling maken?',
       "options-api_credentials": "Voer de sleutel uit het ontwikkelaars paneel in.",
@@ -1505,9 +1586,6 @@
   var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
   // src/screens/options.js
-  var isReady = (state) => {
-    return state.apiCode && APIS[state.apiCode] && (!APIS[state.apiCode].requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiCode].preferredModel);
-  };
   var options = (state) => [
     node("b", translate(state, "greeting")),
     node("label", {
@@ -1546,7 +1624,7 @@
     )),
     node("label", {
       for: "select_proficiency_level"
-    }, translate(state, "options-proficiency_leven")),
+    }, translate(state, "options-proficiency_level")),
     node("select", {
       id: "select_proficiency_level",
       change: (event) => {
@@ -1613,7 +1691,7 @@
       }, APIS[apiCode].name)
     )),
     ...conditional(
-      APIS[state.apiCode].requireCredentials,
+      APIS[state.apiCode]?.requireCredentials,
       [
         node("label", {
           for: "input-api_credentials"
@@ -1633,7 +1711,7 @@
     node("button", {
       click: () => {
         state.apiCredentialsPending = true;
-        getModels4(state).then(([error, response, result]) => {
+        getModels5(state).then(([error, response, result]) => {
           state.apiCredentialsPending = false;
           if (error) {
             state.apiCredentialsTested = false;
@@ -1663,22 +1741,25 @@
       [
         node("label", {
           for: "select_api_model"
-        }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
-        node(
-          "select",
-          {
-            id: "select_api_model",
-            change: (event) => {
-              if (state.apiModel !== event.target.selectedOptions[0].value) {
-                state.apiModel = event.target.selectedOptions[0].value;
-              }
+        }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode]?.preferredModelName ?? APIS[state.apiCode]?.preferredModel)),
+        node("select", {
+          id: "select_api_model",
+          change: (event) => {
+            if (state.apiModel !== event.target.selectedOptions[0].value) {
+              state.apiModel = event.target.selectedOptions[0].value;
             }
-          },
-          state.apiModels?.data?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+          }
+        }, [
+          node("option", {
+            disabled: true,
+            selected: !isReady(state) ? "selected" : false,
+            value: null
+          }, translate(state, "select_an_option")),
+          ...state.apiModels?.data?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
             selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
             value: model.id
-          }, model.name ?? model.id))
-        )
+          }, model.name ?? model.id)) ?? []
+        ])
       ]
     ),
     node("button", {
@@ -1828,9 +1909,6 @@
   ];
 
   // src/screens/setup.js
-  var isReady2 = (state) => {
-    return state.apiCode && APIS[state.apiCode] && (!APIS[state.apiCode].requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiCode].preferredModel);
-  };
   var setup = (state) => [
     node("b", translate(state, "greeting")),
     node("label", {
@@ -1869,7 +1947,7 @@
     )),
     node("label", {
       for: "select_proficiency_level"
-    }, translate(state, "setup-proficiency_leven")),
+    }, translate(state, "setup-proficiency_level")),
     node("select", {
       id: "select_proficiency_level",
       change: (event) => {
@@ -1936,7 +2014,7 @@
       }, APIS[apiCode].name)
     )),
     ...conditional(
-      APIS[state.apiCode].requireCredentials,
+      APIS[state.apiCode]?.requireCredentials,
       [
         node("label", {
           for: "input-api_credentials"
@@ -1956,7 +2034,7 @@
     node("button", {
       click: () => {
         state.apiCredentialsPending = true;
-        getModels4(state).then(([error, response, result]) => {
+        getModels5(state).then(([error, response, result]) => {
           state.apiCredentialsPending = false;
           if (error) {
             state.apiCredentialsTested = false;
@@ -1987,35 +2065,38 @@
       [
         node("label", {
           for: "select_api_model"
-        }, translate(state, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode].preferredModelName ?? APIS[state.apiCode].preferredModel)),
-        node(
-          "select",
-          {
-            id: "select_api_model",
-            change: (event) => {
-              if (state.apiModel !== event.target.selectedOptions[0].value) {
-                state.apiModel = event.target.selectedOptions[0].value;
-              }
+        }, translate(state, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiCode]?.preferredModelName ?? APIS[state.apiCode]?.preferredModel)),
+        node("select", {
+          id: "select_api_model",
+          change: (event) => {
+            if (state.apiModel !== event.target.selectedOptions[0].value) {
+              state.apiModel = event.target.selectedOptions[0].value;
             }
-          },
-          state.apiModels?.data?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+          }
+        }, [
+          node("option", {
+            disabled: true,
+            selected: !isReady(state) ? "selected" : false,
+            value: null
+          }, translate(state, "select_an_option")),
+          ...state.apiModels?.data?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
             selected: (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id ? "selected" : false,
             value: model.id
-          }, model.name ?? model.id))
-        )
+          }, model.name ?? model.id)) ?? []
+        ])
       ]
     ),
     ...conditional(
-      isReady2(state),
+      isReady(state),
       [node("p", translate(state, "setup-outro"))]
     ),
     node("button", {
       click: () => {
-        if (isReady2(state)) {
+        if (isReady(state)) {
           state.screen = SCREENS.overview;
         }
       },
-      disabled: !isReady2(state),
+      disabled: !isReady(state),
       type: "button"
     }, translate(state, "setup-next"))
   ];
@@ -2120,7 +2201,7 @@
                 content: state.conversationInput.trim()
               });
               state.conversationInput = "";
-              createMessage4(
+              createMessage5(
                 state,
                 state.conversationMessages,
                 translate(state, "prompt-context"),
@@ -2151,7 +2232,7 @@
               state.conversationError = false;
               state.conversationMessages = [];
               state.conversationPending = true;
-              createMessage4(
+              createMessage5(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2245,7 +2326,7 @@
               content: state.clarificationInput.trim()
             });
             state.clarificationInput = "";
-            createMessage4(
+            createMessage5(
               state,
               state.clarificationMessages,
               translate(state, "prompt-context"),
@@ -2341,7 +2422,7 @@
                 content: state.comprehensionInput.trim()
               });
               state.comprehensionInput = "";
-              createMessage4(
+              createMessage5(
                 state,
                 state.comprehensionMessages,
                 translate(state, "prompt-context"),
@@ -2369,7 +2450,7 @@
               state.comprehensionError = false;
               state.comprehensionMessages = [];
               state.comprehensionPending = true;
-              createMessage4(
+              createMessage5(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2464,7 +2545,7 @@
                 content: state.storyInput.trim()
               });
               state.storyInput = "";
-              createMessage4(
+              createMessage5(
                 state,
                 state.storyMessages,
                 translate(state, "prompt-context"),
@@ -2495,7 +2576,7 @@
               state.storyError = false;
               state.storyMessages = [];
               state.storyPending = true;
-              createMessage4(
+              createMessage5(
                 state,
                 [],
                 translate(state, "prompt-context"),
@@ -2591,7 +2672,7 @@
                 content: state.vocabularyInput.trim()
               });
               state.vocabularyInput = "";
-              createMessage4(
+              createMessage5(
                 state,
                 state.vocabularyMessages,
                 translate(state, "prompt-context"),
@@ -2619,7 +2700,7 @@
               state.vocabularyError = false;
               state.vocabularyMessages = [];
               state.vocabularyPending = true;
-              createMessage4(
+              createMessage5(
                 state,
                 [],
                 translate(state, "prompt-context"),

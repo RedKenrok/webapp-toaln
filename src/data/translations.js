@@ -157,10 +157,11 @@ export const TRANSLATIONS = Object.freeze({
     'button-reply': 'Reply',
     'button-ask': 'Ask',
     'credits-link': 'Made by {%name%}',
+    'select_an_option': 'Select an option',
 
     'setup-source_language': 'So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.',
     'setup-target_language': 'Now the next step, which language would you like to learn?',
-    'setup-proficiency_leven': 'How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.',
+    'setup-proficiency_level': 'How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.',
     'setup-topics_of_interest': 'It\'s much more enjoyable if the exercises sometimes feature a topic you find interesting. Therefore, fill in a few topics below that can regularly appear. Think mainly of any hobbies or other interests. The more, the better!',
     'setup-api_code': 'This app uses a "Large Language Model" to generate and assess exercises. You may have heard about it, everyone in the tech sector keeps talking about developments in artificial intelligence. The app uses an LLM, but doesn\'t come with one, so we need to link it to an LLM provider. Which provider would you like to use?',
     'setup-api_credentials': 'Now, the important question is the key. You can get it from the developer\'s dashboard. It probably states that you shouldn\'t share it with third parties. Fortunately, this app never sends the key elsewhere. Still not convinced? Check out the app\'s source code or wait for a version that no longer requires this.',
@@ -186,7 +187,7 @@ export const TRANSLATIONS = Object.freeze({
 
     'options-source_language': 'Which language do you already know?',
     'options-target_language': 'Which language would you like to learn?',
-    'options-proficiency_leven': 'How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.',
+    'options-proficiency_level': 'How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.',
     'options-topics_of_interest': 'Fill in a few topics below that can regularly appear in the exercises.',
     'options-api_code': 'This app uses a "Large Language Model" to generate and assess exercises. Which provider would you like to link?',
     'options-api_credentials': 'Enter the key from the developer\'s dashboard.',
@@ -278,10 +279,11 @@ export const TRANSLATIONS = Object.freeze({
     'button-reply': 'Antwoorden',
     'button-ask': 'Vragen',
     'credits-link': 'Gemaakt door {%name%}',
+    'select_an_option': 'Selecteer een optie',
 
     'setup-source_language': 'Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.',
     'setup-target_language': 'Nu het volgende probleem, welke taal wil je leren?',
-    'setup-proficiency_leven': 'Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.',
+    'setup-proficiency_level': 'Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.',
     'setup-topics_of_interest': 'Het is natuurlijk veel leuker als er af en toe een onderwerp voorbij komt wat je interessant vind. Vul daarom hieronder een aantal onderwerpen in die regelmatig terug kunnen komen. Denk hierbij vooral aan enige hobbies of andere interesses. Des te meer des te beter!',
     'setup-api_code': 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model". Je hebt er vast wel van gehoord, iedereen in de technologie sector houdt maar niet op over de ontwikkelingen in kunstmatige intelligentie. De app maakt dus gebruik van een LLM om de oefening te maken en te beoordelen. Helaas komt de app niet zelf met een eentje, dus moeten we een koppeling maken met een LLM. Met welke aanbieder wil je een koppeling maken?',
     'setup-api_credentials': 'Nu is de grote vraag nog de sleutel. Deze kun je bij het ontwikkelaars paneel. Er staat waarschijnlijk al bij vermeld dat je deze niet met derden moet delen. Gelukkig stuurt deze app nooit de sleutel door. Vertrouw je het toch niet? Bekijk dan de brondcode van deze app, of wacht wellicht tot er een variant gemaakt is waarbij dat niet meer nodig is.',
@@ -307,7 +309,7 @@ export const TRANSLATIONS = Object.freeze({
 
     'options-source_language': 'Welke taal ken je al?',
     'options-target_language': 'Welke taal wil je leren?',
-    'options-proficiency_leven': 'Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.',
+    'options-proficiency_level': 'Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.',
     'options-topics_of_interest': 'Vul hieronder een aantal onderwerpen in die regelmatig terug kunnen komen in de oefening.',
     'options-api_code': 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model" om de oefening te maken en te beoordelen. Met welke aanbieder wil je een koppeling maken?',
     'options-api_credentials': 'Voer de sleutel uit het ontwikkelaars paneel in.',
