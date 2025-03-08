@@ -546,8 +546,8 @@
   };
 
   // src/utilities/registerSW.js
-  navigator.serviceWorker.register("sw.js", {
-    scope: "/"
+  navigator.serviceWorker.register("./sw.js", {
+    scope: "./"
   });
 
   // node_modules/@doars/vroagn/dst/vroagn.js

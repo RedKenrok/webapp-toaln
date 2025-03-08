@@ -1,9 +1,9 @@
 // src/sw.js
 var CACHE_NAME = "cache-v1";
 var FILES_TO_CACHE = [
-  "/app.min.js",
-  "/app.min.css",
-  "/manifest.json"
+  "./app.min.js",
+  "./app.min.css",
+  "./manifest.json"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(

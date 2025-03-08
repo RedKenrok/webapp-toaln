@@ -1,8 +1,8 @@
 const CACHE_NAME = 'cache-v1';
 const FILES_TO_CACHE = [
-  '/app.min.js',
-  '/app.min.css',
-  '/manifest.json',
+  './app.min.js',
+  './app.min.css',
+  './manifest.json',
 ];
 
 // Cache the files during the installation phase.
