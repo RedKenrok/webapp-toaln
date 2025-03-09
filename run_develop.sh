@@ -1,9 +1,7 @@
 #!/bin/bash
 
 (
-  npm run develop:scripts
-) & (
-  npm run develop:styles
+  npm run develop
 ) & (
   npm run serve
 )

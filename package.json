@@ -11,16 +11,12 @@
   "type": "module",
   "main": "src/app.js",
   "scripts": {
-    "develop:scripts": "NODE_ENV=development node config.scripts.js",
-    "develop:styles": "NODE_ENV=development node config.styles.js",
-    "build:scripts": "NODE_ENV=production node config.scripts.js",
-    "build:styles": "NODE_ENV=production node config.styles.js",
+    "develop": "NODE_ENV=development node bundle.js",
+    "build": "NODE_ENV=production node bundle.js",
     "serve": "serve ./docs/"
   },
   "devDependencies": {
-    "chokidar": "^4.0.3",
-    "esbuild": "^0.25.0",
-    "lightningcss": "^1.29.1"
+    "esbuild": "^0.25.0"
   },
   "dependencies": {
     "@doars/staark": "^1.7.5",

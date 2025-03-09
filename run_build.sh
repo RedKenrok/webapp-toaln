@@ -1,13 +1,8 @@
 #!/bin/bash
 
-(npm run build:scripts)
+(npm run build)
 if [ $? -ne 0 ]; then
-  echo "Failed to build scripts."
-  exit 1
-fi
-(npm run build:styles)
-if [ $? -ne 0 ]; then
-  echo "Failed to build styles."
+  echo "Failed to build."
   exit 1
 fi
 

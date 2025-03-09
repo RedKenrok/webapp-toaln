@@ -1,10 +1,10 @@
+import './utilities/registerSW.js'
+
 import {
   mount,
   match as m,
   node as n,
 } from '@doars/staark'
-
-import './utilities/registerSW.js'
 
 import { APIS } from './apis/apis.js'
 import {

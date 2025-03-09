@@ -21,8 +21,8 @@ p {
   text-wrap: pretty;
 }
 
-p {
-  margin-bottom: 1rem;
+p:not(:first-child) {
+  margin-top: 1rem;
 }
 
 ul,
@@ -79,6 +79,17 @@ a:visited:hover,
 a:visited::selection {
   background-color: var(--color-visited, purple);
   color: var(--background);
+}
+
+blockquote {
+  padding-left: 1rem;
+  margin-bottom: 1rem !important;
+  margin-top: 1rem !important;
+  border-width: 0px;
+  border-left-width: 1px;
+  border-color: currentColor;
+  border-style: solid;
+  margin: 0;
 }
 
 .icon {

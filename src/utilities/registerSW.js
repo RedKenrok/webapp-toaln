@@ -1,4 +1,7 @@
-// TODO: Should register sw.min.js in production builds.
-navigator.serviceWorker.register('./sw.js', {
+navigator.serviceWorker.register((
+  process.env.NODE_ENV === 'production'
+    ? './sw.min.js'
+    : './sw.js'
+), {
   scope: './',
 });

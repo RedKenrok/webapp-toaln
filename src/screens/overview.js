@@ -146,13 +146,13 @@ export const overview = (
         n('br'),
         t(state, 'overview-options-description')
       ]),
-
-      n('p', {
-        class: 'text-right',
-      }, n('a', {
-        href: 'https://rondekker.com/',
-        target: '_blank',
-        rel: 'noopener me',
-      }, t(state, 'credits-link').replace('{%name%}', 'Ron Dekker')))
     ]),
+
+    n('p', {
+      class: 'text-right',
+    }, n('a', {
+      href: 'https://rondekker.com/',
+      target: '_blank',
+      rel: 'noopener me',
+    }, t(state, 'credits-link').replace('{%name%}', 'Ron Dekker')))
   ]

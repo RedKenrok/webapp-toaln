@@ -1,4 +1,9 @@
 (() => {
+  // src/utilities/registerSW.js
+  navigator.serviceWorker.register(false ? "./sw.min.js" : "./sw.js", {
+    scope: "./"
+  });
+
   // node_modules/@doars/staark/dst/staark.js
   var arrayify = (data) => {
     var _a;
@@ -544,11 +549,6 @@
       state
     ];
   };
-
-  // src/utilities/registerSW.js
-  navigator.serviceWorker.register("./sw.js", {
-    scope: "./"
-  });
 
   // node_modules/@doars/vroagn/dst/vroagn.js
   var __defProp = Object.defineProperty;
@@ -1902,15 +1902,15 @@
         node("b", translate(state, "overview-options-title")),
         node("br"),
         translate(state, "overview-options-description")
-      ]),
-      node("p", {
-        class: "text-right"
-      }, node("a", {
-        href: "https://rondekker.com/",
-        target: "_blank",
-        rel: "noopener me"
-      }, translate(state, "credits-link").replace("{%name%}", "Ron Dekker")))
-    ])
+      ])
+    ]),
+    node("p", {
+      class: "text-right"
+    }, node("a", {
+      href: "https://rondekker.com/",
+      target: "_blank",
+      rel: "noopener me"
+    }, translate(state, "credits-link").replace("{%name%}", "Ron Dekker")))
   ];
 
   // src/screens/setup.js
