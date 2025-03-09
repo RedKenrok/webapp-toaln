@@ -4,6 +4,7 @@ import {
 } from '@doars/staark'
 import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
+import { setScreen } from '../utilities/screen.js'
 
 export const overview = (
   state,
@@ -56,7 +57,7 @@ export const overview = (
       n('button', {
         class: 'card',
         click: () => {
-          state.screen = SCREENS.comprehension
+          setScreen(state, SCREENS.comprehension)
         },
         type: 'button',
       }, [
@@ -71,7 +72,7 @@ export const overview = (
       n('button', {
         class: 'card',
         click: () => {
-          state.screen = SCREENS.vocabulary
+          setScreen(state, SCREENS.vocabulary)
         },
         type: 'button',
       }, [
@@ -86,7 +87,7 @@ export const overview = (
       n('button', {
         class: 'card',
         click: () => {
-          state.screen = SCREENS.conversation
+          setScreen(state, SCREENS.conversation)
         },
         type: 'button',
       }, [
@@ -101,7 +102,7 @@ export const overview = (
       n('button', {
         class: 'card',
         click: () => {
-          state.screen = SCREENS.story
+          setScreen(state, SCREENS.story)
         },
         type: 'button',
       }, [
@@ -116,7 +117,7 @@ export const overview = (
       n('button', {
         class: 'card',
         click: () => {
-          state.screen = SCREENS.clarification
+          setScreen(state, SCREENS.clarification)
         },
         type: 'button',
       }, [
@@ -135,7 +136,7 @@ export const overview = (
       n('button', {
         class: 'card',
         click: () => {
-          state.screen = SCREENS.options
+          setScreen(state, SCREENS.options)
         },
         type: 'button',
       }, [

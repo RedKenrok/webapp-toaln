@@ -28,7 +28,9 @@ import { story } from './screens/story.js'
 import { vocabulary } from './screens/vocabulary.js'
 
 import { createIdentifier } from './utilities/identifiers.js'
+import { handleStartup } from './utilities/manifest.js'
 import { notifyOnUpdate } from './utilities/sw.js'
+import { handleHistory } from './utilities/screen.js'
 
 const STATE_KEY = 'toaln:state'
 
@@ -124,3 +126,5 @@ const [_update, _unmount, state] = mount(
 )
 
 notifyOnUpdate(state)
+handleStartup(state)
+handleHistory(state)

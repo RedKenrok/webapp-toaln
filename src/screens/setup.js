@@ -19,6 +19,7 @@ import {
   getModels,
   isReady,
 } from '../apis/apis.js'
+import { setScreen } from '../utilities/screen.js'
 
 export const setup = (
   state,
@@ -253,7 +254,7 @@ export const setup = (
     n('button', {
       click: () => {
         if (isReady(state)) {
-          state.screen = SCREENS.overview
+          setScreen(state, SCREENS.overview)
         }
       },
       disabled: !isReady(state),

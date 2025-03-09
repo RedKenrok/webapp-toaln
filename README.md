@@ -15,7 +15,8 @@ In order to build and use the app you need to have `Node.JS` installed. You can 
 
 ## Future ideas
 
-- Hmmm... Have any suggestions? Feel free to create an issue.
+- Split translations up in separate CSV files so not all are added into the JS bundle.
+- Have any more suggestions? Feel free to create an issue.
 
 ## Scrapped ideas
 

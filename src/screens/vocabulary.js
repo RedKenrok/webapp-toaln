@@ -6,10 +6,7 @@ import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
 import { createMessage } from '../apis/apis.js'
 import { onActivity } from '../utilities/streak.js'
-import {
-  randomBool,
-  randomItem,
-} from '../utilities/random.js'
+import { setScreen } from '../utilities/screen.js'
 
 export const vocabulary = (
   state,
@@ -151,7 +148,7 @@ export const vocabulary = (
 
       n('button', {
         click: () => {
-          state.screen = SCREENS.overview
+          setScreen(state, SCREENS.overview)
         },
         type: 'button',
       }, t(state, 'button-go_back')),

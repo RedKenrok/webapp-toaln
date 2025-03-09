@@ -10,6 +10,7 @@ import {
   randomBool,
   randomItem,
 } from '../utilities/random.js'
+import { setScreen } from '../utilities/screen.js'
 
 export const comprehension = (
   state,
@@ -158,7 +159,7 @@ export const comprehension = (
 
       n('button', {
         click: () => {
-          state.screen = SCREENS.overview
+          setScreen(state, SCREENS.overview)
         },
         type: 'button',
       }, t(state, 'button-go_back')),

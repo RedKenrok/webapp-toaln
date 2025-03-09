@@ -1,38 +1,5 @@
 // src/sw.js
 var CACHE_NAME = "cache-v1";
-var sendMessageToClients = (message) => {
-  self.clients.matchAll().then((clients) => {
-    clients.forEach(
-      (client) => client.postMessage(message)
-    );
-  });
-};
-var updateCacheAndNotify = async (request, cachedResponse) => {
-  const networkResponse = await fetch(
-    request.clone()
-  );
-  if (!networkResponse || networkResponse.status !== 200) {
-    return;
-  }
-  const cache = await caches.open(CACHE_NAME);
-  const responseForCache = networkResponse.clone();
-  let changed = true;
-  if (cachedResponse) {
-    const responseForComparison = networkResponse.clone();
-    const [newContent, cachedContent] = await Promise.all([
-      responseForComparison.text(),
-      cachedResponse.text()
-    ]);
-    changed = newContent !== cachedContent;
-  }
-  if (changed) {
-    await cache.put(request, responseForCache);
-    sendMessageToClients({
-      type: "cacheUpdate",
-      url: request.url
-    });
-  }
-};
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then(
@@ -48,20 +15,21 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 self.addEventListener("fetch", (event) => {
-  event.respondWith(
+  false ? event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       event.waitUntil(
         updateCacheAndNotify(event.request, cachedResponse ? cachedResponse.clone() : cachedResponse)
       );
       return cachedResponse || fetch(event.request);
     })
-  );
+  ) : fetch(event.request);
 });
 var FILES_TO_CACHE = false ? [
   "./index.html",
-  "./app.min.js",
   "./app.min.css",
-  "./manifest.json"
+  "./app.min.js",
+  "./manifest.json",
+  "./sw.min.js"
 ] : [];
 self.addEventListener("install", (event) => {
   event.waitUntil(

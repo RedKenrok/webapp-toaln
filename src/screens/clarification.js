@@ -2,6 +2,7 @@ import { conditional as c, node as n } from '@doars/staark'
 import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
 import { createMessage } from '../apis/apis.js'
+import { setScreen } from '../utilities/screen.js'
 
 export const clarification = (
   state,
@@ -113,7 +114,7 @@ export const clarification = (
       n('button', {
         type: 'button',
         click: () => {
-          state.screen = SCREENS.overview
+          setScreen(state, SCREENS.overview)
         },
       }, t(state, 'button-go_back')),
     ])

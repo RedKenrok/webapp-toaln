@@ -71,24 +71,26 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        // Trigger background update.
-        event.waitUntil(
-          updateCacheAndNotify(event.request, (
+  process.env.NODE_ENV === 'production'
+    ? event.respondWith(
+      caches.match(event.request)
+        .then(cachedResponse => {
+          // Trigger background update.
+          event.waitUntil(
+            updateCacheAndNotify(event.request, (
+              cachedResponse
+                ? cachedResponse.clone()
+                : cachedResponse
+            ))
+          )
+          // Return cached response immediately if available.
+          return (
             cachedResponse
-              ? cachedResponse.clone()
-              : cachedResponse
-          ))
-        )
-        // Return cached response immediately if available.
-        return (
-          cachedResponse
-          || fetch(event.request)
-        )
-      })
-  )
+            || fetch(event.request)
+          )
+        })
+    )
+    : fetch(event.request)
 })
 
 const FILES_TO_CACHE = (

@@ -10,6 +10,7 @@ import {
   randomBool,
   randomItem,
 } from '../utilities/random.js'
+import { setScreen } from '../utilities/screen.js'
 
 export const conversation = (
   state,
@@ -161,7 +162,7 @@ export const conversation = (
 
       n('button', {
         click: () => {
-          state.screen = SCREENS.overview
+          setScreen(state, SCREENS.overview)
         },
         type: 'button',
       }, t(state, 'button-go_back')),

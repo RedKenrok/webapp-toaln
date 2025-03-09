@@ -84,5 +84,34 @@
       "form_factor": "wide",
       "label": "Practise screen (Wide)"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Answer questions",
+      "description": "You'll receive a short text along with a question to answer.",
+      "url": "./?screen=comprehension"
+    },
+    {
+      "name": "Learn words",
+      "description": "You'll receive a word together with its definition, you then respond with a with a sentence using that word.",
+      "url": "./?screen=vocabulary"
+    },
+    {
+      "name": "Practise conversations",
+      "short_name": "Conversation",
+      "description": "A short conversation will be simulated, for example about ordering food or discussing a hobby.",
+      "url": "./?screen=conversation"
+    },
+    {
+      "name": "Write a story",
+      "description": "You'll take turns writing a story piece by piece.",
+      "url": "./?screen=story"
+    },
+    {
+      "name": "Ask for clarification",
+      "short_name": "Clarification",
+      "description": "Get explanations about German, such as a grammar rule like conjugations or cases.",
+      "url": "./?screen=story"
+    }
   ]
 }
