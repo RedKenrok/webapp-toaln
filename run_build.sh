@@ -1,6 +1,8 @@
 #!/bin/bash
 
-(npm run build)
+cd "$(dirname "$0")"
+
+npm run build
 if [ $? -ne 0 ]; then
   echo "Failed to build."
   exit 1
