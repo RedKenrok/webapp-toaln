@@ -71,9 +71,9 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('fetch', event => {
-  process.env.NODE_ENV === 'production'
-    ? event.respondWith(
-      caches.match(event.request)
+  event.respondWith(
+    process.env.NODE_ENV === 'production'
+      ? caches.match(event.request)
         .then(cachedResponse => {
           // Trigger background update.
           event.waitUntil(
@@ -89,8 +89,8 @@ self.addEventListener('fetch', event => {
             || fetch(event.request)
           )
         })
-    )
-    : fetch(event.request)
+      : fetch(event.request)
+  )
 })
 
 const FILES_TO_CACHE = (

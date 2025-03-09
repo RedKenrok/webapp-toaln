@@ -15,14 +15,14 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 self.addEventListener("fetch", (event) => {
-  false ? event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+  event.respondWith(
+    false ? caches.match(event.request).then((cachedResponse) => {
       event.waitUntil(
         updateCacheAndNotify(event.request, cachedResponse ? cachedResponse.clone() : cachedResponse)
       );
       return cachedResponse || fetch(event.request);
-    })
-  ) : fetch(event.request);
+    }) : fetch(event.request)
+  );
 });
 var FILES_TO_CACHE = false ? [
   "./index.html",
