@@ -158,6 +158,7 @@ export const TRANSLATIONS = Object.freeze({
     'button-ask': 'Ask',
     'credits-link': 'Made by {%name%}',
     'select_an_option': 'Select an option',
+    'banner-update_now': 'There is an update available, click here to update now!',
 
     'setup-source_language': 'So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.',
     'setup-target_language': 'Now the next step, which language would you like to learn?',
@@ -280,6 +281,7 @@ export const TRANSLATIONS = Object.freeze({
     'button-ask': 'Vragen',
     'credits-link': 'Gemaakt door {%name%}',
     'select_an_option': 'Selecteer een optie',
+    'banner-update_now': 'Er is een update beschikbaar, klik hier om te updaten!',
 
     'setup-source_language': 'Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.',
     'setup-target_language': 'Nu het volgende probleem, welke taal wil je leren?',

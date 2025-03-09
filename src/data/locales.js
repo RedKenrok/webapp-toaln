@@ -1,14 +1,3 @@
-export const PROFICIENCY_LEVELS = Object.freeze({
-  a1: 'a1',
-  a2: 'a2',
-  b1: 'b1',
-  b2: 'b2',
-  c1: 'c1',
-  c2: 'c2',
-})
-
-export const PROFICIENCY_LEVEL_CODES = Object.keys(PROFICIENCY_LEVELS)
-
 export const LOCALES = Object.freeze({
   dan: 'dan', // Danish
   deu: 'deu', // German
@@ -53,3 +42,14 @@ export const getPreferredLocale = (
       return preferredLanguage
     }, null)
 ) ?? LOCALES.eng
+
+export const PROFICIENCY_LEVELS = Object.freeze({
+  a1: 'a1',
+  a2: 'a2',
+  b1: 'b1',
+  b2: 'b2',
+  c1: 'c1',
+  c2: 'c2',
+})
+
+export const PROFICIENCY_LEVEL_CODES = Object.keys(PROFICIENCY_LEVELS)

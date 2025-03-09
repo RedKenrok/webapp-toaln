@@ -1,5 +1,3 @@
-import './utilities/registerSW.js'
-
 import {
   mount,
   match as m,
@@ -18,6 +16,7 @@ import {
 } from './data/locales.js'
 import { SCREENS } from './data/screens.js'
 
+import { updateBanner } from './screens/sections/update-banner.js'
 import { options } from './screens/options.js'
 import { overview } from './screens/overview.js'
 import { setup } from './screens/setup.js'
@@ -29,12 +28,13 @@ import { story } from './screens/story.js'
 import { vocabulary } from './screens/vocabulary.js'
 
 import { createIdentifier } from './utilities/identifiers.js'
+import { notifyOnUpdate } from './utilities/sw.js'
 
 const STATE_KEY = 'toaln:state'
 
 const preferredLocale = getPreferredLocale()
 
-mount(
+const [_update, _unmount, state] = mount(
   document.getElementById('app'),
   (state) => {
     localStorage.setItem(STATE_KEY, JSON.stringify(state))
@@ -42,21 +42,26 @@ mount(
 
     return n('div', {
       class: 'screen',
-    }, m(state.screen, {
-      [SCREENS.options]: () => options(state),
-      [SCREENS.overview]: () => overview(state),
+    }, [
+      ...updateBanner(state),
+      ...m(state.screen, {
+        [SCREENS.options]: () => options(state),
+        [SCREENS.overview]: () => overview(state),
 
-      [SCREENS.clarification]: () => clarification(state),
-      [SCREENS.comprehension]: () => comprehension(state),
-      [SCREENS.conversation]: () => conversation(state),
-      [SCREENS.story]: () => story(state),
-      [SCREENS.vocabulary]: () => vocabulary(state),
-    }, () => setup(state)))
+        [SCREENS.clarification]: () => clarification(state),
+        [SCREENS.comprehension]: () => comprehension(state),
+        [SCREENS.conversation]: () => conversation(state),
+        [SCREENS.story]: () => story(state),
+        [SCREENS.vocabulary]: () => vocabulary(state),
+      }, () => setup(state)),
+    ])
   },
   Object.assign({
     screen: SCREENS.setup,
 
+    appUpdateAvailable: false,
     userIdentifier: createIdentifier(),
+
     sourceLocale: preferredLocale,
     sourceLanguage: getLanguageFromLocale(preferredLocale),
     targetLocale: LOCALES.eng,
@@ -112,5 +117,10 @@ mount(
     localStorage.getItem(STATE_KEY)
       ? JSON.parse(localStorage.getItem(STATE_KEY))
       : {}
-  ))
+  ), {
+    // Ensure files updated is always reset after a full page refresh.
+    appUpdateAvailable: false,
+  })
 )
+
+notifyOnUpdate(state)

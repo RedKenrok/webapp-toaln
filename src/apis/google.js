@@ -70,7 +70,6 @@ export const createMessage = (
       ),
     },
   }).then(([error, response, result]) => {
-    console.log('createMessage', error, response, result)
     if (!error) {
       result = {
         content: (
