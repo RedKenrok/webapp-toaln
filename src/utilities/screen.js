@@ -11,12 +11,15 @@ export const setScreen = (
     && state.screen !== screen
     && screenOptions.includes(screen)
   ) {
-    state.screen = screen
+    // Only story history state if not originating from the setup.
+    if (state.screen !== SCREENS.setup) {
+      // Push the new screen state to the history API
+      window.history.pushState({
+        screen: screen,
+      }, '', '?screen=' + screen)
+    }
 
-    // Push the new screen state to the history API
-    window.history.pushState({
-      screen: screen,
-    }, '', '?screen=' + screen)
+    state.screen = screen
   }
 }
 
