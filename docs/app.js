@@ -1600,10 +1600,12 @@
   var screenOptions = Object.values(SCREENS);
   var setScreen = (state3, screen) => {
     if (screen && state3.screen !== screen && screenOptions.includes(screen)) {
+      if (state3.screen !== SCREENS.setup) {
+        window.history.pushState({
+          screen
+        }, "", "?screen=" + screen);
+      }
       state3.screen = screen;
-      window.history.pushState({
-        screen
-      }, "", "?screen=" + screen);
     }
   };
   var handleHistory = (state3) => {
