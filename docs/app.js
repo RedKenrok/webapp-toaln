@@ -1225,16 +1225,22 @@
     // English
     epo: "epo",
     // Esperanto
+    fra: "fra",
+    // French
     fry: "fry",
     // Frisian (West)
     isl: "isl",
     // Icelandic
+    ita: "ita",
+    // Italian
     nld: "nld",
     // Dutch
     nno: "nno",
     // Norwegian (Nynorsk)
     nob: "nob",
     // Norwegian (Bokmål)
+    spa: "spa",
+    // Spanish
     swe: "swe",
     // Swedish
     vls: "vls"
@@ -1340,12 +1346,15 @@
       [LOCALES.deu]: "German",
       [LOCALES.eng]: "English (United Kingdom)",
       [LOCALES.epo]: "Esperanto",
+      [LOCALES.fra]: "French",
       [LOCALES.fry]: "Frisian (West)",
       [LOCALES.isl]: "Icelandic",
       [LOCALES.nld]: "Dutch",
       [LOCALES.nno]: "Norwegian (Nynorsk)",
       [LOCALES.nob]: "Norwegian (Bokm\xE5l)",
+      [LOCALES.spa]: "Spanish",
       [LOCALES.swe]: "Swedish",
+      [LOCALES.ita]: "Italian",
       [LOCALES.vls]: "Flamish",
       "proficiency_name-a1": "A1: Beginner",
       "proficiency_description-a1": [
@@ -1473,11 +1482,14 @@
       [LOCALES.deu]: "Duits",
       [LOCALES.eng]: "Engels (Verenigd Koninkrijk)",
       [LOCALES.epo]: "Esperanto",
+      [LOCALES.fra]: "Frans",
       [LOCALES.fry]: "Fries (West)",
       [LOCALES.isl]: "IJslands",
+      [LOCALES.ita]: "Italiaans",
       [LOCALES.nld]: "Nederlands",
       [LOCALES.nno]: "Noors (Nynorsk)",
       [LOCALES.nob]: "Noors (Bokm\xE5l)",
+      [LOCALES.spa]: "Spaans",
       [LOCALES.swe]: "Zweeds",
       [LOCALES.vls]: "Vlaams",
       "proficiency_name-a1": "A1: Beginner",

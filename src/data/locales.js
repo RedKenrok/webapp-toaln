@@ -3,11 +3,14 @@ export const LOCALES = Object.freeze({
   deu: 'deu', // German
   eng: 'eng', // English
   epo: 'epo', // Esperanto
+  fra: 'fra', // French
   fry: 'fry', // Frisian (West)
   isl: 'isl', // Icelandic
+  ita: 'ita', // Italian
   nld: 'nld', // Dutch
   nno: 'nno', // Norwegian (Nynorsk)
   nob: 'nob', // Norwegian (Bokmål)
+  spa: 'spa', // Spanish
   swe: 'swe', // Swedish
   vls: 'vls', // Flemish
 })
