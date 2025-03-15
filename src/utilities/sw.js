@@ -25,8 +25,8 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener(
     'message',
     (event) => {
-      if (state) {
-        handleMessage(state, event)
+      if (appState) {
+        handleMessage(appState, event)
       } else {
         messages.push(event)
       }

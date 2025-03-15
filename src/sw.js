@@ -1,4 +1,14 @@
 const CACHE_NAME = 'cache-v1'
+const CACHEABLE_EXTENSIONS = [
+  'css',
+  'html',
+  'jpeg',
+  'jpg',
+  'js',
+  'map',
+  'png',
+  'svg',
+]
 
 const sendMessageToClients = (
   message,
@@ -53,7 +63,9 @@ const updateCacheAndNotify = async (
 }
 
 // Clean up old caches during the activation phase.
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (
+  event,
+) => {
   event.waitUntil(
     caches.keys()
       .then(cacheNames =>
@@ -69,11 +81,29 @@ self.addEventListener('activate', event => {
   self.clients.claim()
 })
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
+self.addEventListener('fetch', (
+  event,
+) => {
+  const url = new URL(
+    event.request.url,
+  )
+  // Check if the request is for allowed file types.
+  const isCacheable = (
     process.env.NODE_ENV === 'production'
+    && (
+      CACHEABLE_EXTENSIONS.some((
+        extension,
+      ) => url.pathname.endsWith('.' + extension))
+      || url.pathname.endsWith('manifest.json')
+    )
+  )
+
+  event.respondWith(
+    isCacheable
       ? caches.match(event.request)
-        .then(cachedResponse => {
+        .then((
+          cachedResponse,
+        ) => {
           // Trigger background update.
           event.waitUntil(
             updateCacheAndNotify(event.request, (
@@ -105,7 +135,9 @@ const FILES_TO_CACHE = (
 )
 
 // Cache the files during the installation phase.
-self.addEventListener('install', event => {
+self.addEventListener('install', (
+  event,
+) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(FILES_TO_CACHE))

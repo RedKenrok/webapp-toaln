@@ -13,7 +13,7 @@ export const apiSettings = Object.freeze({
       'aqa',
       'bison',
       'embedding',
-      'imagen',
+      'image',
       'learnlm',
       'vision',
       '1.0',

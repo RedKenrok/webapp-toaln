@@ -147,6 +147,21 @@ export const overview = (
         n('br'),
         t(state, 'overview-options-description')
       ]),
+
+      n('button', {
+        class: 'card',
+        click: () => {
+          setScreen(state, SCREENS.migrate)
+        },
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '💾'),
+        n('b', t(state, 'overview-migrate-title')),
+        n('br'),
+        t(state, 'overview-migrate-description')
+      ]),
     ]),
 
     n('p', {

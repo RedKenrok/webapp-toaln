@@ -17,6 +17,7 @@ import {
 import { SCREENS } from './data/screens.js'
 
 import { updateBanner } from './screens/sections/update-banner.js'
+import { migrate } from './screens/migrate.js'
 import { options } from './screens/options.js'
 import { overview } from './screens/overview.js'
 import { setup } from './screens/setup.js'
@@ -47,6 +48,7 @@ const [_update, _unmount, state] = mount(
     }, [
       ...updateBanner(state),
       ...m(state.screen, {
+        [SCREENS.migrate]: () => migrate(state),
         [SCREENS.options]: () => options(state),
         [SCREENS.overview]: () => overview(state),
 
@@ -60,9 +62,9 @@ const [_update, _unmount, state] = mount(
   },
   Object.assign({
     screen: SCREENS.setup,
+    userIdentifier: createIdentifier(),
 
     appUpdateAvailable: false,
-    userIdentifier: createIdentifier(),
 
     sourceLocale: preferredLocale,
     sourceLanguage: getLanguageFromLocale(preferredLocale),
@@ -75,8 +77,11 @@ const [_update, _unmount, state] = mount(
     apiModel: apiSettingsGoogle.preferredModel,
     apiCredentials: null,
     apiCredentialsError: false,
-    apiCredentialsTested: false,
     apiCredentialsPending: false,
+    apiCredentialsTested: false,
+
+    migrateImportError: null,
+    migrateReset: null,
 
     statisticComprehensionActivity: 0,
     statisticConversationActivity: 0,
@@ -122,6 +127,13 @@ const [_update, _unmount, state] = mount(
   ), {
     // Ensure files updated is always reset after a full page refresh.
     appUpdateAvailable: false,
+    apiCredentialsPending: false,
+
+    clarificationPending: false,
+    comprehensionPending: false,
+    conversationPending: false,
+    storyPending: false,
+    vocabularyPending: false,
   })
 )
 

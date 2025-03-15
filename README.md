@@ -16,7 +16,8 @@ In order to build and use the app you need to have `Node.JS` installed. You can 
 ## Future ideas
 
 - Split translations up in separate CSV files so not all are added into the JS bundle.
-- Add export and import functions so users can easily change over to another device. It should only include historic data and some settings. Not API secrets!
+- Add a screen for translate a text from one language into another language.
+- Allow the LLM to generate a text based on an input where every paragraph in the target language is followed by the same paragraph in the source language.
 - Have any more suggestions? Feel free to create a pull request.
 
 ## Scrapped ideas

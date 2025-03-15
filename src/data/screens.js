@@ -1,7 +1,8 @@
 export const SCREENS = Object.freeze({
-  setup: 'setup',
-  overview: 'overview',
   options: 'options',
+  migrate: 'migrate',
+  overview: 'overview',
+  setup: 'setup',
 
   clarification: 'clarification',
   comprehension: 'comprehension',

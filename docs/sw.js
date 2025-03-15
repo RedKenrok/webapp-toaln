@@ -1,5 +1,38 @@
 // src/sw.js
 var CACHE_NAME = "cache-v1";
+var sendMessageToClients = (message) => {
+  self.clients.matchAll().then((clients) => {
+    clients.forEach(
+      (client) => client.postMessage(message)
+    );
+  });
+};
+var updateCacheAndNotify = async (request, cachedResponse) => {
+  const networkResponse = await fetch(
+    request.clone()
+  );
+  if (!networkResponse || networkResponse.status !== 200) {
+    return;
+  }
+  const cache = await caches.open(CACHE_NAME);
+  const responseForCache = networkResponse.clone();
+  let changed = true;
+  if (cachedResponse) {
+    const responseForComparison = networkResponse.clone();
+    const [newContent, cachedContent] = await Promise.all([
+      responseForComparison.text(),
+      cachedResponse.text()
+    ]);
+    changed = newContent !== cachedContent;
+  }
+  if (changed) {
+    await cache.put(request, responseForCache);
+    sendMessageToClients({
+      type: "cacheUpdate",
+      url: request.url
+    });
+  }
+};
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then(
@@ -15,8 +48,12 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 self.addEventListener("fetch", (event) => {
+  const url = new URL(
+    event.request.url
+  );
+  const isCacheable = false;
   event.respondWith(
-    false ? caches.match(event.request).then((cachedResponse) => {
+    isCacheable ? caches.match(event.request).then((cachedResponse) => {
       event.waitUntil(
         updateCacheAndNotify(event.request, cachedResponse ? cachedResponse.clone() : cachedResponse)
       );
