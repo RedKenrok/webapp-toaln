@@ -16,8 +16,6 @@ In order to build and use the app you need to have `Node.JS` installed. You can 
 ## Future ideas
 
 - Split translations up in separate CSV files so not all are added into the JS bundle.
-- Add a screen for translate a text from one language into another language.
-- A app that changes the text into the same language, but at the users proficiency level.
 - Have any more suggestions? Feel free to create a pull request.
 
 ## Scrapped ideas

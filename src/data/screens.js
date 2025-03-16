@@ -1,13 +1,14 @@
 export const SCREENS = Object.freeze({
-  options: 'options',
-  migrate: 'migrate',
-  overview: 'overview',
-  setup: 'setup',
-
   clarification: 'clarification',
   comprehension: 'comprehension',
   conversation: 'conversation',
   reading: 'reading',
+  rewrite: 'rewrite',
   story: 'story',
   vocabulary: 'vocabulary',
+
+  overview: 'overview',
+  options: 'options',
+  migrate: 'migrate',
+  setup: 'setup',
 })

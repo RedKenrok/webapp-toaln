@@ -2,20 +2,23 @@ import {
   conditional as c,
   node as n,
 } from '@doars/staark'
+
+import { createMessage } from '../apis/apis.js'
+
 import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
-import { createMessage } from '../apis/apis.js'
+
 import { onActivity } from '../utilities/streak.js'
 import { setScreen } from '../utilities/screen.js'
 
-const handleVocabularyInput = (
+const handleInput = (
   event,
   state,
 ) => {
   state.vocabularyInput = event.target.value
 }
 
-const handleVocabularyAnswer = (
+const handleAnswer = (
   _,
   state,
 ) => {
@@ -51,7 +54,7 @@ const handleVocabularyAnswer = (
   }
 }
 
-const handleVocabularyGenerate = (_, state) => {
+const handleGenerate = (_, state) => {
   if (!state.vocabularyPending) {
     state.vocabularyError = false
     state.vocabularyMessages = []
@@ -72,7 +75,7 @@ const handleVocabularyGenerate = (_, state) => {
   }
 }
 
-const handleVocabularyReset = (
+const handleReset = (
   _,
   state,
 ) => {
@@ -82,7 +85,7 @@ const handleVocabularyReset = (
   // TODO: Should reset the network requests properly.
 }
 
-const handleVocabularyBack = (
+const handleBack = (
   _,
   state,
 ) => {
@@ -135,7 +138,7 @@ export const vocabulary = (
           {
             class: 'message-user',
             id: 'input-question',
-            keyup: handleVocabularyInput,
+            keyup: handleInput,
           },
           state.vocabularyInput
         )
@@ -155,12 +158,12 @@ export const vocabulary = (
             || !state.vocabularyInput
             || state.vocabularyInput.trim().length === 0,
           type: 'button',
-          click: handleVocabularyAnswer,
+          click: handleAnswer,
         }, t(state, 'button-answer')),
         n('button', {
           disabled: state.vocabularyPending,
           type: 'button',
-          click: handleVocabularyGenerate,
+          click: handleGenerate,
         }, t(state, 'button-generate'))
       ),
 
@@ -171,13 +174,13 @@ export const vocabulary = (
           && state.vocabularyMessages.length > 0
         ),
         n('button', {
-          click: handleVocabularyReset,
+          click: handleReset,
           type: 'button',
         }, t(state, 'button-reset'))
       ),
 
       n('button', {
-        click: handleVocabularyBack,
+        click: handleBack,
         type: 'button',
       }, t(state, 'button-go_back')),
     ]),

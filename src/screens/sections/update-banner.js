@@ -2,6 +2,7 @@ import {
   conditional as c,
   node as n,
 } from '@doars/staark'
+
 import { translate as t } from '../../data/translations.js'
 
 const handleClick = (

@@ -36,6 +36,7 @@ import { createIdentifier } from './utilities/identifiers.js'
 import { handleStartup } from './utilities/manifest.js'
 import { notifyOnUpdate } from './utilities/sw.js'
 import { handleHistory } from './utilities/screen.js'
+import { rewrite } from './screens/rewrite.js'
 
 const preferredLocale = getPreferredLocale()
 
@@ -52,16 +53,17 @@ const [_update, _unmount, state] = mount(
     }, [
       ...updateBanner(state),
       ...m(state.screen, {
-        [SCREENS.migrate]: () => migrate(state),
-        [SCREENS.options]: () => options(state),
-        [SCREENS.overview]: () => overview(state),
-
         [SCREENS.clarification]: () => clarification(state),
         [SCREENS.comprehension]: () => comprehension(state),
         [SCREENS.conversation]: () => conversation(state),
         [SCREENS.reading]: () => reading(state),
+        [SCREENS.rewrite]: () => rewrite(state),
         [SCREENS.story]: () => story(state),
         [SCREENS.vocabulary]: () => vocabulary(state),
+
+        [SCREENS.overview]: () => overview(state),
+        [SCREENS.options]: () => options(state),
+        [SCREENS.migrate]: () => migrate(state),
       }, () => setup(state)),
     ])
   },
@@ -119,6 +121,11 @@ const [_update, _unmount, state] = mount(
     readingError: false,
     readingPending: false,
     readingMessages: [],
+
+    rewriteInput: '',
+    rewriteError: false,
+    rewritePending: false,
+    rewriteMessages: [],
 
     storyInput: '',
     storyReviewed: false,

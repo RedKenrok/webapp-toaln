@@ -1289,16 +1289,17 @@
 
   // src/data/screens.js
   var SCREENS = Object.freeze({
-    options: "options",
-    migrate: "migrate",
-    overview: "overview",
-    setup: "setup",
     clarification: "clarification",
     comprehension: "comprehension",
     conversation: "conversation",
     reading: "reading",
+    rewrite: "rewrite",
     story: "story",
-    vocabulary: "vocabulary"
+    vocabulary: "vocabulary",
+    overview: "overview",
+    options: "options",
+    migrate: "migrate",
+    setup: "setup"
   });
 
   // src/data/state.js
@@ -1434,18 +1435,20 @@
       "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, headings, or lists. Do not answer the question if it is not language-related.",
       "prompt-reading": "Write a text in {%t:{%s:targetLocale%}%}, but for every paragraph written write the same paragraph below in {%t:{%s:sourceLocale%}%} as well. Don't output any content in regards to the users learning journey, focus on creating a enjoyable text to practise reading. Always write in plain text without any formatting, labels, headings, or lists.",
       "prompt-reading-topic": "The generate text should be about the following topic:",
+      "prompt-rewrite": "Rewrite the user provided text into {%t:{%s:targetLocale%}%} at the users CEFR level of {%s:proficiencyLevel%}. Ensure no information is lost when translating. Always write in plain text without any additional commentary.",
       "prompt-story": "You and the user will collaboratively write a story by taking turns adding sections. Begin by writing the first section of the story in {%t:{%s:targetLocale%}%}, introducing an engaging theme or setting. Focus on having fun and practising the language. Do not include any additional instructions, explanations, formatting, labels, or headings.",
       "prompt-story-follow_up": "You are continuing the collaborative story-writing session with the user. First, provide concise, in-depth feedback in {%t:{%s:sourceLocale%}%} on the user's latest section, focusing solely on linguistic aspects and suggesting improvements. Avoid any comments about the story's plot, logic, or content. Then, add your next section of the story in {%t:{%s:targetLocale%}%}. Write your response in plain text without any formatting, labels, or headings.",
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
       "prompt-vocabulary": "Write a word in {%t:{%s:targetLocale%}%} along with its definition in {%t:{%s:sourceLocale%}%}. The user will then write a sentence in {%t:{%s:targetLocale%}%} in which this word must be used. Take into account the user's skill and language level. Do not provide any additional instructions, explanations, or the answer to the user. Always write in plain text without any formatting, labels, headings, or lists.",
       "prompt-vocabulary-follow_up": "Provide feedback on the sentence in which the user has answered. Check whether the word has been used correctly in the sentence. Provide concise feedback on the {%t:{%s:targetLocale%}%} with considerable depth that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, headings, or lists.",
       "greeting": "Hi!",
-      "button-go_back": "Go back",
-      "button-reset": "Reset",
-      "button-generate": "Generate",
       "button-answer": "Answer",
-      "button-reply": "Reply",
       "button-ask": "Ask",
+      "button-generate": "Generate",
+      "button-go_back": "Go back",
+      "button-reply": "Reply",
+      "button-reset": "Reset",
+      "button-rewrite": "Rewrite",
       "credits-link": "Made by {%name%}",
       "select_an_option": "Select an option",
       "banner-update_now": "There is an update available, click here to update now!",
@@ -1473,6 +1476,8 @@
       "overview-options-title": "Change settings",
       "overview-reading-description": "You can generate a text where each paragraph is available in both languages.",
       "overview-reading-title": "Reading texts",
+      "overview-rewrite-description": "You can let the LLM rewrite a text into {%t:{%s:targetLanguage%}%} at your proficiency level.",
+      "overview-rewrite-title": "Rewrite texts",
       "overview-story-description": "You'll take turns writing a story piece by piece.",
       "overview-story-title": "Write a story",
       "overview-vocabulary-description": "You'll receive a word together with its definition, you then respond with a with a sentence using that word.",
@@ -1493,7 +1498,7 @@
       "migrate-reset": "Remove all the data and reset the app. Once performed this action can not be undone.",
       "migrate-reset_button": "Reset",
       "migrate-reset_button-confirmation": "I confirm that I am absolutely certain I want to reset!",
-      "statistics-activity_per_category": "You have already read {%s:statisticReadingActivity%} texts, answered {%s:statisticComprehensionActivity%} questions, {%s:statisticVocabularyActivity%} words practised, sent {%s:statisticConversationActivity%} messages, told {%s:statisticStoryActivity%} stories, and asked {%s:statisticClarificationActivity%} questions.",
+      "statistics-activity_per_category": "You have already read {%s:statisticReadingActivity%} texts, let {%s:statisticRewriteActivity%} texts be rewritten, answered {%s:statisticComprehensionActivity%} questions, {%s:statisticVocabularyActivity%} words practised, sent {%s:statisticConversationActivity%} messages, told {%s:statisticStoryActivity%} stories, and asked {%s:statisticClarificationActivity%} questions.",
       "statistics-no_activity": "Unfortunately, you haven't completed enough activities yet to display here. Go to the overview and choose an exercise to start. Your progress will be tracked in the background.",
       "statistics-no_activity_streak": "Currently you have no ongoing activity streak. You can build one by completing at least one exercise on consecutive days.",
       "statistics-current_activity_streak": "Your current activity streak is {%s:statisticCurrentActivityStreak%} days long. Don't loose it and practise before midnight to extend it!",
@@ -1505,6 +1510,8 @@
       "conversation-intro": "In a moment you'll simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.",
       "reading-intro": "You will be reading a text where each paragraph is written in both {%t:{%s:targetLanguage%}%} and {%t:{%s:sourceLanguage%}%} allowing you to practise your reading. You can optionally provide a topic for the text to be about.",
       "reading-placeholder": "I want to read about...",
+      "rewrite-intro": "You can enter in a text below. The LLM will ensure the text is in {%t:{%s:sourceLanguage%}%} at your selected proficiency level.",
+      "rewrite-placeholder": "I want to let rewrite...",
       "story-intro": "You're about to write a story in {%t:{%s:targetLanguage%}%} where, in turns, you add a piece. Don't worry about whether the story is good, logical, or well-founded; just make sure you practice the language. Therefore, always respond in {%t:{%s:targetLanguage%}%}. In between, you might receive some feedback on your writing.",
       "vocabulary-intro": "In a moment you'll read a word together with its definition in {%t:{%s:targetLanguage%}%}. Answer with a scentence that uses the word in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer."
     },
@@ -1568,18 +1575,20 @@
       "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
       "prompt-reading": "Schrijf een tekst in {%t:{%s:targetLocale%}%}, maar schrijf na elke geschreven alinea dezelfde alinea eronder in {%t:{%s:sourceLocale%}%}. Geef geen inhoud weer die betrekking heeft op het leerproces van de gebruiker. Zorg voor het maken van een leuke tekst om het lezen mee te oefenen. Schrijf altijd in platte tekst zonder opmaak, labels of kopjes.",
       "prompt-reading-topic": "De gegenereerde tekst moet over het volgende onderwerp gaan:",
+      "prompt-rewrite": "Herschrijf de door de gebruiker verstrekte tekst in {%t:{%s:targetLocale%}%} op het CEFR-niveau {%s:proficiencyLevel%}. Zorg ervoor dat er geen informatie verloren gaat tijdens het vertalen. Schrijf altijd in platte tekst zonder extra commentaar.",
       "prompt-story": "Jij en de gebruiker gaan samen een verhaal schrijven door om de beurt een gedeelte toe te voegen. Begin met het schrijven van de eerste sectie van het verhaal in {%t:{%s:targetLocale%}%}, waarin je een boeiend thema of een interessante setting introduceert. Richt je op plezier hebben en het oefenen van de taal. Voeg geen extra instructies, uitleg, opmaak, labels of koppen toe.",
       "prompt-story-follow_up": "Je zet de gezamenlijke sessie voor het schrijven van een verhaal met de gebruiker voort. Geef eerst korte, diepgaande feedback in {%t:{%s:sourceLocale%}%} op de laatste bijdrage van de gebruiker, waarbij je je uitsluitend richt op taalkundige aspecten en suggesties voor verbetering geeft. Maak geen opmerkingen over de plot, logica of inhoud van het verhaal. Voeg daarna jouw volgende gedeelte van het verhaal toe in {%t:{%s:targetLocale%}%}. Schrijf je antwoord in platte tekst zonder opmaak, labels of koppen.",
       "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
       "prompt-vocabulary": "Schrijf een woord in het {%t:{%s:targetLocale%}%} samen met de definitie in het {%t:{%s:sourceLocale%}%}. De gebruiker zal vervolgens een zin in het {%t:{%s:targetLocale%}%} schrijven waarin dit woord verwerkt moeten worden. Hou hierbij rekening met de vaardigheid en taalniveau van de gebruiker. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten.",
       "prompt-vocabulary-follow_up": "Geef feedback op de zin waarmee de gebruik antwoord heeft gegeven. Controleer of de woord juist gebruikt is in de zin. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten.",
       "greeting": "Hoi!",
-      "button-go_back": "Ga terug",
-      "button-reset": "Resetten",
-      "button-generate": "Genereren",
       "button-answer": "Antwoorden",
-      "button-reply": "Antwoorden",
       "button-ask": "Vragen",
+      "button-generate": "Genereren",
+      "button-go_back": "Ga terug",
+      "button-reply": "Antwoorden",
+      "button-reset": "Resetten",
+      "button-rewrite": "Herschrijven",
       "credits-link": "Gemaakt door {%name%}",
       "select_an_option": "Selecteer een optie",
       "banner-update_now": "Er is een update beschikbaar, klik hier om te updaten!",
@@ -1607,6 +1616,8 @@
       "overview-options-title": "Pas instellingen aan",
       "overview-reading-description": "Je kunt een tekst genereren waarbij elke alinea in beide talen beschikbaar is.",
       "overview-reading-title": "Leesteksten",
+      "overview-rewrite-description": "Je kunt de LLM een tekst laten herschrijven in {%t:{%s:targetLanguage%}%} op jouw vaardigheidsniveau.",
+      "overview-rewrite-title": "Teksten herschrijven",
       "overview-story-description": "Je gaat omste beurten stukje voor stukje een verhaal schrijven.",
       "overview-story-title": "Schrijf een verhaal",
       "overview-vocabulary-description": "Je krijgt een woord samen met de definitie ervan vervolgens schrijf je een zin dat dit woord gebruikt.",
@@ -1627,7 +1638,7 @@
       "migrate-reset": "Verwijder alle gegevens en reset de app. Eenmaal uitgevoerd kan deze actie niet ongedaan worden gemaakt.",
       "migrate-reset_button": "Reset",
       "migrate-reset_button-confirmation": "Ik bevestig dat ik absoluut zeker ben dat ik wil resetten!",
-      "statistics-activity_per_category": " Je hebt al {%s:statisticReadingActivity%} teksten gelezen, {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.",
+      "statistics-activity_per_category": " Je hebt al {%s:statisticReadingActivity%} teksten gelezen, {%s:statisticReadingActivity%} teksten laten herschrijven, {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.",
       "statistics-no_activity": "Je hebt helaas nog niet genoeg activiteiten gedaan om hier weer te geven. Ga naar het overzicht en kies een oefening om te beginnen, op de achtergrond zal bijgehouden worden hoeveel je er al voltooid hebt.",
       "statistics-no_activity_streak": "Op dit moment heb je geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal \xE9\xE9n oefening te doen.",
       "statistics-current_activity_streak": "Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang. Verlies het niet en zorg ervoor dat je voor middernacht oefend!",
@@ -1639,6 +1650,8 @@
       "conversation-intro": "Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
       "reading-intro": "Je zult een tekst lezen waarbij elke alinea zowel in {%t:{%s:targetLanguage%}%} als in {%t:{%s:sourceLanguage%}%} is geschreven, waardoor je je leesvaardigheid kunt oefenen. Je kunt optioneel een onderwerp opgeven waar de tekst over moet gaan.",
       "reading-placeholder": "Ik wil lezen over...",
+      "rewrite-intro": "Je kunt hieronder een tekst invoeren. De LLM zorgt ervoor dat de tekst in {%t:{%s:sourceLanguage%}%} is op jouw geselecteerde vaardigheidsniveau.",
+      "rewrite-placeholder": "Ik wil laten herschrijven...",
       "story-intro": "Je gaat straks een verhaal schrijven in het {%t:{%s:targetLanguage%}%} waarbij je omste beurten een stuk toevoegd. Maak je geen zorgen of het verhaal een goed, logisch en gegrond verhaal is, maar zorg vooral dat je de taal oefened. Zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
       "vocabulary-intro": "Je leest straks een woord samen met de definitie ervan in het {%t:{%s:targetLanguage%}%}. Antwoord met een zin waar het woord ingebruikt wordt in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord."
     }
@@ -1986,23 +1999,26 @@
   ];
 
   // src/screens/overview.js
-  var handleReading = (_, state2) => {
-    setScreen(state2, SCREENS.reading);
+  var handleClarification = (_, state2) => {
+    setScreen(state2, SCREENS.clarification);
   };
   var handleComprehension = (_, state2) => {
     setScreen(state2, SCREENS.comprehension);
   };
-  var handleVocabulary = (_, state2) => {
-    setScreen(state2, SCREENS.vocabulary);
-  };
   var handleConversation = (_, state2) => {
     setScreen(state2, SCREENS.conversation);
+  };
+  var handleReading = (_, state2) => {
+    setScreen(state2, SCREENS.reading);
+  };
+  var handleRewrite = (_, state2) => {
+    setScreen(state2, SCREENS.rewrite);
   };
   var handleStory = (_, state2) => {
     setScreen(state2, SCREENS.story);
   };
-  var handleClarification = (_, state2) => {
-    setScreen(state2, SCREENS.clarification);
+  var handleVocabulary = (_, state2) => {
+    setScreen(state2, SCREENS.vocabulary);
   };
   var handleOptions = (_, state2) => {
     setScreen(state2, SCREENS.options);
@@ -2058,6 +2074,18 @@
         node("b", translate(state2, "overview-reading-title")),
         node("br"),
         translate(state2, "overview-reading-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: handleRewrite,
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F916}"),
+        node("b", translate(state2, "overview-rewrite-title")),
+        node("br"),
+        translate(state2, "overview-rewrite-description")
       ]),
       node("button", {
         class: "card",
@@ -2359,12 +2387,25 @@
     }, translate(state2, "setup-next"))
   ];
 
+  // src/utilities/random.js
+  var randomBool = (odds) => {
+    odds = Math.abs(odds);
+    return Math.random() < 1 / odds;
+  };
+  var randomItem = (items) => {
+    if (!Array.isArray(items) || items.length === 0) {
+      return null;
+    }
+    const index = Math.floor(Math.random() * items.length);
+    return items[index];
+  };
+
   // src/utilities/streak.js
   var ONE_HOUR = 60 * 60 * 1e3;
   var ONE_DAY = ONE_HOUR * 24;
   var TWO_DAYS = ONE_DAY * 2;
   var GRACE_PERIOD = ONE_HOUR;
-  var onActivity2 = (state2) => {
+  var onActivity = (state2) => {
     const lastActivityOn = new Date(state2.statisticLastActivityOn);
     const lastActivityUTC = Date.UTC(
       lastActivityOn.getFullYear(),
@@ -2388,19 +2429,6 @@
     if (state2.statisticCurrentActivityStreak > state2.statisticLongestActivityStreak) {
       state2.statisticLongestActivityStreak = state2.statisticCurrentActivityStreak;
     }
-  };
-
-  // src/utilities/random.js
-  var randomBool = (odds) => {
-    odds = Math.abs(odds);
-    return Math.random() < 1 / odds;
-  };
-  var randomItem = (items) => {
-    if (!Array.isArray(items) || items.length === 0) {
-      return null;
-    }
-    const index = Math.floor(Math.random() * items.length);
-    return items[index];
   };
 
   // src/screens/conversation.js
@@ -2431,7 +2459,7 @@
         }
         state2.conversationMessages.push(result);
         state2.statisticConversationActivity++;
-        onActivity2(state2);
+        onActivity(state2);
       });
     }
   };
@@ -2661,7 +2689,7 @@
         }
         state2.comprehensionMessages.push(result);
         state2.statisticComprehensionActivity++;
-        onActivity2(state2);
+        onActivity(state2);
       });
     }
   };
@@ -2767,10 +2795,10 @@
   ];
 
   // src/screens/reading.js
-  var handleReadingInput = (event, state2) => {
+  var handleInput4 = (event, state2) => {
     state2.readingInput = event.target.value;
   };
-  var handleReadingGenerate = (_, state2) => {
+  var handleGenerate3 = (_, state2) => {
     if (!state2.readingPending) {
       state2.readingError = false;
       state2.readingMessages = [];
@@ -2796,17 +2824,17 @@
         }
         state2.readingMessages.push(result);
         state2.statisticReadingActivity++;
-        onActivity2(state2);
+        onActivity(state2);
       });
     }
   };
-  var handleReadingReset = (_, state2) => {
+  var handleReset5 = (_, state2) => {
     state2.readingError = false;
     state2.readingInput = "";
     state2.readingMessages = [];
     state2.readingPending = false;
   };
-  var handleReadingBack = (_, state2) => {
+  var handleBack5 = (_, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var reading = (state2) => [
@@ -2837,7 +2865,7 @@
           class: "message-user",
           disabled: state2.readingMessages?.length > 0,
           id: "input-topic",
-          input: handleReadingInput,
+          input: handleInput4,
           placeholder: translate(state2, "reading-placeholder")
         }, state2.readingInput || "")
       )
@@ -2858,7 +2886,7 @@
       ...conditional(
         state2.readingPending || state2.readingMessages && state2.readingMessages?.length === 0,
         node("button", {
-          click: handleReadingGenerate,
+          click: handleGenerate3,
           disabled: state2.readingPending,
           type: "button"
         }, translate(state2, "button-generate"))
@@ -2867,21 +2895,21 @@
         state2.readingPending || state2.readingMessages && state2.readingMessages?.length > 0,
         node("button", {
           type: "button",
-          click: handleReadingReset
+          click: handleReset5
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleReadingBack,
+        click: handleBack5,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/story.js
-  var handleStoryInput = (event, state2) => {
+  var handleInput5 = (event, state2) => {
     state2.storyInput = event.target.value;
   };
-  var handleStoryReply = (_, state2) => {
+  var handleReply2 = (_, state2) => {
     if (!state2.storyPending && state2.storyInput && state2.storyInput.trim().length > 0) {
       state2.storyError = false;
       state2.storyPending = true;
@@ -2908,11 +2936,11 @@
         }
         state2.storyMessages.push(result);
         state2.statisticStoryActivity++;
-        onActivity2(state2);
+        onActivity(state2);
       });
     }
   };
-  var handleStoryGenerate = (_, state2) => {
+  var handleGenerate4 = (_, state2) => {
     if (!state2.storyPending) {
       state2.storyError = false;
       state2.storyMessages = [];
@@ -2934,13 +2962,13 @@
       });
     }
   };
-  var handleStoryReset = (_, state2) => {
+  var handleReset6 = (_, state2) => {
     state2.storyError = false;
     state2.storyMessages = [];
     state2.storyPending = false;
     state2.storyStopped = false;
   };
-  var handleStoryBack = (_, state2) => {
+  var handleBack6 = (_, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var story = (state2) => [
@@ -2975,7 +3003,7 @@
         node("textarea", {
           class: "message-user",
           id: "input-question",
-          keyup: handleStoryInput
+          keyup: handleInput5
         }, state2.storyInput)
       )
     ),
@@ -2987,33 +3015,33 @@
         node("button", {
           disabled: state2.storyPending || !state2.storyInput || state2.storyInput.trim().length === 0,
           type: "button",
-          click: handleStoryReply
+          click: handleReply2
         }, translate(state2, "button-reply")),
         node("button", {
           disabled: state2.storyPending,
           type: "button",
-          click: handleStoryGenerate
+          click: handleGenerate4
         }, translate(state2, "button-generate"))
       ),
       ...conditional(
         state2.storyPending || state2.storyMessages && state2.storyMessages.length > 0,
         node("button", {
-          click: handleStoryReset,
+          click: handleReset6,
           type: "button"
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleStoryBack,
+        click: handleBack6,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/vocabulary.js
-  var handleVocabularyInput = (event, state2) => {
+  var handleInput6 = (event, state2) => {
     state2.vocabularyInput = event.target.value;
   };
-  var handleVocabularyAnswer = (_, state2) => {
+  var handleAnswer2 = (_, state2) => {
     if (!state2.vocabularyPending && state2.vocabularyInput && state2.vocabularyInput.trim().length > 0) {
       state2.vocabularyError = false;
       state2.vocabularyPending = true;
@@ -3037,11 +3065,11 @@
         }
         state2.vocabularyMessages.push(result);
         state2.statisticVocabularyActivity++;
-        onActivity2(state2);
+        onActivity(state2);
       });
     }
   };
-  var handleVocabularyGenerate = (_, state2) => {
+  var handleGenerate5 = (_, state2) => {
     if (!state2.vocabularyPending) {
       state2.vocabularyError = false;
       state2.vocabularyMessages = [];
@@ -3061,12 +3089,12 @@
       });
     }
   };
-  var handleVocabularyReset = (_, state2) => {
+  var handleReset7 = (_, state2) => {
     state2.vocabularyError = false;
     state2.vocabularyMessages = [];
     state2.vocabularyPending = false;
   };
-  var handleVocabularyBack = (_, state2) => {
+  var handleBack7 = (_, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var vocabulary = (state2) => [
@@ -3107,7 +3135,7 @@
           {
             class: "message-user",
             id: "input-question",
-            keyup: handleVocabularyInput
+            keyup: handleInput6
           },
           state2.vocabularyInput
         )
@@ -3121,23 +3149,23 @@
         node("button", {
           disabled: state2.vocabularyPending || !state2.vocabularyInput || state2.vocabularyInput.trim().length === 0,
           type: "button",
-          click: handleVocabularyAnswer
+          click: handleAnswer2
         }, translate(state2, "button-answer")),
         node("button", {
           disabled: state2.vocabularyPending,
           type: "button",
-          click: handleVocabularyGenerate
+          click: handleGenerate5
         }, translate(state2, "button-generate"))
       ),
       ...conditional(
         state2.vocabularyPending || state2.vocabularyMessages && state2.vocabularyMessages.length > 0,
         node("button", {
-          click: handleVocabularyReset,
+          click: handleReset7,
           type: "button"
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleVocabularyBack,
+        click: handleBack7,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -3200,6 +3228,112 @@
     messages = null;
   };
 
+  // src/screens/rewrite.js
+  var handleInput7 = (event, state2) => {
+    state2.rewriteInput = event.target.value;
+  };
+  var handleRewrite2 = (_, state2) => {
+    if (!state2.rewritePending) {
+      state2.rewriteError = false;
+      state2.rewriteMessages = [{
+        role: "user",
+        content: state2.rewriteInput.trim()
+      }];
+      state2.rewritePending = true;
+      createMessage5(
+        state2,
+        state2.rewriteMessages,
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-rewrite")
+      ).then(([error, _2, result]) => {
+        state2.rewritePending = false;
+        if (error) {
+          state2.rewriteError = error.toString();
+          return;
+        }
+        state2.rewriteMessages.push(result);
+        state2.statisticRewriteActivity++;
+        onActivity(state2);
+      });
+    }
+  };
+  var handleReset8 = (_, state2) => {
+    state2.rewriteError = false;
+    state2.rewriteInput = "";
+    state2.rewriteMessages = [];
+    state2.rewritePending = false;
+  };
+  var handleBack8 = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
+  var rewrite = (state2) => [
+    node("p", [
+      node("b", translate(state2, "greeting")),
+      node("br"),
+      node("label", {
+        for: "input-text"
+      }, translate(state2, "rewrite-intro"))
+    ]),
+    node("div", {
+      class: "messages"
+    }, [
+      ...conditional(
+        state2.rewriteMessages && state2.rewriteMessages.length > 0,
+        state2.rewriteMessages.map(
+          (message) => node(
+            "p",
+            {
+              class: "message-" + message.role
+            },
+            message.content.split("\n").flatMap(
+              (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+            )
+          )
+        ),
+        node("textarea", {
+          class: "message-user",
+          disabled: state2.rewriteMessages && state2.rewriteMessages.length > 0,
+          id: "input-text",
+          input: handleInput7,
+          placeholder: translate(state2, "rewrite-placeholder")
+        }, state2.rewriteInput)
+      )
+    ]),
+    ...conditional(
+      state2.rewriteError,
+      node("p", state2.rewriteError)
+    ),
+    ...conditional(
+      state2.rewritePending,
+      node("p", {
+        class: "pending"
+      })
+    ),
+    node("div", {
+      class: "row reverse"
+    }, [
+      ...conditional(
+        state2.rewritePending || state2.rewriteMessages && state2.rewriteMessages.length === 0,
+        node("button", {
+          click: handleRewrite2,
+          disabled: state2.rewritePending || state2.rewriteInput.trim().length === 0,
+          type: "button"
+        }, translate(state2, "button-rewrite"))
+      ),
+      ...conditional(
+        state2.rewritePending || state2.rewriteMessages && state2.rewriteMessages.length > 0,
+        node("button", {
+          type: "button",
+          click: handleReset8
+        }, translate(state2, "button-reset"))
+      ),
+      node("button", {
+        click: handleBack8,
+        type: "button"
+      }, translate(state2, "button-go_back"))
+    ])
+  ];
+
   // src/app.js
   var preferredLocale = getPreferredLocale();
   var [_update, _unmount, state] = mount(
@@ -3214,15 +3348,16 @@
       }, [
         ...updateBanner(state2),
         ...match(state2.screen, {
-          [SCREENS.migrate]: () => migrate(state2),
-          [SCREENS.options]: () => options(state2),
-          [SCREENS.overview]: () => overview(state2),
           [SCREENS.clarification]: () => clarification(state2),
           [SCREENS.comprehension]: () => comprehension(state2),
           [SCREENS.conversation]: () => conversation(state2),
           [SCREENS.reading]: () => reading(state2),
+          [SCREENS.rewrite]: () => rewrite(state2),
           [SCREENS.story]: () => story(state2),
-          [SCREENS.vocabulary]: () => vocabulary(state2)
+          [SCREENS.vocabulary]: () => vocabulary(state2),
+          [SCREENS.overview]: () => overview(state2),
+          [SCREENS.options]: () => options(state2),
+          [SCREENS.migrate]: () => migrate(state2)
         }, () => setup(state2))
       ]);
     },
@@ -3271,6 +3406,10 @@
       readingError: false,
       readingPending: false,
       readingMessages: [],
+      rewriteInput: "",
+      rewriteError: false,
+      rewritePending: false,
+      rewriteMessages: [],
       storyInput: "",
       storyReviewed: false,
       storyError: false,

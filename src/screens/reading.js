@@ -5,22 +5,22 @@ import {
 
 import { createMessage } from '../apis/apis.js'
 
+import { SCREENS } from '../data/screens.js'
 import {
   translate as t,
 } from '../data/translations.js'
-import { SCREENS } from '../data/screens.js'
 
-import { onActivity } from '../utilities/streak.js'
 import { setScreen } from '../utilities/screen.js'
+import { onActivity } from '../utilities/streak.js'
 
-const handleReadingInput = (
+const handleInput = (
   event,
   state,
 ) => {
   state.readingInput = event.target.value
 }
 
-const handleReadingGenerate = (
+const handleGenerate = (
   _,
   state,
 ) => {
@@ -59,7 +59,7 @@ const handleReadingGenerate = (
   }
 }
 
-const handleReadingReset = (
+const handleReset = (
   _,
   state,
 ) => {
@@ -70,7 +70,7 @@ const handleReadingReset = (
   // TODO: Should reset the network requests properly.
 }
 
-const handleReadingBack = (
+const handleBack = (
   _,
   state,
 ) => {
@@ -110,7 +110,7 @@ export const reading = (
           class: 'message-user',
           disabled: state.readingMessages?.length > 0,
           id: 'input-topic',
-          input: handleReadingInput,
+          input: handleInput,
           placeholder: t(state, 'reading-placeholder'),
         }, state.readingInput || ''),
       ),
@@ -138,7 +138,7 @@ export const reading = (
           && state.readingMessages?.length === 0
         ),
         n('button', {
-          click: handleReadingGenerate,
+          click: handleGenerate,
           disabled: state.readingPending,
           type: 'button',
         }, t(state, 'button-generate')),
@@ -152,12 +152,12 @@ export const reading = (
         ),
         n('button', {
           type: 'button',
-          click: handleReadingReset,
+          click: handleReset,
         }, t(state, 'button-reset')),
       ),
 
       n('button', {
-        click: handleReadingBack,
+        click: handleBack,
         type: 'button'
       }, t(state, 'button-go_back'))
     ])

@@ -2,15 +2,17 @@ import {
   conditional as c,
   node as n,
 } from '@doars/staark'
-import { translate as t } from '../data/translations.js'
+
 import { SCREENS } from '../data/screens.js'
+import { translate as t } from '../data/translations.js'
+
 import { setScreen } from '../utilities/screen.js'
 
-const handleReading = (
+const handleClarification = (
   _,
   state,
 ) => {
-  setScreen(state, SCREENS.reading)
+  setScreen(state, SCREENS.clarification)
 }
 
 const handleComprehension = (
@@ -20,18 +22,25 @@ const handleComprehension = (
   setScreen(state, SCREENS.comprehension)
 }
 
-const handleVocabulary = (
-  _,
-  state,
-) => {
-  setScreen(state, SCREENS.vocabulary)
-}
-
 const handleConversation = (
   _,
   state,
 ) => {
   setScreen(state, SCREENS.conversation)
+}
+
+const handleReading = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.reading)
+}
+
+const handleRewrite = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.rewrite)
 }
 
 const handleStory = (
@@ -41,11 +50,11 @@ const handleStory = (
   setScreen(state, SCREENS.story)
 }
 
-const handleClarification = (
+const handleVocabulary = (
   _,
   state,
 ) => {
-  setScreen(state, SCREENS.clarification)
+  setScreen(state, SCREENS.vocabulary)
 }
 
 const handleOptions = (
@@ -122,6 +131,19 @@ export const overview = (
         n('b', t(state, 'overview-reading-title')),
         n('br'),
         t(state, 'overview-reading-description'),
+      ]),
+
+      n('button', {
+        class: 'card',
+        click: handleRewrite,
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '🤖'),
+        n('b', t(state, 'overview-rewrite-title')),
+        n('br'),
+        t(state, 'overview-rewrite-description'),
       ]),
 
       n('button', {

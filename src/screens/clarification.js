@@ -1,8 +1,15 @@
-import { conditional as c, node as n } from '@doars/staark'
-import { translate as t } from '../data/translations.js'
-import { SCREENS } from '../data/screens.js'
+import {
+  conditional as c,
+  node as n,
+} from '@doars/staark'
+
 import { createMessage } from '../apis/apis.js'
+
+import { SCREENS } from '../data/screens.js'
+import { translate as t } from '../data/translations.js'
+
 import { setScreen } from '../utilities/screen.js'
+import { onActivity } from '../utilities/streak.js'
 
 const handleAsk = (
   _,

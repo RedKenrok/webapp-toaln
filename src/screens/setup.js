@@ -4,22 +4,23 @@ import {
 } from '@doars/staark'
 
 import {
+  APIS,
+  getModels,
+  isReady,
+} from '../apis/apis.js'
+
+import {
   getLanguageFromLocale,
   LOCALE_CODES,
   PROFICIENCY_LEVEL_CODES,
   setLangAttribute,
 } from '../data/locales.js'
 import { SCREENS } from '../data/screens.js'
-
 import {
   translate as t,
   TRANSLATABLE_CODES,
 } from '../data/translations.js'
-import {
-  APIS,
-  getModels,
-  isReady,
-} from '../apis/apis.js'
+
 import { setScreen } from '../utilities/screen.js'
 
 const handleSourceLanguage = (
