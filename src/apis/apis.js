@@ -33,8 +33,8 @@ const callApi = (
   ...parameters
 ) => {
   let method = null
-  if (state.apiCode) {
-    method = lookupTable[state.apiCode]
+  if (state.apiProvider) {
+    method = lookupTable[state.apiProvider]
   }
   if (method) {
     return method(state, ...parameters)
@@ -69,15 +69,15 @@ export const isReady = (
   state,
 ) => {
   return (
-    state.apiCode
-    && APIS[state.apiCode]
+    state.apiProvider
+    && APIS[state.apiProvider]
     && (
-      !APIS[state.apiCode]?.requireCredentials
+      !APIS[state.apiProvider]?.requireCredentials
       || state.apiCredentialsTested
     )
-    && (state.apiModel ?? APIS[state.apiCode].preferredModel)
+    && (state.apiModel ?? APIS[state.apiProvider].preferredModel)
     && state.apiModels?.data?.some(
-      (model) => model.id === (state.apiModel ?? APIS[state.apiCode].preferredModel)
+      (model) => model.id === (state.apiModel ?? APIS[state.apiProvider].preferredModel)
     )
   )
 }

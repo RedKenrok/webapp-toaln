@@ -11,6 +11,100 @@ import {
   randomItem,
 } from '../utilities/random.js'
 import { setScreen } from '../utilities/screen.js'
+const handleReply = (
+  _,
+  state,
+) => {
+  if (
+    !state.conversationPending
+    && state.conversationInput
+    && state.conversationInput.trim().length > 0
+  ) {
+    state.conversationError = false
+    state.conversationPending = true
+    state.conversationMessages.push({
+      role: 'user',
+      content: state.conversationInput.trim(),
+    })
+    state.conversationInput = ''
+    createMessage(
+      state,
+      state.conversationMessages,
+      t(state, 'prompt-context'),
+      t(state, 'prompt-conversation-follow_up'),
+    ).then(([error, _, result]) => {
+      state.conversationPending = false
+      if (error) {
+        state.conversationError = error.toString()
+        const message = state.conversationMessages.pop()
+        state.conversationInput = message.content
+        return
+      }
+      if (result.content.trim().endsWith('STOP')) {
+        state.conversationStopped = true
+      }
+      state.conversationMessages.push(result)
+      state.statisticConversationActivity++
+      onActivity(state)
+    })
+  }
+}
+
+const handleGenerate = (
+  _,
+  state,
+) => {
+  if (!state.conversationPending) {
+    state.conversationError = false
+    state.conversationMessages = []
+    state.conversationPending = true
+    createMessage(
+      state,
+      [],
+      t(state, 'prompt-context'),
+      t(state, 'prompt-conversation') + (
+        randomBool(10)
+          ? t(state, 'prompt-topic')
+            .replace('{%topic%}', randomItem(
+              state.topicsOfInterest.filter(topic => topic)
+            ))
+          : ''
+      ),
+    ).then(([error, _, result]) => {
+      state.conversationPending = false
+      if (error) {
+        state.conversationError = error.toString()
+        return
+      }
+      state.conversationMessages.push(result)
+    })
+  }
+}
+
+const handleReset = (
+  _,
+  state,
+) => {
+  state.conversationError = false
+  state.conversationMessages = []
+  state.conversationPending = false
+  state.conversationStopped = false
+  // TODO: Should reset the network requests properly.
+}
+
+const handleBack = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.overview)
+}
+
+const handleInput = (
+  event,
+  state
+) => {
+  state.conversationInput = event.target.value
+}
 
 export const conversation = (
   state,
@@ -52,9 +146,7 @@ export const conversation = (
         n('textarea', {
           class: 'message-user',
           id: 'input-question',
-          keyup: (event) => {
-            state.conversationInput = event.target.value
-          },
+          keyup: handleInput,
         }, state.conversationInput),
       ),
     ),
@@ -73,72 +165,12 @@ export const conversation = (
             || state.conversationInput.trim().length === 0
           ),
           type: 'button',
-          click: () => {
-            if (
-              !state.conversationPending
-              && state.conversationInput
-              && state.conversationInput.trim().length > 0
-            ) {
-              state.conversationError = false
-              state.conversationPending = true
-              state.conversationMessages.push({
-                role: 'user',
-                content: state.conversationInput.trim(),
-              })
-              state.conversationInput = ''
-              createMessage(
-                state,
-                state.conversationMessages,
-                t(state, 'prompt-context'),
-                t(state, 'prompt-conversation-follow_up'),
-              ).then(([error, response, result]) => {
-                state.conversationPending = false
-                if (error) {
-                  state.conversationError = error.toString()
-                  const message = state.conversationMessages.pop()
-                  state.conversationInput = message.content
-                  return
-                }
-                if (result.content.trim().endsWith('STOP')) {
-                  state.conversationStopped = true
-                }
-                state.conversationMessages.push(result)
-                state.statisticConversationActivity++
-                onActivity(state)
-              })
-            }
-          },
+          click: handleReply,
         }, t(state, 'button-reply')),
         n('button', {
           disabled: state.conversationPending,
           type: 'button',
-          click: () => {
-            if (!state.conversationPending) {
-              state.conversationError = false
-              state.conversationMessages = []
-              state.conversationPending = true
-              createMessage(
-                state,
-                [],
-                t(state, 'prompt-context'),
-                t(state, 'prompt-conversation') + (
-                  randomBool(10)
-                    ? t(state, 'prompt-topic')
-                      .replace('{%topic%}', randomItem(
-                        state.topicsOfInterest.filter(topic => topic)
-                      ))
-                    : ''
-                ),
-              ).then(([error, response, result]) => {
-                state.conversationPending = false
-                if (error) {
-                  state.conversationError = error.toString()
-                  return
-                }
-                state.conversationMessages.push(result)
-              })
-            }
-          },
+          click: handleGenerate,
         }, t(state, 'button-generate')),
       ),
 
@@ -149,21 +181,13 @@ export const conversation = (
           && state.conversationMessages.length > 0
         ),
         n('button', {
-          click: () => {
-            state.conversationError = false
-            state.conversationMessages = []
-            state.conversationPending = false
-            state.conversationStopped = false
-            // TODO: Should reset the network requests properly.
-          },
+          click: handleReset,
           type: 'button',
         }, t(state, 'button-reset')),
       ),
 
       n('button', {
-        click: () => {
-          setScreen(state, SCREENS.overview)
-        },
+        click: handleBack,
         type: 'button',
       }, t(state, 'button-go_back')),
     ])

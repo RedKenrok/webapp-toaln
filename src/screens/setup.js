@@ -7,6 +7,7 @@ import {
   getLanguageFromLocale,
   LOCALE_CODES,
   PROFICIENCY_LEVEL_CODES,
+  setLangAttribute,
 } from '../data/locales.js'
 import { SCREENS } from '../data/screens.js'
 
@@ -21,6 +22,104 @@ import {
 } from '../apis/apis.js'
 import { setScreen } from '../utilities/screen.js'
 
+const handleSourceLanguage = (
+  event,
+  state,
+) => {
+  if (state.sourceLocale !== event.target.selectedOptions[0].value) {
+    state.sourceLocale = event.target.selectedOptions[0].value
+    state.sourceLanguage = getLanguageFromLocale(state.sourceLocale)
+    setLangAttribute(state)
+  }
+}
+
+const handleTargetLanguage = (
+  event,
+  state,
+) => {
+  if (state.targetLocale !== event.target.selectedOptions[0].value) {
+    state.targetLocale = event.target.selectedOptions[0].value
+    state.targetLanguage = getLanguageFromLocale(state.targetLocale)
+  }
+}
+
+const handleProficiencyLevel = (
+  event,
+  state,
+) => {
+  if (state.proficiencyLevel !== event.target.selectedOptions[0].value) {
+    state.proficiencyLevel = event.target.selectedOptions[0].value
+  }
+}
+
+const handleNewTopic = (
+  event,
+  state,
+) => {
+  if (event.target.value) {
+    state.topicsOfInterest.push(event.target.value)
+  }
+}
+
+const handleApiProvider = (
+  event,
+  state,
+) => {
+  if (state.apiProvider !== event.target.selectedOptions[0].value) {
+    state.apiProvider = event.target.selectedOptions[0].value
+    state.apiCredentialsTested = false
+  }
+}
+
+const handleApiCredentials = (
+  event,
+  state,
+) => {
+  if (state.apiCredentials !== event.target.value) {
+    state.apiCredentials = event.target.value
+  }
+}
+
+const handleApiCredentialsTest = (
+  _,
+  state,
+) => {
+  state.apiCredentialsPending = true
+  getModels(state)
+    .then(([error, _, result]) => {
+      state.apiCredentialsPending = false
+
+      if (error) {
+        state.apiCredentialsTested = false
+        state.apiCredentialsError = error.toString()
+        state.apiModels = null
+      } else {
+        state.apiCredentialsTested = true
+        state.apiCredentialsError = false
+        state.apiModels = result
+        state.apiModel ??= result?.data.length > 0 ? result.data[0].id : null
+      }
+    })
+}
+
+const handleApiModel = (
+  event,
+  state,
+) => {
+  if (state.apiModel !== event.target.selectedOptions[0].value) {
+    state.apiModel = event.target.selectedOptions[0].value
+  }
+}
+
+const handleNext = (
+  _,
+  state,
+) => {
+  if (isReady(state)) {
+    setScreen(state, SCREENS.overview)
+  }
+}
+
 export const setup = (
   state,
 ) => [
@@ -31,12 +130,7 @@ export const setup = (
     }, t(state, 'setup-source_language')),
     n('select', {
       id: 'select_source_language',
-      change: (event) => {
-        if (state.sourceLocale !== event.target.selectedOptions[0].value) {
-          state.sourceLocale = event.target.selectedOptions[0].value
-          state.sourceLanguage = getLanguageFromLocale(state.sourceLocale)
-        }
-      },
+      change: handleSourceLanguage,
     }, TRANSLATABLE_CODES.map(
       localeCode => n('option', {
         selected: (
@@ -53,12 +147,7 @@ export const setup = (
     }, t(state, 'setup-target_language')),
     n('select', {
       id: 'select_target_language',
-      change: (event) => {
-        if (state.targetLocale !== event.target.selectedOptions[0].value) {
-          state.targetLocale = event.target.selectedOptions[0].value
-          state.targetLanguage = getLanguageFromLocale(state.targetLocale)
-        }
-      },
+      change: handleTargetLanguage,
     }, LOCALE_CODES.map(
       localeCode => n('option', {
         selected: (
@@ -75,11 +164,7 @@ export const setup = (
     }, t(state, 'setup-proficiency_level')),
     n('select', {
       id: 'select_proficiency_level',
-      change: (event) => {
-        if (state.proficiencyLevel !== event.target.selectedOptions[0].value) {
-          state.proficiencyLevel = event.target.selectedOptions[0].value
-        }
-      },
+      change: handleProficiencyLevel,
     }, PROFICIENCY_LEVEL_CODES.map(
       proficiencyLevel => n('option', {
         selected: (
@@ -109,7 +194,9 @@ export const setup = (
     ...state.topicsOfInterest
       .map(
         (topic, index) => n('input', {
-          keyup: (event) => {
+          keyup: (
+            event,
+          ) => {
             if (!event.target.value) {
               state.topicsOfInterest.splice(index, 1)
             } else {
@@ -120,49 +207,36 @@ export const setup = (
         })
       ),
     n('input', {
-      keyup: (event) => {
-        if (event.target.value) {
-          state.topicsOfInterest.push(event.target.value)
-        }
-      },
+      keyup: handleNewTopic,
       id: 'input_topics_of_interest',
     }),
 
     n('label', {
-      for: 'select_api_code',
-    }, t(state, 'setup-api_code')),
+      for: 'select_api_provider',
+    }, t(state, 'setup-api_provider')),
     n('select', {
-      id: 'select_api_code',
-      change: (event) => {
-        if (state.apiCode !== event.target.selectedOptions[0].value) {
-          state.apiCode = event.target.selectedOptions[0].value
-          state.apiCredentialsTested = false
-        }
-      },
+      id: 'select_api_provider',
+      change: handleApiProvider,
     }, Object.keys(APIS).map(
-      apiCode => n('option', {
+      apiProvider => n('option', {
         selected: (
-          state.apiCode === apiCode
+          state.apiProvider === apiProvider
             ? 'selected'
             : false
         ),
-        value: apiCode,
-      }, APIS[apiCode].name),
+        value: apiProvider,
+      }, APIS[apiProvider].name),
     )),
 
     ...c(
-      APIS[state.apiCode]?.requireCredentials,
+      APIS[state.apiProvider]?.requireCredentials,
       [
         n('label', {
           for: 'input-api_credentials',
         }, t(state, 'setup-api_credentials')),
         n('input', {
           id: 'input-api_credentials',
-          keyup: (event) => {
-            if (state.apiCredentials !== event.target.value) {
-              state.apiCredentials = event.target.value
-            }
-          },
+          keyup: handleApiCredentials,
           type: 'password',
           value: state.apiCredentials,
         }),
@@ -170,24 +244,7 @@ export const setup = (
     ),
 
     n('button', {
-      click: () => {
-        state.apiCredentialsPending = true
-        getModels(state)
-          .then(([error, response, result]) => {
-            state.apiCredentialsPending = false
-
-            if (error) {
-              state.apiCredentialsTested = false
-              state.apiCredentialsError = error.toString()
-              state.apiModels = null
-            } else {
-              state.apiCredentialsTested = true
-              state.apiCredentialsError = false
-              state.apiModels = result
-              state.apiModel ??= result?.data.length > 0 ? result.data[0].id : null
-            }
-          })
-      },
+      click: handleApiCredentialsTest,
       type: 'button',
     }, [
       t(state, 'setup-test_api_credentials'),
@@ -211,14 +268,10 @@ export const setup = (
       [
         n('label', {
           for: 'select_api_model',
-        }, t(state, 'setup-api_credentials_tested').replace('{%preferredModel%}', APIS[state.apiCode]?.preferredModelName ?? APIS[state.apiCode]?.preferredModel)),
+        }, t(state, 'setup-api_credentials_tested').replace('{%preferredModel%}', APIS[state.apiProvider]?.preferredModelName ?? APIS[state.apiProvider]?.preferredModel)),
         n('select', {
           id: 'select_api_model',
-          change: (event) => {
-            if (state.apiModel !== event.target.selectedOptions[0].value) {
-              state.apiModel = event.target.selectedOptions[0].value
-            }
-          },
+          change: handleApiModel,
         }, [
           n('option', {
             disabled: true,
@@ -231,11 +284,11 @@ export const setup = (
           }, t(state, 'select_an_option')),
 
           ...state.apiModels?.data
-            ?.filter(APIS[state.apiCode].modelOptionsFilter ?? (() => true))
+            ?.filter(APIS[state.apiProvider].modelOptionsFilter ?? (() => true))
             ?.sort((a, b) => a.id.localeCompare(b.id))
             ?.map(model => n('option', {
               selected: (
-                (state.apiModel ?? APIS[state.apiCode].preferredModel) === model.id
+                (state.apiModel ?? APIS[state.apiProvider].preferredModel) === model.id
                   ? 'selected'
                   : false
               ),
@@ -252,11 +305,7 @@ export const setup = (
     ),
 
     n('button', {
-      click: () => {
-        if (isReady(state)) {
-          setScreen(state, SCREENS.overview)
-        }
-      },
+      click: handleNext,
       disabled: !isReady(state),
       type: 'button',
     }, t(state, 'setup-next'))

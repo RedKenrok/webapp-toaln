@@ -1,11 +1,13 @@
-export const createSingleton = (
-  createMethod,
+export const callOnce = (
+  method,
 ) => {
-  let instance = null
+  let called = false
+  let result = null
   return () => {
-    if (!instance) {
-      instance = createMethod()
+    if (!called) {
+      called = true
+      result = method()
     }
-    return instance
+    return result
   }
 }

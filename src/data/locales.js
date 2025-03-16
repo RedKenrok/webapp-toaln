@@ -10,6 +10,7 @@ export const LOCALES = Object.freeze({
   nld: 'nld', // Dutch
   nno: 'nno', // Norwegian (Nynorsk)
   nob: 'nob', // Norwegian (Bokmål)
+  por: 'por', // Portuguese
   spa: 'spa', // Spanish
   swe: 'swe', // Swedish
   vls: 'vls', // Flemish
@@ -45,6 +46,15 @@ export const getPreferredLocale = (
       return preferredLanguage
     }, null)
 ) ?? LOCALES.eng
+
+export const setLangAttribute = (
+  state,
+) => {
+  document.documentElement.setAttribute(
+    'lang',
+    state.sourceLocale,
+  )
+}
 
 export const PROFICIENCY_LEVELS = Object.freeze({
   a1: 'a1',

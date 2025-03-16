@@ -7,6 +7,7 @@ export const SCREENS = Object.freeze({
   clarification: 'clarification',
   comprehension: 'comprehension',
   conversation: 'conversation',
+  reading: 'reading',
   story: 'story',
   vocabulary: 'vocabulary',
 })

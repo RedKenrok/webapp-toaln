@@ -1,6 +1,6 @@
 import { create } from '@doars/vroagn'
 import { cloneRecursive } from '../utilities/clone.js'
-import { createSingleton } from '../utilities/singleton.js'
+import { callOnce } from '../utilities/singleton.js'
 
 export const apiSettings = Object.freeze({
   code: 'anthropic',
@@ -14,7 +14,7 @@ export const apiSettings = Object.freeze({
     ].some(keyword => model.name.toLowerCase().includes(keyword))
 })
 
-const _createMessage = createSingleton(
+const _createMessage = callOnce(
   () => create({
     credentials: 'same-origin',
     domain: 'https://api.anthropic.com',
@@ -64,7 +64,7 @@ export const createMessage = (
   })
 }
 
-const _getModels = createSingleton(
+const _getModels = callOnce(
   () => create({
     credentials: 'same-origin',
     domain: 'https://api.anthropic.com',

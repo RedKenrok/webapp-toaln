@@ -8,6 +8,87 @@ import { createMessage } from '../apis/apis.js'
 import { onActivity } from '../utilities/streak.js'
 import { setScreen } from '../utilities/screen.js'
 
+const handleVocabularyInput = (
+  event,
+  state,
+) => {
+  state.vocabularyInput = event.target.value
+}
+
+const handleVocabularyAnswer = (
+  _,
+  state,
+) => {
+  if (
+    !state.vocabularyPending
+    && state.vocabularyInput
+    && state.vocabularyInput.trim().length > 0
+  ) {
+    state.vocabularyError = false
+    state.vocabularyPending = true
+    state.vocabularyMessages.push({
+      role: 'user',
+      content: state.vocabularyInput.trim(),
+    })
+    state.vocabularyInput = ''
+    createMessage(
+      state,
+      state.vocabularyMessages,
+      t(state, 'prompt-context'),
+      t(state, 'prompt-vocabulary-follow_up'),
+    ).then(([error, _, result]) => {
+      state.vocabularyPending = false
+      if (error) {
+        state.vocabularyError = error.toString()
+        const message = state.vocabularyMessages.pop()
+        state.vocabularyInput = message.content
+        return
+      }
+      state.vocabularyMessages.push(result)
+      state.statisticVocabularyActivity++
+      onActivity(state)
+    })
+  }
+}
+
+const handleVocabularyGenerate = (_, state) => {
+  if (!state.vocabularyPending) {
+    state.vocabularyError = false
+    state.vocabularyMessages = []
+    state.vocabularyPending = true
+    createMessage(
+      state,
+      [],
+      t(state, 'prompt-context'),
+      t(state, 'prompt-vocabulary'),
+    ).then(([error, _, result]) => {
+      state.vocabularyPending = false
+      if (error) {
+        state.vocabularyError = error.toString()
+        return
+      }
+      state.vocabularyMessages.push(result)
+    })
+  }
+}
+
+const handleVocabularyReset = (
+  _,
+  state,
+) => {
+  state.vocabularyError = false
+  state.vocabularyMessages = []
+  state.vocabularyPending = false
+  // TODO: Should reset the network requests properly.
+}
+
+const handleVocabularyBack = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.overview)
+}
+
 export const vocabulary = (
   state,
 ) => [
@@ -21,14 +102,17 @@ export const vocabulary = (
       state.vocabularyMessages
       && state.vocabularyMessages.length > 0,
       n('div', {
-        class: 'messages',
-      }, state.vocabularyMessages.map(
-        (message) => n('p', {
+        class: 'messages'
+      }, state.vocabularyMessages.map((message) =>
+        n('p', {
           class: 'message-' + message?.role
-        }, message?.content?.split('\n')?.flatMap(
-          (content, index, results) =>
-            index === results.length - 1 ? [content] : [content, n('br')]
-        )),
+        }, message?.content?.split('\n')
+          ?.flatMap((content, index, results) =>
+            index === results.length - 1
+              ? [content]
+              : [content, n('br')]
+          ),
+        ),
       )),
     ),
 
@@ -46,14 +130,16 @@ export const vocabulary = (
         state.vocabularyMessages
         && state.vocabularyMessages.length > 0
         && state.vocabularyMessages.length < 3,
-        n('textarea', {
-          class: 'message-user',
-          id: 'input-question',
-          keyup: (event) => {
-            state.vocabularyInput = event.target.value
+        n(
+          'textarea',
+          {
+            class: 'message-user',
+            id: 'input-question',
+            keyup: handleVocabularyInput,
           },
-        }, state.vocabularyInput),
-      ),
+          state.vocabularyInput
+        )
+      )
     ),
 
     n('div', {
@@ -64,69 +150,18 @@ export const vocabulary = (
         && state.vocabularyMessages.length > 0
         && state.vocabularyMessages.length < 3,
         n('button', {
-          disabled: (
+          disabled:
             state.vocabularyPending
             || !state.vocabularyInput
-            || state.vocabularyInput.trim().length === 0
-          ),
+            || state.vocabularyInput.trim().length === 0,
           type: 'button',
-          click: () => {
-            if (
-              !state.vocabularyPending
-              && state.vocabularyInput
-              && state.vocabularyInput.trim().length > 0
-            ) {
-              state.vocabularyError = false
-              state.vocabularyPending = true
-              state.vocabularyMessages.push({
-                role: 'user',
-                content: state.vocabularyInput.trim(),
-              })
-              state.vocabularyInput = ''
-              createMessage(
-                state,
-                state.vocabularyMessages,
-                t(state, 'prompt-context'),
-                t(state, 'prompt-vocabulary-follow_up'),
-              ).then(([error, response, result]) => {
-                state.vocabularyPending = false
-                if (error) {
-                  state.vocabularyError = error.toString()
-                  const message = state.vocabularyMessages.pop()
-                  state.vocabularyInput = message.content
-                  return
-                }
-                state.vocabularyMessages.push(result)
-                state.statisticVocabularyActivity++
-                onActivity(state)
-              })
-            }
-          },
+          click: handleVocabularyAnswer,
         }, t(state, 'button-answer')),
         n('button', {
           disabled: state.vocabularyPending,
           type: 'button',
-          click: () => {
-            if (!state.vocabularyPending) {
-              state.vocabularyError = false
-              state.vocabularyMessages = []
-              state.vocabularyPending = true
-              createMessage(
-                state,
-                [],
-                t(state, 'prompt-context'),
-                t(state, 'prompt-vocabulary'),
-              ).then(([error, response, result]) => {
-                state.vocabularyPending = false
-                if (error) {
-                  state.vocabularyError = error.toString()
-                  return
-                }
-                state.vocabularyMessages.push(result)
-              })
-            }
-          },
-        }, t(state, 'button-generate')),
+          click: handleVocabularyGenerate,
+        }, t(state, 'button-generate'))
       ),
 
       ...c(
@@ -136,21 +171,14 @@ export const vocabulary = (
           && state.vocabularyMessages.length > 0
         ),
         n('button', {
-          click: () => {
-            state.vocabularyError = false
-            state.vocabularyMessages = []
-            state.vocabularyPending = false
-            // TODO: Should reset the network requests properly.
-          },
+          click: handleVocabularyReset,
           type: 'button',
-        }, t(state, 'button-reset')),
+        }, t(state, 'button-reset'))
       ),
 
       n('button', {
-        click: () => {
-          setScreen(state, SCREENS.overview)
-        },
+        click: handleVocabularyBack,
         type: 'button',
       }, t(state, 'button-go_back')),
-    ])
+    ]),
   ]

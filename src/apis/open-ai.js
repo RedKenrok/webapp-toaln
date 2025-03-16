@@ -1,6 +1,6 @@
 import { create } from '@doars/vroagn'
 import { cloneRecursive } from '../utilities/clone.js'
-import { createSingleton } from '../utilities/singleton.js'
+import { callOnce } from '../utilities/singleton.js'
 
 export const apiSettings = Object.freeze({
   code: 'open_ai',
@@ -22,7 +22,7 @@ export const apiSettings = Object.freeze({
     && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
 })
 
-const _createMessage = createSingleton(
+const _createMessage = callOnce(
   () => create({
     method: 'post',
     domain: 'https://api.openai.com',
@@ -86,7 +86,7 @@ export const createMessage = (
   })
 }
 
-const _getModels = createSingleton(
+const _getModels = callOnce(
   () => create({
     domain: 'https://api.openai.com',
     path: '/v1/models',

@@ -22,16 +22,15 @@ if ('serviceWorker' in navigator) {
   })
 
   // Start listening to incoming messages.
-  navigator.serviceWorker.addEventListener(
-    'message',
-    (event) => {
-      if (appState) {
-        handleMessage(appState, event)
-      } else {
-        messages.push(event)
-      }
-    },
-  )
+  navigator.serviceWorker.addEventListener('message', (
+    event,
+  ) => {
+    if (appState) {
+      handleMessage(appState, event)
+    } else {
+      messages.push(event)
+    }
+  })
 }
 
 export const notifyOnUpdate = (

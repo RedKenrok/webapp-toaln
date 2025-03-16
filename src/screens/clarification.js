@@ -4,6 +4,66 @@ import { SCREENS } from '../data/screens.js'
 import { createMessage } from '../apis/apis.js'
 import { setScreen } from '../utilities/screen.js'
 
+const handleAsk = (
+  _,
+  state,
+) => {
+  if (
+    !state.clarificationPending
+    && state.clarificationInput
+    && state.clarificationInput.trim().length > 0
+  ) {
+    state.clarificationError = false
+    state.clarificationPending = true
+    state.clarificationMessages.push({
+      role: 'user',
+      content: state.clarificationInput.trim(),
+    })
+    state.clarificationInput = ''
+    createMessage(
+      state,
+      state.clarificationMessages,
+      t(state, 'prompt-context'),
+      t(state, 'prompt-clarification'),
+    ).then(([error, _, result]) => {
+      state.clarificationPending = false
+      if (error) {
+        state.clarificationError = error.toString()
+        const message = state.clarificationMessages.pop()
+        state.clarificationInput = message.content
+        return
+      }
+      state.clarificationMessages.push(result)
+      state.statisticClarificationActivity++
+      onActivity(state)
+    })
+  }
+}
+
+const handleInput = (
+  event,
+  state
+) => {
+  state.clarificationInput = event.target.value
+}
+
+const handleReset = (
+  _,
+  state,
+) => {
+  state.clarificationError = false
+  state.clarificationMessages = []
+  state.clarificationPending = false
+  // TODO: Should reset the network requests properly.
+}
+
+const handleBack = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.overview)
+}
+
 export const clarification = (
   state,
 ) => [
@@ -44,9 +104,7 @@ export const clarification = (
         class: 'message-user',
         id: 'input-question',
         placeholder: t(state, 'clarification-placeholder'),
-        keyup: (event) => {
-          state.clarificationInput = event.target.value
-        },
+        keyup: handleInput,
       }, state.clarificationInput),
     ),
 
@@ -60,38 +118,7 @@ export const clarification = (
           || state.clarificationInput.trim().length === 0
         ),
         type: 'button',
-        click: () => {
-          if (
-            !state.clarificationPending
-            && state.clarificationInput
-            && state.clarificationInput.trim().length > 0
-          ) {
-            state.clarificationError = false
-            state.clarificationPending = true
-            state.clarificationMessages.push({
-              role: 'user',
-              content: state.clarificationInput.trim(),
-            })
-            state.clarificationInput = ''
-            createMessage(
-              state,
-              state.clarificationMessages,
-              t(state, 'prompt-context'),
-              t(state, 'prompt-clarification'),
-            ).then(([error, response, result]) => {
-              state.clarificationPending = false
-              if (error) {
-                state.clarificationError = error.toString()
-                const message = state.clarificationMessages.pop()
-                state.clarificationInput = message.content
-                return
-              }
-              state.clarificationMessages.push(result)
-              state.statisticClarificationActivity++
-              onActivity(state)
-            })
-          }
-        },
+        click: handleAsk,
       }, t(state, 'button-ask')),
 
       ...c(
@@ -102,20 +129,13 @@ export const clarification = (
         ),
         n('button', {
           type: 'button',
-          click: () => {
-            state.clarificationError = false
-            state.clarificationMessages = []
-            state.clarificationPending = false
-            // TODO: Should reset the network requests properly.
-          },
+          click: handleReset,
         }, t(state, 'button-reset')),
       ),
 
       n('button', {
         type: 'button',
-        click: () => {
-          setScreen(state, SCREENS.overview)
-        },
+        click: handleBack,
       }, t(state, 'button-go_back')),
     ])
   ]

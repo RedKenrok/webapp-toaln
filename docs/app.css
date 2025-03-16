@@ -343,6 +343,8 @@ textarea.message-user {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .row.reverse {
   flex-direction: row-reverse;

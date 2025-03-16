@@ -6,6 +6,62 @@ import { translate as t } from '../data/translations.js'
 import { SCREENS } from '../data/screens.js'
 import { setScreen } from '../utilities/screen.js'
 
+const handleReading = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.reading)
+}
+
+const handleComprehension = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.comprehension)
+}
+
+const handleVocabulary = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.vocabulary)
+}
+
+const handleConversation = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.conversation)
+}
+
+const handleStory = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.story)
+}
+
+const handleClarification = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.clarification)
+}
+
+const handleOptions = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.options)
+}
+
+const handleMigrate = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.migrate)
+}
+
 export const overview = (
   state,
 ) => [
@@ -16,6 +72,7 @@ export const overview = (
         state.statisticComprehensionActivity > 0
         || state.statisticConversationActivity > 0
         || state.statisticClarificationActivity > 0
+        || state.statisticReadingActivity > 0
         || state.statisticStoryActivity > 0
         || state.statisticVocabularyActivity > 0,
         t(state, 'statistics-activity_per_category'),
@@ -56,14 +113,25 @@ export const overview = (
     }, [
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.comprehension)
-        },
+        click: handleReading,
         type: 'button',
       }, [
         n('span', {
           class: 'icon',
         }, '📖'),
+        n('b', t(state, 'overview-reading-title')),
+        n('br'),
+        t(state, 'overview-reading-description'),
+      ]),
+
+      n('button', {
+        class: 'card',
+        click: handleComprehension,
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '🖊️'),
         n('b', t(state, 'overview-comprehension-title')),
         n('br'),
         t(state, 'overview-comprehension-description'),
@@ -71,9 +139,7 @@ export const overview = (
 
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.vocabulary)
-        },
+        click: handleVocabulary,
         type: 'button',
       }, [
         n('span', {
@@ -86,9 +152,7 @@ export const overview = (
 
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.conversation)
-        },
+        click: handleConversation,
         type: 'button',
       }, [
         n('span', {
@@ -101,9 +165,7 @@ export const overview = (
 
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.story)
-        },
+        click: handleStory,
         type: 'button',
       }, [
         n('span', {
@@ -116,9 +178,7 @@ export const overview = (
 
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.clarification)
-        },
+        click: handleClarification,
         type: 'button',
       }, [
         n('span', {
@@ -135,9 +195,7 @@ export const overview = (
 
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.options)
-        },
+        click: handleOptions,
         type: 'button',
       }, [
         n('span', {
@@ -145,14 +203,12 @@ export const overview = (
         }, '⚙️'),
         n('b', t(state, 'overview-options-title')),
         n('br'),
-        t(state, 'overview-options-description')
+        t(state, 'overview-options-description'),
       ]),
 
       n('button', {
         class: 'card',
-        click: () => {
-          setScreen(state, SCREENS.migrate)
-        },
+        click: handleMigrate,
         type: 'button',
       }, [
         n('span', {
@@ -160,7 +216,7 @@ export const overview = (
         }, '💾'),
         n('b', t(state, 'overview-migrate-title')),
         n('br'),
-        t(state, 'overview-migrate-description')
+        t(state, 'overview-migrate-description'),
       ]),
     ]),
 

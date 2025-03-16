@@ -12,6 +12,97 @@ import {
 } from '../utilities/random.js'
 import { setScreen } from '../utilities/screen.js'
 
+const handleInput = (
+  event,
+  state,
+) => {
+  state.comprehensionInput = event.target.value
+}
+
+const handleAnswer = (
+  _,
+  state,
+) => {
+  if (
+    !state.comprehensionPending &&
+    state.comprehensionInput &&
+    state.comprehensionInput.trim().length > 0
+  ) {
+    state.comprehensionError = false
+    state.comprehensionPending = true
+    state.comprehensionMessages.push({
+      role: 'user',
+      content: state.comprehensionInput.trim(),
+    })
+    state.comprehensionInput = ''
+    createMessage(
+      state,
+      state.comprehensionMessages,
+      t(state, 'prompt-context'),
+      t(state, 'prompt-comprehension-follow_up'),
+    ).then(([error, _, result]) => {
+      state.comprehensionPending = false
+      if (error) {
+        state.comprehensionError = error.toString()
+        const message = state.comprehensionMessages.pop()
+        state.comprehensionInput = message.content
+        return
+      }
+      state.comprehensionMessages.push(result)
+      state.statisticComprehensionActivity++
+      onActivity(state)
+    })
+  }
+}
+
+const handleGenerate = (
+  _,
+  state,
+) => {
+  if (!state.comprehensionPending) {
+    state.comprehensionError = false
+    state.comprehensionMessages = []
+    state.comprehensionPending = true
+    createMessage(
+      state,
+      [],
+      t(state, 'prompt-context'),
+      t(state, 'prompt-comprehension') + (
+        randomBool(10)
+          ? t(state, 'prompt-topic')
+            .replace('{%topic%}', randomItem(
+              state.topicsOfInterest.filter(topic => topic)
+            ))
+          : ''
+      ),
+    ).then(([error, _, result]) => {
+      state.comprehensionPending = false
+      if (error) {
+        state.comprehensionError = error.toString()
+        return
+      }
+      state.comprehensionMessages.push(result)
+    })
+  }
+}
+
+const handleReset = (
+  _,
+  state,
+) => {
+  state.comprehensionError = false
+  state.comprehensionInput = ''
+  state.comprehensionMessages = []
+  state.comprehensionPending = false
+}
+
+const handleBack = (
+  _,
+  state,
+) => {
+  setScreen(state, SCREENS.overview)
+}
+
 export const comprehension = (
   state,
 ) => [
@@ -28,11 +119,15 @@ export const comprehension = (
         class: 'messages',
       }, state.comprehensionMessages.map(
         (message) => n('p', {
-          class: 'message-' + message?.role
-        }, message?.content?.split('\n')?.flatMap(
-          (content, index, results) =>
-            index === results.length - 1 ? [content] : [content, n('br')]
-        )),
+          class: 'message-' + message?.role,
+        }, message?.content?.split('\n')
+          ?.flatMap(
+            (content, index, results) =>
+              index === results.length - 1
+                ? [content]
+                : [content, n('br')]
+          ),
+        ),
       )),
     ),
 
@@ -53,9 +148,7 @@ export const comprehension = (
         n('textarea', {
           class: 'message-user',
           id: 'input-question',
-          keyup: (event) => {
-            state.comprehensionInput = event.target.value
-          },
+          keyup: handleInput,
         }, state.comprehensionInput),
       ),
     ),
@@ -74,69 +167,12 @@ export const comprehension = (
             || state.comprehensionInput.trim().length === 0
           ),
           type: 'button',
-          click: () => {
-            if (
-              !state.comprehensionPending
-              && state.comprehensionInput
-              && state.comprehensionInput.trim().length > 0
-            ) {
-              state.comprehensionError = false
-              state.comprehensionPending = true
-              state.comprehensionMessages.push({
-                role: 'user',
-                content: state.comprehensionInput.trim(),
-              })
-              state.comprehensionInput = ''
-              createMessage(
-                state,
-                state.comprehensionMessages,
-                t(state, 'prompt-context'),
-                t(state, 'prompt-comprehension-follow_up'),
-              ).then(([error, response, result]) => {
-                state.comprehensionPending = false
-                if (error) {
-                  state.comprehensionError = error.toString()
-                  const message = state.comprehensionMessages.pop()
-                  state.comprehensionInput = message.content
-                  return
-                }
-                state.comprehensionMessages.push(result)
-                state.statisticComprehensionActivity++
-                onActivity(state)
-              })
-            }
-          },
+          click: handleAnswer,
         }, t(state, 'button-answer')),
         n('button', {
           disabled: state.comprehensionPending,
           type: 'button',
-          click: () => {
-            if (!state.comprehensionPending) {
-              state.comprehensionError = false
-              state.comprehensionMessages = []
-              state.comprehensionPending = true
-              createMessage(
-                state,
-                [],
-                t(state, 'prompt-context'),
-                t(state, 'prompt-comprehension') + (
-                  randomBool(10)
-                    ? t(state, 'prompt-topic')
-                      .replace('{%topic%}', randomItem(
-                        state.topicsOfInterest.filter(topic => topic)
-                      ))
-                    : ''
-                ),
-              ).then(([error, response, result]) => {
-                state.comprehensionPending = false
-                if (error) {
-                  state.comprehensionError = error.toString()
-                  return
-                }
-                state.comprehensionMessages.push(result)
-              })
-            }
-          },
+          click: handleGenerate,
         }, t(state, 'button-generate')),
       ),
 
@@ -147,20 +183,13 @@ export const comprehension = (
           && state.comprehensionMessages.length > 0
         ),
         n('button', {
-          click: () => {
-            state.comprehensionError = false
-            state.comprehensionMessages = []
-            state.comprehensionPending = false
-            // TODO: Should reset the network requests properly.
-          },
+          click: handleReset,
           type: 'button',
         }, t(state, 'button-reset')),
       ),
 
       n('button', {
-        click: () => {
-          setScreen(state, SCREENS.overview)
-        },
+        click: handleBack,
         type: 'button',
       }, t(state, 'button-go_back')),
     ])

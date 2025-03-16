@@ -857,13 +857,15 @@
   };
 
   // src/utilities/singleton.js
-  var createSingleton = (createMethod) => {
-    let instance = null;
+  var callOnce = (method) => {
+    let called = false;
+    let result = null;
     return () => {
-      if (!instance) {
-        instance = createMethod();
+      if (!called) {
+        called = true;
+        result = method();
       }
-      return instance;
+      return result;
     };
   };
 
@@ -878,7 +880,7 @@
       "(old)"
     ].some((keyword) => model.name.toLowerCase().includes(keyword))
   });
-  var _createMessage = createSingleton(
+  var _createMessage = callOnce(
     () => create({
       credentials: "same-origin",
       domain: "https://api.anthropic.com",
@@ -921,7 +923,7 @@
       return [error, response, result];
     });
   };
-  var _getModels = createSingleton(
+  var _getModels = callOnce(
     () => create({
       credentials: "same-origin",
       domain: "https://api.anthropic.com",
@@ -966,7 +968,7 @@
     //   && !model.id.match(/-(?:\d){4}$/)
     //   && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
   });
-  var _createMessage2 = createSingleton(
+  var _createMessage2 = callOnce(
     () => create({
       method: "post",
       domain: "https://api.deepseek.com",
@@ -1009,7 +1011,7 @@
       return [error, response, result];
     });
   };
-  var _getModels2 = createSingleton(
+  var _getModels2 = callOnce(
     () => create({
       domain: "https://api.deepseek.com",
       path: "/v1/models",
@@ -1042,7 +1044,7 @@
       "1.5"
     ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){3,4}$/) && !model.id.match(/-(?:\d){2}-(?:\d){2}$/)
   });
-  var _createMessage3 = createSingleton(
+  var _createMessage3 = callOnce(
     () => create({
       domain: "https://generativelanguage.googleapis.com",
       headers: {
@@ -1079,7 +1081,7 @@
       return [error, response, result];
     });
   };
-  var _getModels3 = createSingleton(
+  var _getModels3 = callOnce(
     () => create({
       domain: "https://generativelanguage.googleapis.com",
       headers: {
@@ -1119,7 +1121,7 @@
       "whisper-"
     ].some((keyword) => model.id.toLowerCase().includes(keyword)) && !model.id.match(/-(?:\d){4}$/) && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
   });
-  var _createMessage4 = createSingleton(
+  var _createMessage4 = callOnce(
     () => create({
       method: "post",
       domain: "https://api.openai.com",
@@ -1163,7 +1165,7 @@
       return [error, response, result];
     });
   };
-  var _getModels4 = createSingleton(
+  var _getModels4 = callOnce(
     () => create({
       domain: "https://api.openai.com",
       path: "/v1/models",
@@ -1187,8 +1189,8 @@
   });
   var callApi = (lookupTable, state2, ...parameters) => {
     let method = null;
-    if (state2.apiCode) {
-      method = lookupTable[state2.apiCode];
+    if (state2.apiProvider) {
+      method = lookupTable[state2.apiProvider];
     }
     if (method) {
       return method(state2, ...parameters);
@@ -1210,8 +1212,8 @@
     [APIS.open_ai.code]: getModels4
   }, state2);
   var isReady = (state2) => {
-    return state2.apiCode && APIS[state2.apiCode] && (!APIS[state2.apiCode]?.requireCredentials || state2.apiCredentialsTested) && (state2.apiModel ?? APIS[state2.apiCode].preferredModel) && state2.apiModels?.data?.some(
-      (model) => model.id === (state2.apiModel ?? APIS[state2.apiCode].preferredModel)
+    return state2.apiProvider && APIS[state2.apiProvider] && (!APIS[state2.apiProvider]?.requireCredentials || state2.apiCredentialsTested) && (state2.apiModel ?? APIS[state2.apiProvider].preferredModel) && state2.apiModels?.data?.some(
+      (model) => model.id === (state2.apiModel ?? APIS[state2.apiProvider].preferredModel)
     );
   };
 
@@ -1239,6 +1241,8 @@
     // Norwegian (Nynorsk)
     nob: "nob",
     // Norwegian (Bokmål)
+    por: "por",
+    // Portuguese
     spa: "spa",
     // Spanish
     swe: "swe",
@@ -1267,6 +1271,12 @@
     }
     return preferredLanguage;
   }, null) ?? LOCALES.eng;
+  var setLangAttribute = (state2) => {
+    document.documentElement.setAttribute(
+      "lang",
+      state2.sourceLocale
+    );
+  };
   var PROFICIENCY_LEVELS = Object.freeze({
     a1: "a1",
     a2: "a2",
@@ -1286,9 +1296,13 @@
     clarification: "clarification",
     comprehension: "comprehension",
     conversation: "conversation",
+    reading: "reading",
     story: "story",
     vocabulary: "vocabulary"
   });
+
+  // src/data/state.js
+  var STORAGE_KEY = "toaln:state";
 
   // src/data/translations.js
   var translate = (state2, key, locale = null) => {
@@ -1353,6 +1367,7 @@
       [LOCALES.nld]: "Dutch",
       [LOCALES.nno]: "Norwegian (Nynorsk)",
       [LOCALES.nob]: "Norwegian (Bokm\xE5l)",
+      [LOCALES.por]: "Portuguese",
       [LOCALES.spa]: "Spanish",
       [LOCALES.swe]: "Swedish",
       [LOCALES.ita]: "Italian",
@@ -1417,6 +1432,8 @@
       "prompt-conversation": "You will simulate a conversation with the user in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings. Write the first message in the conversation, immediately introducing a topic to discuss.",
       "prompt-conversation-follow_up": "You are simulating a conversation with the user in {%t:{%s:targetLocale%}%}. First, provide brief, in-depth feedback on the message in {%t:{%s:sourceLocale%}%}, focusing solely on linguistic aspects and ignoring any content-related evaluations or interpretations. Then, respond to the message in {%t:{%s:targetLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, or headings.",
       "prompt-clarification": "The user has a question below, answer it concisely with in-depth feedback, appropriate to the user's proficiency level. Answer the question {%t:{%s:sourceLocale%}%} and provide examples in {%t:{%s:targetLocale%}%} where appropriate. Always write in plain text without any formatting, labels, or headings. Do not answer the question if it is not language-related.",
+      "prompt-reading": "Write a text in {%t:{%s:targetLocale%}%}, but for every paragraph written write the same paragraph below in {%t:{%s:sourceLocale%}%} as well. Always write in plain text without any formatting, labels, or headings.",
+      "prompt-reading-topic": "The generate text should be about the following topic:",
       "prompt-story": "You and the user will collaboratively write a story by taking turns adding sections. Begin by writing the first section of the story in {%t:{%s:targetLocale%}%}, introducing an engaging theme or setting. Focus on having fun and practising the language. Do not include any additional instructions, explanations, formatting, labels, or headings.",
       "prompt-story-follow_up": "You are continuing the collaborative story-writing session with the user. First, provide concise, in-depth feedback in {%t:{%s:sourceLocale%}%} on the user's latest section, focusing solely on linguistic aspects and suggesting improvements. Avoid any comments about the story's plot, logic, or content. Then, add your next section of the story in {%t:{%s:targetLocale%}%}. Write your response in plain text without any formatting, labels, or headings.",
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
@@ -1436,7 +1453,7 @@
       "setup-target_language": "Now the next step, which language would you like to learn?",
       "setup-proficiency_level": "How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
       "setup-topics_of_interest": "It's much more enjoyable if the exercises sometimes feature a topic you find interesting. Therefore, fill in a few topics below that can regularly appear. Think mainly of any hobbies or other interests. The more, the better!",
-      "setup-api_code": `This app uses a "Large Language Model" to generate and assess exercises. You may have heard about it, everyone in the tech sector keeps talking about developments in artificial intelligence. The app uses an LLM, but doesn't come with one, so we need to link it to an LLM provider. Which provider would you like to use?`,
+      "setup-api_provider": `This app uses a "Large Language Model" to generate and assess exercises. You may have heard about it, everyone in the tech sector keeps talking about developments in artificial intelligence. The app uses an LLM, but doesn't come with one, so we need to link it to an LLM provider. Which provider would you like to use?`,
       "setup-api_credentials": "Now, the important question is the key. You can get it from the developer's dashboard. It probably states that you shouldn't share it with third parties. Fortunately, this app never sends the key elsewhere. Still not convinced? Check out the app's source code or wait for a version that no longer requires this.",
       "setup-test_api_credentials": "Test key",
       "setup-api_credentials_untested": "Test the credentials before proceeding.",
@@ -1444,25 +1461,27 @@
       "setup-outro": "Good luck and have fun!",
       "setup-next": "Start practising",
       "overview-intro": "What would you like to do?",
-      "overview-comprehension-title": "Answer questions",
-      "overview-comprehension-description": "You'll receive a short text along with a question to answer.",
-      "overview-vocabulary-title": "Learn words",
-      "overview-vocabulary-description": "You'll receive a word together with its definition, you then respond with a with a sentence using that word.",
-      "overview-conversation-title": "Practise conversations",
-      "overview-conversation-description": "A short conversation will be simulated, for example about ordering food or discussing a hobby.",
-      "overview-clarification-title": "Ask for clarification",
       "overview-clarification-description": "Get explanations about {%t:{%s:targetLanguage%}%}, such as a grammar rule like conjugations or cases.",
-      "overview-story-title": "Write a story",
-      "overview-story-description": "You'll take turns writing a story piece by piece.",
-      "overview-options-title": "Change settings",
-      "overview-options-description": "Change the language you want to learn, the topics you find interesting, or the LLM used.",
-      "overview-migrate-title": "Manage data",
+      "overview-clarification-title": "Ask for clarification",
+      "overview-comprehension-description": "You'll receive a short text along with a question to answer.",
+      "overview-comprehension-title": "Answer questions",
+      "overview-conversation-description": "A short conversation will be simulated, for example about ordering food or discussing a hobby.",
+      "overview-conversation-title": "Practise conversations",
       "overview-migrate-description": "Export, import or reset your data.",
+      "overview-migrate-title": "Manage data",
+      "overview-options-description": "Change the language you want to learn, the topics you find interesting, or the LLM used.",
+      "overview-options-title": "Change settings",
+      "overview-reading-description": "You can generate a text where each paragraph is available in both languages.",
+      "overview-reading-title": "Reading texts",
+      "overview-story-description": "You'll take turns writing a story piece by piece.",
+      "overview-story-title": "Write a story",
+      "overview-vocabulary-description": "You'll receive a word together with its definition, you then respond with a with a sentence using that word.",
+      "overview-vocabulary-title": "Learn words",
       "options-source_language": "Which language do you already know?",
       "options-target_language": "Which language would you like to learn?",
       "options-proficiency_level": "How proficient are you in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
       "options-topics_of_interest": "Fill in a few topics below that can regularly appear in the exercises.",
-      "options-api_code": 'This app uses a "Large Language Model" to generate and assess exercises. Which provider would you like to link?',
+      "options-api_provider": 'This app uses a "Large Language Model" to generate and assess exercises. Which provider would you like to link?',
       "options-api_credentials": "Enter the key from the developer's dashboard.",
       "options-test_api_credentials": "Test key",
       "options-api_credentials_untested": "Test the credentials before proceeding.",
@@ -1474,9 +1493,9 @@
       "migrate-reset": "Remove all the data and reset the app. Once performed this action can not be undone.",
       "migrate-reset_button": "Reset",
       "migrate-reset_button-confirmation": "I confirm that I am absolutely certain I want to reset!",
-      "statistics-activity_per_category": "You have already answered {%s:statisticComprehensionActivity%} questions,  {%s:statisticVocabularyActivity%} words practised, sent {%s:statisticConversationActivity%} messages, told {%s:statisticStoryActivity%} stories, and asked {%s:statisticClarificationActivity%} questions.",
+      "statistics-activity_per_category": "You have already read {%s:statisticReadingActivity%} texts, answered {%s:statisticComprehensionActivity%} questions, {%s:statisticVocabularyActivity%} words practised, sent {%s:statisticConversationActivity%} messages, told {%s:statisticStoryActivity%} stories, and asked {%s:statisticClarificationActivity%} questions.",
       "statistics-no_activity": "Unfortunately, you haven't completed enough activities yet to display here. Go to the overview and choose an exercise to start. Your progress will be tracked in the background.",
-      "statistics-no_activity_streak": "You currently have no ongoing activity streak. You can build one by completing at least one exercise on multiple consecutive days.",
+      "statistics-no_activity_streak": "Currently you have no ongoing activity streak. You can build one by completing at least one exercise on consecutive days.",
       "statistics-current_activity_streak": "Your current activity streak is {%s:statisticCurrentActivityStreak%} days long. Don't loose it and practise before midnight to extend it!",
       "statistics-extended_activity_streak": "Good job, you extended your streak for today! Your current activity streak is {%s:statisticCurrentActivityStreak%} days long.",
       "statistics-longest_activity_streak": "Your longest activity streak ever was {%s:statisticLongestActivityStreak%} days long.",
@@ -1484,6 +1503,8 @@
       "clarification-placeholder": "I'm wondering about...",
       "comprehension-intro": "In a moment you'll read a text in {%t:{%s:targetLanguage%}%} along with a question about it. Answer the question in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer.",
       "conversation-intro": "In a moment you'll simulate a conversation in {%t:{%s:targetLanguage%}%}, so always respond in {%t:{%s:targetLanguage%}%}. You may receive feedback along the way.",
+      "reading-intro": "You will be reading a text where each paragraph is written in both {%t:{%s:targetLanguage%}%} and {%t:{%s:sourceLanguage%}%} allowing you to practise your reading. You can optionally provide a topic for the text to be about.",
+      "reading-placeholder": "I want to read about...",
       "story-intro": "You're about to write a story in {%t:{%s:targetLanguage%}%} where, in turns, you add a piece. Don't worry about whether the story is good, logical, or well-founded; just make sure you practice the language. Therefore, always respond in {%t:{%s:targetLanguage%}%}. In between, you might receive some feedback on your writing.",
       "vocabulary-intro": "In a moment you'll read a word together with its definition in {%t:{%s:targetLanguage%}%}. Answer with a scentence that uses the word in {%t:{%s:targetLanguage%}%}. You'll then receive some feedback regarding your answer."
     },
@@ -1499,6 +1520,7 @@
       [LOCALES.nld]: "Nederlands",
       [LOCALES.nno]: "Noors (Nynorsk)",
       [LOCALES.nob]: "Noors (Bokm\xE5l)",
+      [LOCALES.por]: "Portugees",
       [LOCALES.spa]: "Spaans",
       [LOCALES.swe]: "Zweeds",
       [LOCALES.vls]: "Vlaams",
@@ -1544,6 +1566,8 @@
       "prompt-conversation": "Je gaat met de gebruiker een gesprek simuleren in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Schrijf het eerste bericht in een gesprek dat al gelijk een onderwerp introduceert om het over te hebben.",
       "prompt-conversation-follow_up": "Je bent met de gebruiker een gesprek aan het simuleren in het {%t:{%s:targetLocale%}%}. Geef als antwoord op een bericht eerst beknopt feedback met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Ga daarna verder met het antwoorden op het bericht in het {%t:{%s:targetLocale%}%}. Geef geen verdere instructies of uitleg aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten.",
       "prompt-clarification": "De gebruiker heeft onderstaande vraag, beantwoord de vraag beknopt met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Beantwoord de vraag in het {%t:{%s:sourceLocale%}%} geef voorbeelden in het {%t:{%s:targetLocale%}%} waar nodig. Schrijf altijd in platte tekst zonder enige opmaak, labels of kopteksten. Beantwoord de vraag niet als het absoluut niet taal gerelateerd is.",
+      "prompt-reading": "Schrijf een tekst in {%t:{%s:targetLocale%}%}, maar schrijf na elke geschreven alinea dezelfde alinea eronder in {%t:{%s:sourceLocale%}%}. Schrijf altijd in platte tekst zonder opmaak, labels of kopjes.",
+      "prompt-reading-topic": "De gegenereerde tekst moet over het volgende onderwerp gaan:",
       "prompt-story": "Jij en de gebruiker gaan samen een verhaal schrijven door om de beurt een gedeelte toe te voegen. Begin met het schrijven van de eerste sectie van het verhaal in {%t:{%s:targetLocale%}%}, waarin je een boeiend thema of een interessante setting introduceert. Richt je op plezier hebben en het oefenen van de taal. Voeg geen extra instructies, uitleg, opmaak, labels of koppen toe.",
       "prompt-story-follow_up": "Je zet de gezamenlijke sessie voor het schrijven van een verhaal met de gebruiker voort. Geef eerst korte, diepgaande feedback in {%t:{%s:sourceLocale%}%} op de laatste bijdrage van de gebruiker, waarbij je je uitsluitend richt op taalkundige aspecten en suggesties voor verbetering geeft. Maak geen opmerkingen over de plot, logica of inhoud van het verhaal. Voeg daarna jouw volgende gedeelte van het verhaal toe in {%t:{%s:targetLocale%}%}. Schrijf je antwoord in platte tekst zonder opmaak, labels of koppen.",
       "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
@@ -1563,7 +1587,7 @@
       "setup-target_language": "Nu het volgende probleem, welke taal wil je leren?",
       "setup-proficiency_level": "Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
       "setup-topics_of_interest": "Het is natuurlijk veel leuker als er af en toe een onderwerp voorbij komt wat je interessant vind. Vul daarom hieronder een aantal onderwerpen in die regelmatig terug kunnen komen. Denk hierbij vooral aan enige hobbies of andere interesses. Des te meer des te beter!",
-      "setup-api_code": 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model". Je hebt er vast wel van gehoord, iedereen in de technologie sector houdt maar niet op over de ontwikkelingen in kunstmatige intelligentie. De app maakt dus gebruik van een LLM om de oefening te maken en te beoordelen. Helaas komt de app niet zelf met een eentje, dus moeten we een koppeling maken met een LLM. Met welke aanbieder wil je een koppeling maken?',
+      "setup-api_provider": 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model". Je hebt er vast wel van gehoord, iedereen in de technologie sector houdt maar niet op over de ontwikkelingen in kunstmatige intelligentie. De app maakt dus gebruik van een LLM om de oefening te maken en te beoordelen. Helaas komt de app niet zelf met een eentje, dus moeten we een koppeling maken met een LLM. Met welke aanbieder wil je een koppeling maken?',
       "setup-api_credentials": "Nu is de grote vraag nog de sleutel. Deze kun je bij het ontwikkelaars paneel. Er staat waarschijnlijk al bij vermeld dat je deze niet met derden moet delen. Gelukkig stuurt deze app nooit de sleutel door. Vertrouw je het toch niet? Bekijk dan de brondcode van deze app, of wacht wellicht tot er een variant gemaakt is waarbij dat niet meer nodig is.",
       "setup-test_api_credentials": "Sleutel testen",
       "setup-api_credentials_untested": "Test de gegevens eerst voordat je verder gaat.",
@@ -1571,25 +1595,27 @@
       "setup-outro": "Heel veel succes en plezier!",
       "setup-next": "Begin met oefenen",
       "overview-intro": "Wat wil je gaan doen?",
-      "overview-comprehension-title": "Beantwoord vragen",
-      "overview-comprehension-description": "Je krijgt een korte tekst samen met een vraag die je kan beantwoorden.",
-      "overview-vocabulary-title": "Leer woorden",
-      "overview-vocabulary-description": "Je krijgt een woord samen met de definitie ervan vervolgens schrijf je een zin dat dit woord gebruikt.",
-      "overview-conversation-title": "Oefen gesprekken",
-      "overview-conversation-description": "Er zal een kort gesprekje gespeeld worden over bijvoorbeeld het bestellen van eten of over een hobby.",
-      "overview-clarification-title": "Vraag om uitleg",
       "overview-clarification-description": "Krijg verduidelijk over het {%t:{%s:targetLanguage%}%}, bijvoorbeeld een grammatica regel zoals vervoegingen en naamvallen.",
-      "overview-story-title": "Schrijf een verhaal",
-      "overview-story-description": "Je gaat omste beurten stukje voor stukje een verhaal schrijven.",
-      "overview-options-title": "Pas instellingen aan",
-      "overview-options-description": "Pas aan welke taal je wilt leren, welke onderwerpen je interessant vind of welke LLM gebruikt wordt.",
-      "overview-migrate-title": "Gegevens beheren",
+      "overview-clarification-title": "Vraag om uitleg",
+      "overview-comprehension-description": "Je krijgt een korte tekst samen met een vraag die je kan beantwoorden.",
+      "overview-comprehension-title": "Beantwoord vragen",
+      "overview-conversation-description": "Er zal een kort gesprekje gespeeld worden over bijvoorbeeld het bestellen van eten of over een hobby.",
+      "overview-conversation-title": "Oefen gesprekken",
       "overview-migrate-description": "Exporteer, importeer of reset uw gegevens.",
+      "overview-migrate-title": "Gegevens beheren",
+      "overview-options-description": "Pas aan welke taal je wilt leren, welke onderwerpen je interessant vind of welke LLM gebruikt wordt.",
+      "overview-options-title": "Pas instellingen aan",
+      "overview-reading-description": "Je kunt een tekst genereren waarbij elke alinea in beide talen beschikbaar is.",
+      "overview-reading-title": "Leesteksten",
+      "overview-story-description": "Je gaat omste beurten stukje voor stukje een verhaal schrijven.",
+      "overview-story-title": "Schrijf een verhaal",
+      "overview-vocabulary-description": "Je krijgt een woord samen met de definitie ervan vervolgens schrijf je een zin dat dit woord gebruikt.",
+      "overview-vocabulary-title": "Leer woorden",
       "options-source_language": "Welke taal ken je al?",
       "options-target_language": "Welke taal wil je leren?",
       "options-proficiency_level": "Hoe vaardig ben je al in de taal? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
       "options-topics_of_interest": "Vul hieronder een aantal onderwerpen in die regelmatig terug kunnen komen in de oefening.",
-      "options-api_code": 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model" om de oefening te maken en te beoordelen. Met welke aanbieder wil je een koppeling maken?',
+      "options-api_provider": 'Om te oefenen wordt gebruik gemaakt van een "Large Language Model" om de oefening te maken en te beoordelen. Met welke aanbieder wil je een koppeling maken?',
       "options-api_credentials": "Voer de sleutel uit het ontwikkelaars paneel in.",
       "options-test_api_credentials": "Sleutel testen",
       "options-api_credentials_untested": "Test de gegevens eerst voordat je verder gaat.",
@@ -1601,9 +1627,9 @@
       "migrate-reset": "Verwijder alle gegevens en reset de app. Eenmaal uitgevoerd kan deze actie niet ongedaan worden gemaakt.",
       "migrate-reset_button": "Reset",
       "migrate-reset_button-confirmation": "Ik bevestig dat ik absoluut zeker ben dat ik wil resetten!",
-      "statistics-activity_per_category": " Je hebt al {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.",
+      "statistics-activity_per_category": " Je hebt al {%s:statisticReadingActivity%} teksten gelezen, {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.",
       "statistics-no_activity": "Je hebt helaas nog niet genoeg activiteiten gedaan om hier weer te geven. Ga naar het overzicht en kies een oefening om te beginnen, op de achtergrond zal bijgehouden worden hoeveel je er al voltooid hebt.",
-      "statistics-no_activity_streak": "Je hebt op dit momenten geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal \xE9\xE9n oefening te doen.",
+      "statistics-no_activity_streak": "Op dit moment heb je geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal \xE9\xE9n oefening te doen.",
       "statistics-current_activity_streak": "Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang. Verlies het niet en zorg ervoor dat je voor middernacht oefend!",
       "statistics-extended_activity_streak": "Goed gedaan, je hebt jouw reeks voor vandaag verlengt! Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang.",
       "statistics-longest_activity_streak": " Jouw langste activiteitenreeks ooit was {%s:statisticLongestActivityStreak%} dagen lang.",
@@ -1611,6 +1637,8 @@
       "clarification-placeholder": "Ik vraag mij af...",
       "comprehension-intro": "Je leest straks een tekst in het {%t:{%s:targetLanguage%}%} samen met een vraag erover, beantwoord de vraag in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord.",
       "conversation-intro": "Je gaat straks een gesprek simuleren in het {%t:{%s:targetLanguage%}%} zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
+      "reading-intro": "Je zult een tekst lezen waarbij elke alinea zowel in {%t:{%s:targetLanguage%}%} als in {%t:{%s:sourceLanguage%}%} is geschreven, waardoor je je leesvaardigheid kunt oefenen. Je kunt optioneel een onderwerp opgeven waar de tekst over moet gaan.",
+      "reading-placeholder": "Ik wil lezen over...",
       "story-intro": "Je gaat straks een verhaal schrijven in het {%t:{%s:targetLanguage%}%} waarbij je omste beurten een stuk toevoegd. Maak je geen zorgen of het verhaal een goed, logisch en gegrond verhaal is, maar zorg vooral dat je de taal oefened. Zorg daarom dat je ook altijd in het {%t:{%s:targetLanguage%}%} antwoord. Tussendoor zal je enige verbeterpunten kunnen ontvangen.",
       "vocabulary-intro": "Je leest straks een woord samen met de definitie ervan in het {%t:{%s:targetLanguage%}%}. Antwoord met een zin waar het woord ingebruikt wordt in het {%t:{%s:targetLanguage%}%}. Vervolgens zal je enige verbeterpunten krijgen over jouw antwoord."
     }
@@ -1618,9 +1646,12 @@
   var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
   // src/screens/sections/update-banner.js
+  var handleClick = () => {
+    window.location.reload();
+  };
   var updateBanner = (state2) => conditional(state2.appUpdateAvailable, [
     node("button", {
-      click: () => window.location.reload()
+      click: handleClick
     }, translate(state2, "banner-update_now")),
     node("div", {
       class: "margin"
@@ -1706,7 +1737,7 @@
           } catch (error) {
             state2.migrateImportError = error.toString();
           }
-          location.reload();
+          window.location.reload();
         });
         reader.readAsText(file);
       }
@@ -1721,10 +1752,8 @@
       state2.migrateReset = true;
       return;
     }
-    for (const key in state2) {
-      delete state2[key];
-    }
-    location.reload();
+    window.localStorage.setItem(STORAGE_KEY, null);
+    window.location.reload();
   };
   var handleBack = (_, state2) => {
     state2.migrateReset = false;
@@ -1762,6 +1791,65 @@
   ];
 
   // src/screens/options.js
+  var handleSourceLanguage = (event, state2) => {
+    if (state2.sourceLocale !== event.target.selectedOptions[0].value) {
+      state2.sourceLocale = event.target.selectedOptions[0].value;
+      state2.sourceLanguage = getLanguageFromLocale(state2.sourceLocale);
+      setLangAttribute(state2);
+    }
+  };
+  var handleTargetLanguage = (event, state2) => {
+    if (state2.targetLocale !== event.target.selectedOptions[0].value) {
+      state2.targetLocale = event.target.selectedOptions[0].value;
+      state2.targetLanguage = getLanguageFromLocale(state2.targetLocale);
+    }
+  };
+  var handleProficiencyLevel = (event, state2) => {
+    if (state2.proficiencyLevel !== event.target.selectedOptions[0].value) {
+      state2.proficiencyLevel = event.target.selectedOptions[0].value;
+    }
+  };
+  var handleNewTopic = (event, state2) => {
+    if (event.target.value) {
+      state2.topicsOfInterest.push(event.target.value);
+    }
+  };
+  var handleApiProvider = (event, state2) => {
+    if (state2.apiProvider !== event.target.selectedOptions[0].value) {
+      state2.apiProvider = event.target.selectedOptions[0].value;
+      state2.apiCredentialsTested = false;
+    }
+  };
+  var handleApiCredentials = (event, state2) => {
+    if (state2.apiCredentials !== event.target.value) {
+      state2.apiCredentials = event.target.value;
+    }
+  };
+  var handleApiCredentialsTest = (_, state2) => {
+    state2.apiCredentialsPending = true;
+    getModels5(state2).then(([error, , result]) => {
+      state2.apiCredentialsPending = false;
+      if (error) {
+        state2.apiCredentialsTested = false;
+        state2.apiCredentialsError = error.toString();
+        state2.apiModels = null;
+      } else {
+        state2.apiCredentialsTested = true;
+        state2.apiCredentialsError = false;
+        state2.apiModels = result;
+      }
+    });
+  };
+  var handleApiModel = (event, state2) => {
+    if (state2.apiModel !== event.target.selectedOptions[0].value) {
+      state2.apiModel = event.target.selectedOptions[0].value;
+    }
+  };
+  var handleGoBack = (_, state2) => {
+    if (isReady(state2)) {
+      setScreen(state2, SCREENS.overview);
+    }
+  };
   var options = (state2) => [
     node("b", translate(state2, "greeting")),
     node("label", {
@@ -1769,12 +1857,7 @@
     }, translate(state2, "options-source_language")),
     node("select", {
       id: "select_source_language",
-      change: (event) => {
-        if (state2.sourceLocale !== event.target.selectedOptions[0].value) {
-          state2.sourceLocale = event.target.selectedOptions[0].value;
-          state2.sourceLanguage = getLanguageFromLocale(state2.sourceLocale);
-        }
-      }
+      change: handleSourceLanguage
     }, TRANSLATABLE_CODES.map(
       (localeCode) => node("option", {
         selected: state2.sourceLocale === localeCode ? "selected" : false,
@@ -1786,12 +1869,7 @@
     }, translate(state2, "options-target_language")),
     node("select", {
       id: "select_target_language",
-      change: (event) => {
-        if (state2.targetLocale !== event.target.selectedOptions[0].value) {
-          state2.targetLocale = event.target.selectedOptions[0].value;
-          state2.targetLanguage = getLanguageFromLocale(state2.targetLocale);
-        }
-      }
+      change: handleTargetLanguage
     }, LOCALE_CODES.map(
       (localeCode) => node("option", {
         selected: state2.targetLocale === localeCode ? "selected" : false,
@@ -1803,21 +1881,14 @@
     }, translate(state2, "options-proficiency_level")),
     node("select", {
       id: "select_proficiency_level",
-      change: (event) => {
-        if (state2.proficiencyLevel !== event.target.selectedOptions[0].value) {
-          state2.proficiencyLevel = event.target.selectedOptions[0].value;
-        }
-      }
+      change: handleProficiencyLevel
     }, PROFICIENCY_LEVEL_CODES.map(
       (proficiencyLevel) => node("option", {
         selected: state2.proficiencyLevel === proficiencyLevel ? "selected" : false,
         value: proficiencyLevel
       }, translate(state2, "proficiency_name-" + proficiencyLevel))
     )),
-    node(
-      "ul",
-      translate(state2, "proficiency_description-" + state2.proficiencyLevel).map((text) => node("li", text))
-    ),
+    node("ul", translate(state2, "proficiency_description-" + state2.proficiencyLevel).map((text) => node("li", text))),
     node(
       "blockquote",
       node("p", conditional(
@@ -1842,64 +1913,37 @@
       })
     ),
     node("input", {
-      keyup: (event) => {
-        if (event.target.value) {
-          state2.topicsOfInterest.push(event.target.value);
-        }
-      },
+      keyup: handleNewTopic,
       id: "input_topics_of_interest"
     }),
     node("label", {
-      for: "select_api_code"
-    }, translate(state2, "options-api_code")),
+      for: "select_api_provider"
+    }, translate(state2, "options-api_provider")),
     node("select", {
-      id: "select_api_code",
-      change: (event) => {
-        if (state2.apiCode !== event.target.selectedOptions[0].value) {
-          state2.apiCode = event.target.selectedOptions[0].value;
-          state2.apiCredentialsTested = false;
-        }
-      }
+      id: "select_api_provider",
+      change: handleApiProvider
     }, Object.keys(APIS).map(
-      (apiCode) => node("option", {
-        selected: state2.apiCode === apiCode ? "selected" : false,
-        value: apiCode
-      }, APIS[apiCode].name)
+      (apiProvider) => node("option", {
+        selected: state2.apiProvider === apiProvider ? "selected" : false,
+        value: apiProvider
+      }, APIS[apiProvider].name)
     )),
     ...conditional(
-      APIS[state2.apiCode]?.requireCredentials,
+      APIS[state2.apiProvider]?.requireCredentials,
       [
         node("label", {
           for: "input-api_credentials"
         }, translate(state2, "options-api_credentials")),
         node("input", {
           id: "input-api_credentials",
-          keyup: (event) => {
-            if (state2.apiCredentials !== event.target.value) {
-              state2.apiCredentials = event.target.value;
-            }
-          },
+          keyup: handleApiCredentials,
           type: "password",
           value: state2.apiCredentials
         })
       ]
     ),
     node("button", {
-      click: () => {
-        state2.apiCredentialsPending = true;
-        getModels5(state2).then(([error, response, result]) => {
-          state2.apiCredentialsPending = false;
-          if (error) {
-            state2.apiCredentialsTested = false;
-            state2.apiCredentialsError = error.toString();
-            state2.apiModels = null;
-          } else {
-            state2.apiCredentialsTested = true;
-            state2.apiCredentialsError = false;
-            state2.apiModels = result;
-          }
-        });
-      },
+      click: handleApiCredentialsTest,
       type: "button"
     }, [
       translate(state2, "options-test_api_credentials"),
@@ -1917,45 +1961,61 @@
       [
         node("label", {
           for: "select_api_model"
-        }, translate(state2, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state2.apiCode]?.preferredModelName ?? APIS[state2.apiCode]?.preferredModel)),
+        }, translate(state2, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state2.apiProvider]?.preferredModelName ?? APIS[state2.apiProvider]?.preferredModel)),
         node("select", {
           id: "select_api_model",
-          change: (event) => {
-            if (state2.apiModel !== event.target.selectedOptions[0].value) {
-              state2.apiModel = event.target.selectedOptions[0].value;
-            }
-          }
+          change: handleApiModel
         }, [
           node("option", {
             disabled: true,
             selected: !isReady(state2) ? "selected" : false,
             value: null
           }, translate(state2, "select_an_option")),
-          ...state2.apiModels?.data?.filter(APIS[state2.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
-            selected: (state2.apiModel ?? APIS[state2.apiCode].preferredModel) === model.id ? "selected" : false,
+          ...state2.apiModels?.data?.filter(APIS[state2.apiProvider].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+            selected: (state2.apiModel ?? APIS[state2.apiProvider].preferredModel) === model.id ? "selected" : false,
             value: model.id
           }, model.name ?? model.id)) ?? []
         ])
       ]
     ),
     node("button", {
-      click: () => {
-        if (isReady(state2)) {
-          setScreen(state2, SCREENS.overview);
-        }
-      },
+      click: handleGoBack,
       disabled: !isReady(state2),
       type: "button"
     }, translate(state2, "button-go_back"))
   ];
 
   // src/screens/overview.js
+  var handleReading = (_, state2) => {
+    setScreen(state2, SCREENS.reading);
+  };
+  var handleComprehension = (_, state2) => {
+    setScreen(state2, SCREENS.comprehension);
+  };
+  var handleVocabulary = (_, state2) => {
+    setScreen(state2, SCREENS.vocabulary);
+  };
+  var handleConversation = (_, state2) => {
+    setScreen(state2, SCREENS.conversation);
+  };
+  var handleStory = (_, state2) => {
+    setScreen(state2, SCREENS.story);
+  };
+  var handleClarification = (_, state2) => {
+    setScreen(state2, SCREENS.clarification);
+  };
+  var handleOptions = (_, state2) => {
+    setScreen(state2, SCREENS.options);
+  };
+  var handleMigrate = (_, state2) => {
+    setScreen(state2, SCREENS.migrate);
+  };
   var overview = (state2) => [
     node("p", [
       node("b", translate(state2, "greeting")),
       node("br"),
       ...conditional(
-        state2.statisticComprehensionActivity > 0 || state2.statisticConversationActivity > 0 || state2.statisticClarificationActivity > 0 || state2.statisticStoryActivity > 0 || state2.statisticVocabularyActivity > 0,
+        state2.statisticComprehensionActivity > 0 || state2.statisticConversationActivity > 0 || state2.statisticClarificationActivity > 0 || state2.statisticReadingActivity > 0 || state2.statisticStoryActivity > 0 || state2.statisticVocabularyActivity > 0,
         translate(state2, "statistics-activity_per_category"),
         translate(state2, "statistics-no_activity")
       )
@@ -1989,23 +2049,31 @@
     }, [
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.comprehension);
-        },
+        click: handleReading,
         type: "button"
       }, [
         node("span", {
           class: "icon"
         }, "\u{1F4D6}"),
+        node("b", translate(state2, "overview-reading-title")),
+        node("br"),
+        translate(state2, "overview-reading-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: handleComprehension,
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F58A}\uFE0F"),
         node("b", translate(state2, "overview-comprehension-title")),
         node("br"),
         translate(state2, "overview-comprehension-description")
       ]),
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.vocabulary);
-        },
+        click: handleVocabulary,
         type: "button"
       }, [
         node("span", {
@@ -2017,9 +2085,7 @@
       ]),
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.conversation);
-        },
+        click: handleConversation,
         type: "button"
       }, [
         node("span", {
@@ -2031,9 +2097,7 @@
       ]),
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.story);
-        },
+        click: handleStory,
         type: "button"
       }, [
         node("span", {
@@ -2045,9 +2109,7 @@
       ]),
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.clarification);
-        },
+        click: handleClarification,
         type: "button"
       }, [
         node("span", {
@@ -2062,9 +2124,7 @@
       }),
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.options);
-        },
+        click: handleOptions,
         type: "button"
       }, [
         node("span", {
@@ -2076,9 +2136,7 @@
       ]),
       node("button", {
         class: "card",
-        click: () => {
-          setScreen(state2, SCREENS.migrate);
-        },
+        click: handleMigrate,
         type: "button"
       }, [
         node("span", {
@@ -2099,6 +2157,66 @@
   ];
 
   // src/screens/setup.js
+  var handleSourceLanguage2 = (event, state2) => {
+    if (state2.sourceLocale !== event.target.selectedOptions[0].value) {
+      state2.sourceLocale = event.target.selectedOptions[0].value;
+      state2.sourceLanguage = getLanguageFromLocale(state2.sourceLocale);
+      setLangAttribute(state2);
+    }
+  };
+  var handleTargetLanguage2 = (event, state2) => {
+    if (state2.targetLocale !== event.target.selectedOptions[0].value) {
+      state2.targetLocale = event.target.selectedOptions[0].value;
+      state2.targetLanguage = getLanguageFromLocale(state2.targetLocale);
+    }
+  };
+  var handleProficiencyLevel2 = (event, state2) => {
+    if (state2.proficiencyLevel !== event.target.selectedOptions[0].value) {
+      state2.proficiencyLevel = event.target.selectedOptions[0].value;
+    }
+  };
+  var handleNewTopic2 = (event, state2) => {
+    if (event.target.value) {
+      state2.topicsOfInterest.push(event.target.value);
+    }
+  };
+  var handleApiProvider2 = (event, state2) => {
+    if (state2.apiProvider !== event.target.selectedOptions[0].value) {
+      state2.apiProvider = event.target.selectedOptions[0].value;
+      state2.apiCredentialsTested = false;
+    }
+  };
+  var handleApiCredentials2 = (event, state2) => {
+    if (state2.apiCredentials !== event.target.value) {
+      state2.apiCredentials = event.target.value;
+    }
+  };
+  var handleApiCredentialsTest2 = (_, state2) => {
+    state2.apiCredentialsPending = true;
+    getModels5(state2).then(([error, _2, result]) => {
+      state2.apiCredentialsPending = false;
+      if (error) {
+        state2.apiCredentialsTested = false;
+        state2.apiCredentialsError = error.toString();
+        state2.apiModels = null;
+      } else {
+        state2.apiCredentialsTested = true;
+        state2.apiCredentialsError = false;
+        state2.apiModels = result;
+        state2.apiModel ??= result?.data.length > 0 ? result.data[0].id : null;
+      }
+    });
+  };
+  var handleApiModel2 = (event, state2) => {
+    if (state2.apiModel !== event.target.selectedOptions[0].value) {
+      state2.apiModel = event.target.selectedOptions[0].value;
+    }
+  };
+  var handleNext = (_, state2) => {
+    if (isReady(state2)) {
+      setScreen(state2, SCREENS.overview);
+    }
+  };
   var setup = (state2) => [
     node("b", translate(state2, "greeting")),
     node("label", {
@@ -2106,12 +2224,7 @@
     }, translate(state2, "setup-source_language")),
     node("select", {
       id: "select_source_language",
-      change: (event) => {
-        if (state2.sourceLocale !== event.target.selectedOptions[0].value) {
-          state2.sourceLocale = event.target.selectedOptions[0].value;
-          state2.sourceLanguage = getLanguageFromLocale(state2.sourceLocale);
-        }
-      }
+      change: handleSourceLanguage2
     }, TRANSLATABLE_CODES.map(
       (localeCode) => node("option", {
         selected: state2.sourceLocale === localeCode ? "selected" : false,
@@ -2123,12 +2236,7 @@
     }, translate(state2, "setup-target_language")),
     node("select", {
       id: "select_target_language",
-      change: (event) => {
-        if (state2.targetLocale !== event.target.selectedOptions[0].value) {
-          state2.targetLocale = event.target.selectedOptions[0].value;
-          state2.targetLanguage = getLanguageFromLocale(state2.targetLocale);
-        }
-      }
+      change: handleTargetLanguage2
     }, LOCALE_CODES.map(
       (localeCode) => node("option", {
         selected: state2.targetLocale === localeCode ? "selected" : false,
@@ -2140,11 +2248,7 @@
     }, translate(state2, "setup-proficiency_level")),
     node("select", {
       id: "select_proficiency_level",
-      change: (event) => {
-        if (state2.proficiencyLevel !== event.target.selectedOptions[0].value) {
-          state2.proficiencyLevel = event.target.selectedOptions[0].value;
-        }
-      }
+      change: handleProficiencyLevel2
     }, PROFICIENCY_LEVEL_CODES.map(
       (proficiencyLevel) => node("option", {
         selected: state2.proficiencyLevel === proficiencyLevel ? "selected" : false,
@@ -2179,65 +2283,37 @@
       })
     ),
     node("input", {
-      keyup: (event) => {
-        if (event.target.value) {
-          state2.topicsOfInterest.push(event.target.value);
-        }
-      },
+      keyup: handleNewTopic2,
       id: "input_topics_of_interest"
     }),
     node("label", {
-      for: "select_api_code"
-    }, translate(state2, "setup-api_code")),
+      for: "select_api_provider"
+    }, translate(state2, "setup-api_provider")),
     node("select", {
-      id: "select_api_code",
-      change: (event) => {
-        if (state2.apiCode !== event.target.selectedOptions[0].value) {
-          state2.apiCode = event.target.selectedOptions[0].value;
-          state2.apiCredentialsTested = false;
-        }
-      }
+      id: "select_api_provider",
+      change: handleApiProvider2
     }, Object.keys(APIS).map(
-      (apiCode) => node("option", {
-        selected: state2.apiCode === apiCode ? "selected" : false,
-        value: apiCode
-      }, APIS[apiCode].name)
+      (apiProvider) => node("option", {
+        selected: state2.apiProvider === apiProvider ? "selected" : false,
+        value: apiProvider
+      }, APIS[apiProvider].name)
     )),
     ...conditional(
-      APIS[state2.apiCode]?.requireCredentials,
+      APIS[state2.apiProvider]?.requireCredentials,
       [
         node("label", {
           for: "input-api_credentials"
         }, translate(state2, "setup-api_credentials")),
         node("input", {
           id: "input-api_credentials",
-          keyup: (event) => {
-            if (state2.apiCredentials !== event.target.value) {
-              state2.apiCredentials = event.target.value;
-            }
-          },
+          keyup: handleApiCredentials2,
           type: "password",
           value: state2.apiCredentials
         })
       ]
     ),
     node("button", {
-      click: () => {
-        state2.apiCredentialsPending = true;
-        getModels5(state2).then(([error, response, result]) => {
-          state2.apiCredentialsPending = false;
-          if (error) {
-            state2.apiCredentialsTested = false;
-            state2.apiCredentialsError = error.toString();
-            state2.apiModels = null;
-          } else {
-            state2.apiCredentialsTested = true;
-            state2.apiCredentialsError = false;
-            state2.apiModels = result;
-            state2.apiModel ??= result?.data.length > 0 ? result.data[0].id : null;
-          }
-        });
-      },
+      click: handleApiCredentialsTest2,
       type: "button"
     }, [
       translate(state2, "setup-test_api_credentials"),
@@ -2255,22 +2331,18 @@
       [
         node("label", {
           for: "select_api_model"
-        }, translate(state2, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state2.apiCode]?.preferredModelName ?? APIS[state2.apiCode]?.preferredModel)),
+        }, translate(state2, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state2.apiProvider]?.preferredModelName ?? APIS[state2.apiProvider]?.preferredModel)),
         node("select", {
           id: "select_api_model",
-          change: (event) => {
-            if (state2.apiModel !== event.target.selectedOptions[0].value) {
-              state2.apiModel = event.target.selectedOptions[0].value;
-            }
-          }
+          change: handleApiModel2
         }, [
           node("option", {
             disabled: true,
             selected: !isReady(state2) ? "selected" : false,
             value: null
           }, translate(state2, "select_an_option")),
-          ...state2.apiModels?.data?.filter(APIS[state2.apiCode].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
-            selected: (state2.apiModel ?? APIS[state2.apiCode].preferredModel) === model.id ? "selected" : false,
+          ...state2.apiModels?.data?.filter(APIS[state2.apiProvider].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+            selected: (state2.apiModel ?? APIS[state2.apiProvider].preferredModel) === model.id ? "selected" : false,
             value: model.id
           }, model.name ?? model.id)) ?? []
         ])
@@ -2281,11 +2353,7 @@
       [node("p", translate(state2, "setup-outro"))]
     ),
     node("button", {
-      click: () => {
-        if (isReady(state2)) {
-          setScreen(state2, SCREENS.overview);
-        }
-      },
+      click: handleNext,
       disabled: !isReady(state2),
       type: "button"
     }, translate(state2, "setup-next"))
@@ -2336,6 +2404,71 @@
   };
 
   // src/screens/conversation.js
+  var handleReply = (_, state2) => {
+    if (!state2.conversationPending && state2.conversationInput && state2.conversationInput.trim().length > 0) {
+      state2.conversationError = false;
+      state2.conversationPending = true;
+      state2.conversationMessages.push({
+        role: "user",
+        content: state2.conversationInput.trim()
+      });
+      state2.conversationInput = "";
+      createMessage5(
+        state2,
+        state2.conversationMessages,
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-conversation-follow_up")
+      ).then(([error, _2, result]) => {
+        state2.conversationPending = false;
+        if (error) {
+          state2.conversationError = error.toString();
+          const message = state2.conversationMessages.pop();
+          state2.conversationInput = message.content;
+          return;
+        }
+        if (result.content.trim().endsWith("STOP")) {
+          state2.conversationStopped = true;
+        }
+        state2.conversationMessages.push(result);
+        state2.statisticConversationActivity++;
+        onActivity2(state2);
+      });
+    }
+  };
+  var handleGenerate = (_, state2) => {
+    if (!state2.conversationPending) {
+      state2.conversationError = false;
+      state2.conversationMessages = [];
+      state2.conversationPending = true;
+      createMessage5(
+        state2,
+        [],
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-conversation") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
+          state2.topicsOfInterest.filter((topic) => topic)
+        )) : "")
+      ).then(([error, _2, result]) => {
+        state2.conversationPending = false;
+        if (error) {
+          state2.conversationError = error.toString();
+          return;
+        }
+        state2.conversationMessages.push(result);
+      });
+    }
+  };
+  var handleReset2 = (_, state2) => {
+    state2.conversationError = false;
+    state2.conversationMessages = [];
+    state2.conversationPending = false;
+    state2.conversationStopped = false;
+  };
+  var handleBack2 = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
+  var handleInput = (event, state2) => {
+    state2.conversationInput = event.target.value;
+  };
   var conversation = (state2) => [
     node("p", [
       node("b", translate(state2, "greeting")),
@@ -2368,9 +2501,7 @@
         node("textarea", {
           class: "message-user",
           id: "input-question",
-          keyup: (event) => {
-            state2.conversationInput = event.target.value;
-          }
+          keyup: handleInput
         }, state2.conversationInput)
       )
     ),
@@ -2382,87 +2513,68 @@
         node("button", {
           disabled: state2.conversationPending || !state2.conversationInput || state2.conversationInput.trim().length === 0,
           type: "button",
-          click: () => {
-            if (!state2.conversationPending && state2.conversationInput && state2.conversationInput.trim().length > 0) {
-              state2.conversationError = false;
-              state2.conversationPending = true;
-              state2.conversationMessages.push({
-                role: "user",
-                content: state2.conversationInput.trim()
-              });
-              state2.conversationInput = "";
-              createMessage5(
-                state2,
-                state2.conversationMessages,
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-conversation-follow_up")
-              ).then(([error, response, result]) => {
-                state2.conversationPending = false;
-                if (error) {
-                  state2.conversationError = error.toString();
-                  const message = state2.conversationMessages.pop();
-                  state2.conversationInput = message.content;
-                  return;
-                }
-                if (result.content.trim().endsWith("STOP")) {
-                  state2.conversationStopped = true;
-                }
-                state2.conversationMessages.push(result);
-                state2.statisticConversationActivity++;
-                onActivity2(state2);
-              });
-            }
-          }
+          click: handleReply
         }, translate(state2, "button-reply")),
         node("button", {
           disabled: state2.conversationPending,
           type: "button",
-          click: () => {
-            if (!state2.conversationPending) {
-              state2.conversationError = false;
-              state2.conversationMessages = [];
-              state2.conversationPending = true;
-              createMessage5(
-                state2,
-                [],
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-conversation") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
-                  state2.topicsOfInterest.filter((topic) => topic)
-                )) : "")
-              ).then(([error, response, result]) => {
-                state2.conversationPending = false;
-                if (error) {
-                  state2.conversationError = error.toString();
-                  return;
-                }
-                state2.conversationMessages.push(result);
-              });
-            }
-          }
+          click: handleGenerate
         }, translate(state2, "button-generate"))
       ),
       ...conditional(
         state2.conversationPending || state2.conversationMessages && state2.conversationMessages.length > 0,
         node("button", {
-          click: () => {
-            state2.conversationError = false;
-            state2.conversationMessages = [];
-            state2.conversationPending = false;
-            state2.conversationStopped = false;
-          },
+          click: handleReset2,
           type: "button"
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: () => {
-          setScreen(state2, SCREENS.overview);
-        },
+        click: handleBack2,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/clarification.js
+  var handleAsk = (_, state2) => {
+    if (!state2.clarificationPending && state2.clarificationInput && state2.clarificationInput.trim().length > 0) {
+      state2.clarificationError = false;
+      state2.clarificationPending = true;
+      state2.clarificationMessages.push({
+        role: "user",
+        content: state2.clarificationInput.trim()
+      });
+      state2.clarificationInput = "";
+      createMessage5(
+        state2,
+        state2.clarificationMessages,
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-clarification")
+      ).then(([error, _2, result]) => {
+        state2.clarificationPending = false;
+        if (error) {
+          state2.clarificationError = error.toString();
+          const message = state2.clarificationMessages.pop();
+          state2.clarificationInput = message.content;
+          return;
+        }
+        state2.clarificationMessages.push(result);
+        state2.statisticClarificationActivity++;
+        onActivity(state2);
+      });
+    }
+  };
+  var handleInput2 = (event, state2) => {
+    state2.clarificationInput = event.target.value;
+  };
+  var handleReset3 = (_, state2) => {
+    state2.clarificationError = false;
+    state2.clarificationMessages = [];
+    state2.clarificationPending = false;
+  };
+  var handleBack3 = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
   var clarification = (state2) => [
     node("p", [
       node("b", translate(state2, "greeting")),
@@ -2496,9 +2608,7 @@
         class: "message-user",
         id: "input-question",
         placeholder: translate(state2, "clarification-placeholder"),
-        keyup: (event) => {
-          state2.clarificationInput = event.target.value;
-        }
+        keyup: handleInput2
       }, state2.clarificationInput)
     ),
     node("div", {
@@ -2507,56 +2617,85 @@
       node("button", {
         disabled: state2.clarificationPending || !state2.clarificationInput || state2.clarificationInput.trim().length === 0,
         type: "button",
-        click: () => {
-          if (!state2.clarificationPending && state2.clarificationInput && state2.clarificationInput.trim().length > 0) {
-            state2.clarificationError = false;
-            state2.clarificationPending = true;
-            state2.clarificationMessages.push({
-              role: "user",
-              content: state2.clarificationInput.trim()
-            });
-            state2.clarificationInput = "";
-            createMessage5(
-              state2,
-              state2.clarificationMessages,
-              translate(state2, "prompt-context"),
-              translate(state2, "prompt-clarification")
-            ).then(([error, response, result]) => {
-              state2.clarificationPending = false;
-              if (error) {
-                state2.clarificationError = error.toString();
-                const message = state2.clarificationMessages.pop();
-                state2.clarificationInput = message.content;
-                return;
-              }
-              state2.clarificationMessages.push(result);
-              state2.statisticClarificationActivity++;
-              onActivity(state2);
-            });
-          }
-        }
+        click: handleAsk
       }, translate(state2, "button-ask")),
       ...conditional(
         state2.clarificationPending || state2.clarificationMessages && state2.clarificationMessages.length > 0,
         node("button", {
           type: "button",
-          click: () => {
-            state2.clarificationError = false;
-            state2.clarificationMessages = [];
-            state2.clarificationPending = false;
-          }
+          click: handleReset3
         }, translate(state2, "button-reset"))
       ),
       node("button", {
         type: "button",
-        click: () => {
-          setScreen(state2, SCREENS.overview);
-        }
+        click: handleBack3
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/comprehension.js
+  var handleInput3 = (event, state2) => {
+    state2.comprehensionInput = event.target.value;
+  };
+  var handleAnswer = (_, state2) => {
+    if (!state2.comprehensionPending && state2.comprehensionInput && state2.comprehensionInput.trim().length > 0) {
+      state2.comprehensionError = false;
+      state2.comprehensionPending = true;
+      state2.comprehensionMessages.push({
+        role: "user",
+        content: state2.comprehensionInput.trim()
+      });
+      state2.comprehensionInput = "";
+      createMessage5(
+        state2,
+        state2.comprehensionMessages,
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-comprehension-follow_up")
+      ).then(([error, _2, result]) => {
+        state2.comprehensionPending = false;
+        if (error) {
+          state2.comprehensionError = error.toString();
+          const message = state2.comprehensionMessages.pop();
+          state2.comprehensionInput = message.content;
+          return;
+        }
+        state2.comprehensionMessages.push(result);
+        state2.statisticComprehensionActivity++;
+        onActivity2(state2);
+      });
+    }
+  };
+  var handleGenerate2 = (_, state2) => {
+    if (!state2.comprehensionPending) {
+      state2.comprehensionError = false;
+      state2.comprehensionMessages = [];
+      state2.comprehensionPending = true;
+      createMessage5(
+        state2,
+        [],
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-comprehension") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
+          state2.topicsOfInterest.filter((topic) => topic)
+        )) : "")
+      ).then(([error, _2, result]) => {
+        state2.comprehensionPending = false;
+        if (error) {
+          state2.comprehensionError = error.toString();
+          return;
+        }
+        state2.comprehensionMessages.push(result);
+      });
+    }
+  };
+  var handleReset4 = (_, state2) => {
+    state2.comprehensionError = false;
+    state2.comprehensionInput = "";
+    state2.comprehensionMessages = [];
+    state2.comprehensionPending = false;
+  };
+  var handleBack4 = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
   var comprehension = (state2) => [
     node("p", [
       node("b", translate(state2, "greeting")),
@@ -2568,11 +2707,15 @@
       node("div", {
         class: "messages"
       }, state2.comprehensionMessages.map(
-        (message) => node("p", {
-          class: "message-" + message?.role
-        }, message?.content?.split("\n")?.flatMap(
-          (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
-        ))
+        (message) => node(
+          "p",
+          {
+            class: "message-" + message?.role
+          },
+          message?.content?.split("\n")?.flatMap(
+            (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+          )
+        )
       ))
     ),
     ...conditional(
@@ -2589,9 +2732,7 @@
         node("textarea", {
           class: "message-user",
           id: "input-question",
-          keyup: (event) => {
-            state2.comprehensionInput = event.target.value;
-          }
+          keyup: handleInput3
         }, state2.comprehensionInput)
       )
     ),
@@ -2603,83 +2744,205 @@
         node("button", {
           disabled: state2.comprehensionPending || !state2.comprehensionInput || state2.comprehensionInput.trim().length === 0,
           type: "button",
-          click: () => {
-            if (!state2.comprehensionPending && state2.comprehensionInput && state2.comprehensionInput.trim().length > 0) {
-              state2.comprehensionError = false;
-              state2.comprehensionPending = true;
-              state2.comprehensionMessages.push({
-                role: "user",
-                content: state2.comprehensionInput.trim()
-              });
-              state2.comprehensionInput = "";
-              createMessage5(
-                state2,
-                state2.comprehensionMessages,
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-comprehension-follow_up")
-              ).then(([error, response, result]) => {
-                state2.comprehensionPending = false;
-                if (error) {
-                  state2.comprehensionError = error.toString();
-                  const message = state2.comprehensionMessages.pop();
-                  state2.comprehensionInput = message.content;
-                  return;
-                }
-                state2.comprehensionMessages.push(result);
-                state2.statisticComprehensionActivity++;
-                onActivity2(state2);
-              });
-            }
-          }
+          click: handleAnswer
         }, translate(state2, "button-answer")),
         node("button", {
           disabled: state2.comprehensionPending,
           type: "button",
-          click: () => {
-            if (!state2.comprehensionPending) {
-              state2.comprehensionError = false;
-              state2.comprehensionMessages = [];
-              state2.comprehensionPending = true;
-              createMessage5(
-                state2,
-                [],
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-comprehension") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
-                  state2.topicsOfInterest.filter((topic) => topic)
-                )) : "")
-              ).then(([error, response, result]) => {
-                state2.comprehensionPending = false;
-                if (error) {
-                  state2.comprehensionError = error.toString();
-                  return;
-                }
-                state2.comprehensionMessages.push(result);
-              });
-            }
-          }
+          click: handleGenerate2
         }, translate(state2, "button-generate"))
       ),
       ...conditional(
         state2.comprehensionPending || state2.comprehensionMessages && state2.comprehensionMessages.length > 0,
         node("button", {
-          click: () => {
-            state2.comprehensionError = false;
-            state2.comprehensionMessages = [];
-            state2.comprehensionPending = false;
-          },
+          click: handleReset4,
           type: "button"
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: () => {
-          setScreen(state2, SCREENS.overview);
-        },
+        click: handleBack4,
+        type: "button"
+      }, translate(state2, "button-go_back"))
+    ])
+  ];
+
+  // src/screens/reading.js
+  var handleReadingInput = (event, state2) => {
+    state2.readingInput = event.target.value;
+  };
+  var handleReadingGenerate = (_, state2) => {
+    if (!state2.readingPending) {
+      state2.readingError = false;
+      state2.readingMessages = [];
+      state2.readingPending = true;
+      let instructions = translate(state2, "prompt-reading");
+      if (state2.readingInput && state2.readingInput.trim().length > 0) {
+        state2.readingMessages.push({
+          role: "user",
+          content: state2.readingInput.trim()
+        });
+        instructions += " " + translate(state2, "prompt-reading-topic");
+      }
+      createMessage5(
+        state2,
+        state2.readingMessages,
+        translate(state2, "prompt-context"),
+        instructions
+      ).then(([error, _2, result]) => {
+        state2.readingPending = false;
+        if (error) {
+          state2.readingError = error.toString();
+          return;
+        }
+        state2.readingMessages.push(result);
+        state2.statisticReadingActivity++;
+        onActivity2(state2);
+      });
+    }
+  };
+  var handleReadingReset = (_, state2) => {
+    state2.readingError = false;
+    state2.readingInput = "";
+    state2.readingMessages = [];
+    state2.readingPending = false;
+  };
+  var handleReadingBack = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
+  var reading = (state2) => [
+    node("p", [
+      node("b", translate(state2, "greeting")),
+      node("br"),
+      node("label", {
+        for: "input-topic"
+      }, translate(state2, "reading-intro"))
+    ]),
+    node("div", {
+      class: "messages"
+    }, [
+      ...conditional(
+        state2.readingMessages && state2.readingMessages?.length > 0,
+        state2.readingMessages?.map(
+          (message) => node(
+            "p",
+            {
+              class: "message-" + message?.role
+            },
+            message?.content?.split("\n")?.flatMap(
+              (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+            )
+          )
+        ),
+        node("textarea", {
+          class: "message-user",
+          disabled: state2.readingMessages?.length > 0,
+          id: "input-topic",
+          input: handleReadingInput,
+          placeholder: translate(state2, "reading-placeholder")
+        }, state2.readingInput || "")
+      )
+    ]),
+    ...conditional(
+      state2.readingError,
+      node("p", state2.readingError)
+    ),
+    ...conditional(
+      state2.readingPending,
+      node("p", {
+        class: "pending"
+      })
+    ),
+    node("div", {
+      class: "row reverse"
+    }, [
+      ...conditional(
+        state2.readingPending || state2.readingMessages && state2.readingMessages?.length === 0,
+        node("button", {
+          click: handleReadingGenerate,
+          disabled: state2.readingPending,
+          type: "button"
+        }, translate(state2, "button-generate"))
+      ),
+      ...conditional(
+        state2.readingPending || state2.readingMessages && state2.readingMessages?.length > 0,
+        node("button", {
+          type: "button",
+          click: handleReadingReset
+        }, translate(state2, "button-reset"))
+      ),
+      node("button", {
+        click: handleReadingBack,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/story.js
+  var handleStoryInput = (event, state2) => {
+    state2.storyInput = event.target.value;
+  };
+  var handleStoryReply = (_, state2) => {
+    if (!state2.storyPending && state2.storyInput && state2.storyInput.trim().length > 0) {
+      state2.storyError = false;
+      state2.storyPending = true;
+      state2.storyMessages.push({
+        role: "user",
+        content: state2.storyInput.trim()
+      });
+      state2.storyInput = "";
+      createMessage5(
+        state2,
+        state2.storyMessages,
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-story-follow_up")
+      ).then(([error, _2, result]) => {
+        state2.storyPending = false;
+        if (error) {
+          state2.storyError = error.toString();
+          const message = state2.storyMessages.pop();
+          state2.storyInput = message.content;
+          return;
+        }
+        if (result.content.endsWith("STOP")) {
+          state2.storyStopped = true;
+        }
+        state2.storyMessages.push(result);
+        state2.statisticStoryActivity++;
+        onActivity2(state2);
+      });
+    }
+  };
+  var handleStoryGenerate = (_, state2) => {
+    if (!state2.storyPending) {
+      state2.storyError = false;
+      state2.storyMessages = [];
+      state2.storyPending = true;
+      createMessage5(
+        state2,
+        [],
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-story") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
+          state2.topicsOfInterest.filter((topic) => topic)
+        )) : "")
+      ).then(([error, _2, result]) => {
+        state2.storyPending = false;
+        if (error) {
+          state2.storyError = error.toString();
+          return;
+        }
+        state2.storyMessages.push(result);
+      });
+    }
+  };
+  var handleStoryReset = (_, state2) => {
+    state2.storyError = false;
+    state2.storyMessages = [];
+    state2.storyPending = false;
+    state2.storyStopped = false;
+  };
+  var handleStoryBack = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
   var story = (state2) => [
     node("p", [
       node("b", translate(state2, "greeting")),
@@ -2712,9 +2975,7 @@
         node("textarea", {
           class: "message-user",
           id: "input-question",
-          keyup: (event) => {
-            state2.storyInput = event.target.value;
-          }
+          keyup: handleStoryInput
         }, state2.storyInput)
       )
     ),
@@ -2726,87 +2987,88 @@
         node("button", {
           disabled: state2.storyPending || !state2.storyInput || state2.storyInput.trim().length === 0,
           type: "button",
-          click: () => {
-            if (!state2.storyPending && state2.storyInput && state2.storyInput.trim().length > 0) {
-              state2.storyError = false;
-              state2.storyPending = true;
-              state2.storyMessages.push({
-                role: "user",
-                content: state2.storyInput.trim()
-              });
-              state2.storyInput = "";
-              createMessage5(
-                state2,
-                state2.storyMessages,
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-story-follow_up")
-              ).then(([error, response, result]) => {
-                state2.storyPending = false;
-                if (error) {
-                  state2.storyError = error.toString();
-                  const message = state2.storyMessages.pop();
-                  state2.storyInput = message.content;
-                  return;
-                }
-                if (result.content.endsWith("STOP")) {
-                  state2.storyStopped = true;
-                }
-                state2.storyMessages.push(result);
-                state2.statisticStoryActivity++;
-                onActivity2(state2);
-              });
-            }
-          }
+          click: handleStoryReply
         }, translate(state2, "button-reply")),
         node("button", {
           disabled: state2.storyPending,
           type: "button",
-          click: () => {
-            if (!state2.storyPending) {
-              state2.storyError = false;
-              state2.storyMessages = [];
-              state2.storyPending = true;
-              createMessage5(
-                state2,
-                [],
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-story") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
-                  state2.topicsOfInterest.filter((topic) => topic)
-                )) : "")
-              ).then(([error, response, result]) => {
-                state2.storyPending = false;
-                if (error) {
-                  state2.storyError = error.toString();
-                  return;
-                }
-                state2.storyMessages.push(result);
-              });
-            }
-          }
+          click: handleStoryGenerate
         }, translate(state2, "button-generate"))
       ),
       ...conditional(
         state2.storyPending || state2.storyMessages && state2.storyMessages.length > 0,
         node("button", {
-          click: () => {
-            state2.storyError = false;
-            state2.storyMessages = [];
-            state2.storyPending = false;
-            state2.storyStopped = false;
-          },
+          click: handleStoryReset,
           type: "button"
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: () => {
-          setScreen(state2, SCREENS.overview);
-        },
+        click: handleStoryBack,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/vocabulary.js
+  var handleVocabularyInput = (event, state2) => {
+    state2.vocabularyInput = event.target.value;
+  };
+  var handleVocabularyAnswer = (_, state2) => {
+    if (!state2.vocabularyPending && state2.vocabularyInput && state2.vocabularyInput.trim().length > 0) {
+      state2.vocabularyError = false;
+      state2.vocabularyPending = true;
+      state2.vocabularyMessages.push({
+        role: "user",
+        content: state2.vocabularyInput.trim()
+      });
+      state2.vocabularyInput = "";
+      createMessage5(
+        state2,
+        state2.vocabularyMessages,
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-vocabulary-follow_up")
+      ).then(([error, _2, result]) => {
+        state2.vocabularyPending = false;
+        if (error) {
+          state2.vocabularyError = error.toString();
+          const message = state2.vocabularyMessages.pop();
+          state2.vocabularyInput = message.content;
+          return;
+        }
+        state2.vocabularyMessages.push(result);
+        state2.statisticVocabularyActivity++;
+        onActivity2(state2);
+      });
+    }
+  };
+  var handleVocabularyGenerate = (_, state2) => {
+    if (!state2.vocabularyPending) {
+      state2.vocabularyError = false;
+      state2.vocabularyMessages = [];
+      state2.vocabularyPending = true;
+      createMessage5(
+        state2,
+        [],
+        translate(state2, "prompt-context"),
+        translate(state2, "prompt-vocabulary")
+      ).then(([error, _2, result]) => {
+        state2.vocabularyPending = false;
+        if (error) {
+          state2.vocabularyError = error.toString();
+          return;
+        }
+        state2.vocabularyMessages.push(result);
+      });
+    }
+  };
+  var handleVocabularyReset = (_, state2) => {
+    state2.vocabularyError = false;
+    state2.vocabularyMessages = [];
+    state2.vocabularyPending = false;
+  };
+  var handleVocabularyBack = (_, state2) => {
+    setScreen(state2, SCREENS.overview);
+  };
   var vocabulary = (state2) => [
     node("p", [
       node("b", translate(state2, "greeting")),
@@ -2818,11 +3080,15 @@
       node("div", {
         class: "messages"
       }, state2.vocabularyMessages.map(
-        (message) => node("p", {
-          class: "message-" + message?.role
-        }, message?.content?.split("\n")?.flatMap(
-          (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
-        ))
+        (message) => node(
+          "p",
+          {
+            class: "message-" + message?.role
+          },
+          message?.content?.split("\n")?.flatMap(
+            (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+          )
+        )
       ))
     ),
     ...conditional(
@@ -2836,13 +3102,15 @@
       }),
       conditional(
         state2.vocabularyMessages && state2.vocabularyMessages.length > 0 && state2.vocabularyMessages.length < 3,
-        node("textarea", {
-          class: "message-user",
-          id: "input-question",
-          keyup: (event) => {
-            state2.vocabularyInput = event.target.value;
-          }
-        }, state2.vocabularyInput)
+        node(
+          "textarea",
+          {
+            class: "message-user",
+            id: "input-question",
+            keyup: handleVocabularyInput
+          },
+          state2.vocabularyInput
+        )
       )
     ),
     node("div", {
@@ -2853,75 +3121,23 @@
         node("button", {
           disabled: state2.vocabularyPending || !state2.vocabularyInput || state2.vocabularyInput.trim().length === 0,
           type: "button",
-          click: () => {
-            if (!state2.vocabularyPending && state2.vocabularyInput && state2.vocabularyInput.trim().length > 0) {
-              state2.vocabularyError = false;
-              state2.vocabularyPending = true;
-              state2.vocabularyMessages.push({
-                role: "user",
-                content: state2.vocabularyInput.trim()
-              });
-              state2.vocabularyInput = "";
-              createMessage5(
-                state2,
-                state2.vocabularyMessages,
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-vocabulary-follow_up")
-              ).then(([error, response, result]) => {
-                state2.vocabularyPending = false;
-                if (error) {
-                  state2.vocabularyError = error.toString();
-                  const message = state2.vocabularyMessages.pop();
-                  state2.vocabularyInput = message.content;
-                  return;
-                }
-                state2.vocabularyMessages.push(result);
-                state2.statisticVocabularyActivity++;
-                onActivity2(state2);
-              });
-            }
-          }
+          click: handleVocabularyAnswer
         }, translate(state2, "button-answer")),
         node("button", {
           disabled: state2.vocabularyPending,
           type: "button",
-          click: () => {
-            if (!state2.vocabularyPending) {
-              state2.vocabularyError = false;
-              state2.vocabularyMessages = [];
-              state2.vocabularyPending = true;
-              createMessage5(
-                state2,
-                [],
-                translate(state2, "prompt-context"),
-                translate(state2, "prompt-vocabulary")
-              ).then(([error, response, result]) => {
-                state2.vocabularyPending = false;
-                if (error) {
-                  state2.vocabularyError = error.toString();
-                  return;
-                }
-                state2.vocabularyMessages.push(result);
-              });
-            }
-          }
+          click: handleVocabularyGenerate
         }, translate(state2, "button-generate"))
       ),
       ...conditional(
         state2.vocabularyPending || state2.vocabularyMessages && state2.vocabularyMessages.length > 0,
         node("button", {
-          click: () => {
-            state2.vocabularyError = false;
-            state2.vocabularyMessages = [];
-            state2.vocabularyPending = false;
-          },
+          click: handleVocabularyReset,
           type: "button"
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: () => {
-          setScreen(state2, SCREENS.overview);
-        },
+        click: handleVocabularyBack,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -2968,16 +3184,13 @@
     navigator.serviceWorker.register(false ? "./sw.min.js" : "./sw.js", {
       scope: "./"
     });
-    navigator.serviceWorker.addEventListener(
-      "message",
-      (event) => {
-        if (appState) {
-          handleMessage(appState, event);
-        } else {
-          messages.push(event);
-        }
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      if (appState) {
+        handleMessage(appState, event);
+      } else {
+        messages.push(event);
       }
-    );
+    });
   }
   var notifyOnUpdate = (state2) => {
     for (const message of messages) {
@@ -2988,13 +3201,14 @@
   };
 
   // src/app.js
-  var STATE_KEY = "toaln:state";
   var preferredLocale = getPreferredLocale();
   var [_update, _unmount, state] = mount(
     document.getElementById("app"),
     (state2) => {
-      localStorage.setItem(STATE_KEY, JSON.stringify(state2));
-      document.documentElement.setAttribute("lang", state2.sourceLocale);
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(state2)
+      );
       return node("div", {
         class: "screen"
       }, [
@@ -3006,6 +3220,7 @@
           [SCREENS.clarification]: () => clarification(state2),
           [SCREENS.comprehension]: () => comprehension(state2),
           [SCREENS.conversation]: () => conversation(state2),
+          [SCREENS.reading]: () => reading(state2),
           [SCREENS.story]: () => story(state2),
           [SCREENS.vocabulary]: () => vocabulary(state2)
         }, () => setup(state2))
@@ -3021,17 +3236,18 @@
       targetLanguage: getLanguageFromLocale(LOCALES.eng),
       proficiencyLevel: PROFICIENCY_LEVELS.a1,
       topicsOfInterest: [],
-      apiCode: APIS.google.code,
+      apiProvider: APIS.google.code,
       apiModel: apiSettings3.preferredModel,
       apiCredentials: null,
       apiCredentialsError: false,
       apiCredentialsPending: false,
       apiCredentialsTested: false,
-      migrateImportError: null,
-      migrateReset: null,
+      migrateImportError: false,
+      migrateReset: false,
+      statisticClarificationActivity: 0,
       statisticComprehensionActivity: 0,
       statisticConversationActivity: 0,
-      statisticClarificationActivity: 0,
+      statisticReadingActivity: 0,
       statisticStoryActivity: 0,
       statisticVocabularyActivity: 0,
       statisticLastActivityOn: null,
@@ -3051,6 +3267,10 @@
       conversationError: false,
       conversationPending: false,
       conversationMessages: [],
+      readingInput: "",
+      readingError: false,
+      readingPending: false,
+      readingMessages: [],
       storyInput: "",
       storyReviewed: false,
       storyError: false,
@@ -3061,7 +3281,9 @@
       vocabularyError: false,
       vocabularyPending: false,
       vocabularyMessages: []
-    }, localStorage.getItem(STATE_KEY) ? JSON.parse(localStorage.getItem(STATE_KEY)) : {}, {
+    }, window.localStorage.getItem(STORAGE_KEY) ? JSON.parse(
+      window.localStorage.getItem(STORAGE_KEY)
+    ) : {}, {
       // Ensure files updated is always reset after a full page refresh.
       appUpdateAvailable: false,
       apiCredentialsPending: false,
@@ -3072,6 +3294,7 @@
       vocabularyPending: false
     })
   );
+  setLangAttribute(state);
   notifyOnUpdate(state);
   handleStartup(state);
   handleHistory(state);

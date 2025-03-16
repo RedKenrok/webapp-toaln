@@ -3,9 +3,13 @@ import {
   node as n,
 } from '@doars/staark'
 
-import { setScreen } from '../utilities/screen.js'
 import { SCREENS } from '../data/screens.js'
-import { translate as t } from '../data/translations.js'
+import { STORAGE_KEY } from '../data/state.js'
+import {
+  translate as t,
+} from '../data/translations.js'
+
+import { setScreen } from '../utilities/screen.js'
 
 const EXCLUDED_KEYS = [
   'screen',
@@ -80,7 +84,7 @@ const handleImport = (
         } catch (error) {
           state.migrateImportError = error.toString()
         }
-        location.reload()
+        window.location.reload()
       })
       reader.readAsText(file)
     }
@@ -104,10 +108,8 @@ const handleReset = (
     return
   }
 
-  for (const key in state) {
-    delete state[key]
-  }
-  location.reload()
+  window.localStorage.setItem(STORAGE_KEY, null)
+  window.location.reload()
 }
 
 const handleBack = (
