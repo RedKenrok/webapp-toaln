@@ -367,7 +367,7 @@ export const TRANSLATIONS = Object.freeze({
     'migrate-reset_button': 'Reset',
     'migrate-reset_button-confirmation': 'Ik bevestig dat ik absoluut zeker ben dat ik wil resetten!',
 
-    'statistics-activity_per_category': ' Je hebt al {%s:statisticReadingActivity%} teksten gelezen, {%s:statisticReadingActivity%} teksten laten herschrijven, {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.',
+    'statistics-activity_per_category': ' Je hebt al {%s:statisticReadingActivity%} teksten gelezen, {%s:statisticRewriteActivity%} teksten laten herschrijven, {%s:statisticComprehensionActivity%} vragen beantwoord, {%s:statisticVocabularyActivity%} woorden geoefened, {%s:statisticConversationActivity%} berichten verstuurd, {%s:statisticStoryActivity%} verhalen verteld en {%s:statisticClarificationActivity%} vragen gesteld.',
     'statistics-no_activity': 'Je hebt helaas nog niet genoeg activiteiten gedaan om hier weer te geven. Ga naar het overzicht en kies een oefening om te beginnen, op de achtergrond zal bijgehouden worden hoeveel je er al voltooid hebt.',
     'statistics-no_activity_streak': 'Op dit moment heb je geen lopende activiteitenreeks opgebouwd. Deze krijg je door op meerdere dagen op een rij minimaal één oefening te doen.',
     'statistics-current_activity_streak': 'Op dit moment is jouw activiteitenreeks {%s:statisticCurrentActivityStreak%} dagen lang. Verlies het niet en zorg ervoor dat je voor middernacht oefend!',

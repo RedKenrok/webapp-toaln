@@ -94,6 +94,7 @@ const [_update, _unmount, state] = mount(
     statisticComprehensionActivity: 0,
     statisticConversationActivity: 0,
     statisticReadingActivity: 0,
+    statisticRewriteActivity: 0,
     statisticStoryActivity: 0,
     statisticVocabularyActivity: 0,
     statisticLastActivityOn: null,
