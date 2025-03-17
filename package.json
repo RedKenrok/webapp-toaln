@@ -13,14 +13,13 @@
   "scripts": {
     "develop": "NODE_ENV=development node bundle.js",
     "build": "NODE_ENV=production node bundle.js",
-    "serve": "serve ./docs/"
+    "serve": "node serve.js"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.1"
   },
   "dependencies": {
-    "@doars/staark": "^1.7.5",
-    "@doars/vroagn": "^1.4.1",
-    "sanitize.css": "^13.0.0"
+    "@doars/staark": "^1.7.6",
+    "@doars/vroagn": "^1.4.2"
   }
 }

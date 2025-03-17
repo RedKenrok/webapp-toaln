@@ -1,4 +1,4 @@
-/* node_modules/sanitize.css/sanitize.css */
+/* src/styles/reset/sanitize.css */
 *,
 ::before,
 ::after {
@@ -146,49 +146,22 @@
   position: absolute;
 }
 
-/* node_modules/sanitize.css/system-ui.css */
-@font-face {
-  font-family: system-ui;
-  src:
-    local(".AppleSystemUIFont"),
-    local("Segoe UI"),
-    local("Ubuntu"),
-    local("Roboto-Regular"),
-    local("HelveticaNeue");
-}
-@font-face {
-  font-family: system-ui;
-  font-style: italic;
-  src:
-    local(".AppleSystemUIFont"),
-    local("Segoe UI Italic"),
-    local("Ubuntu-Italic"),
-    local("Roboto-Italic"),
-    local("HelveticaNeue-Italic");
-}
-@font-face {
-  font-family: system-ui;
-  font-weight: bold;
-  src:
-    local(".AppleSystemUIFont"),
-    local("Segoe UI Bold"),
-    local("Ubuntu-Bold"),
-    local("Roboto-Bold"),
-    local("HelveticaNeue-Bold");
-}
-@font-face {
-  font-family: system-ui;
-  font-style: italic;
-  font-weight: bold;
-  src:
-    local(".AppleSystemUIFont"),
-    local("Segoe UI Bold Italic"),
-    local("Ubuntu-BoldItalic"),
-    local("Roboto-BoldItalic"),
-    local("HelveticaNeue-BoldItalic");
+/* src/styles/reset/reduce-motion.css */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0s !important;
+    transition-duration: 0s !important;
+  }
 }
 
-/* node_modules/sanitize.css/forms.css */
+/* src/styles/reset/forms.css */
 :where(button, input, select, textarea) {
   background-color: transparent;
   border: 1px solid WindowFrame;
@@ -197,63 +170,11 @@
   letter-spacing: inherit;
   padding: 0.25em 0.375em;
 }
-:where(select) {
-  appearance: none;
-  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E") no-repeat right center / 1em;
-  border-radius: 0;
-  padding-right: 1em;
-}
 :where(select[multiple]) {
   background-image: none;
 }
-:where([type=color i], [type=range i]) {
-  border-width: 0;
-  padding: 0;
-}
 
-/* node_modules/sanitize.css/ui-monospace.css */
-@font-face {
-  font-family: ui-monospace;
-  src:
-    local(".AppleSystemUIFontMonospaced-Regular"),
-    local("Segoe UI Mono"),
-    local("UbuntuMono"),
-    local("Roboto-Mono"),
-    local("Menlo");
-}
-@font-face {
-  font-family: ui-monospace;
-  font-style: italic;
-  src:
-    local(".AppleSystemUIFontMonospaced-RegularItalic"),
-    local("Segoe UI Mono Italic"),
-    local("UbuntuMono-Italic"),
-    local("Roboto-Mono-Italic"),
-    local("Menlo-Italic");
-}
-@font-face {
-  font-family: ui-monospace;
-  font-weight: bold;
-  src:
-    local(".AppleSystemUIFontMonospaced-Bold"),
-    local("Segoe UI Mono Bold"),
-    local("UbuntuMono-Bold"),
-    local("Roboto-Mono-Bold"),
-    local("Menlo-Bold");
-}
-@font-face {
-  font-family: ui-monospace;
-  font-style: italic;
-  font-weight: bold;
-  src:
-    local(".AppleSystemUIFontMonospaced-BoldItalic"),
-    local("Segoe UI Mono Bold Italic"),
-    local("UbuntuMono-BoldItalic"),
-    local("Roboto-Mono-BoldItalic"),
-    local("Menlo-BoldItalic");
-}
-
-/* node_modules/sanitize.css/typography.css */
+/* src/styles/reset/typography.css */
 html {
   font-family:
     system-ui,
@@ -287,12 +208,6 @@ pre {
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     "Noto Color Emoji";
-}
-
-/* node_modules/sanitize.css/assets.css */
-:where(iframe, img, input, video, select, textarea) {
-  height: auto;
-  max-width: 100%;
 }
 
 /* src/styles/theme.css */

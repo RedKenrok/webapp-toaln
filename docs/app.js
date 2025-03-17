@@ -1,10 +1,9 @@
 (() => {
-  // node_modules/@doars/staark/dst/staark.js
-  var arrayify = (data) => {
-    var _a;
-    return (_a = arrayifyOrUndefined(data)) != null ? _a : [];
-  };
+  // node_modules/@doars/staark-common/src/array.js
+  var arrayify = (data) => arrayifyOrUndefined(data) || [];
   var arrayifyOrUndefined = (data) => data ? Array.isArray(data) ? data : [data] : void 0;
+
+  // node_modules/@doars/staark-common/src/conditional.js
   var conditional = (condition, onTruth, onFalse) => {
     let result = condition ? onTruth : onFalse;
     if (typeof result === "function") {
@@ -12,7 +11,11 @@
     }
     return arrayify(result);
   };
+
+  // node_modules/@doars/staark-common/src/marker.js
   var marker = "n";
+
+  // node_modules/@doars/staark-common/src/node.js
   var node = (type, attributesOrContents, contents) => {
     if (typeof attributesOrContents !== "object" || attributesOrContents._ === marker || Array.isArray(attributesOrContents)) {
       contents = attributesOrContents;
@@ -25,7 +28,14 @@
       t: type.toUpperCase()
     };
   };
+
+  // node_modules/@doars/staark-common/src/factory.js
   var factory = new Proxy({}, {
+    /**
+     * @param {FactoryCache} target
+     * @param {string} type
+     * @returns {Factory}
+     */
     get: (target, type) => {
       if (target[type]) {
         return target[type];
@@ -41,6 +51,8 @@
       );
     }
   });
+
+  // node_modules/@doars/staark-common/src/selector.js
   var BRACKET_CLOSE = "]";
   var BRACKET_OPEN = "[";
   var DOT = ".";
@@ -48,6 +60,12 @@
   var HASH = "#";
   var QUOTE_SINGLE = "'";
   var QUOTE_DOUBLE = '"';
+  var TokenTypes = {
+    attribute: 0,
+    class: 1,
+    id: 2,
+    type: 3
+  };
   var selectorToTokenizer = (selector) => {
     const length = selector.length;
     let i = 0;
@@ -55,25 +73,25 @@
     const attributes = {};
     let tokenA = "";
     let tokenB = true;
-    let tokenType = 3;
+    let tokenType = TokenTypes.type;
     const storeToken = () => {
       if (tokenA) {
         switch (tokenType) {
-          case 0:
+          case TokenTypes.attribute:
             attributes[tokenA] = tokenB === true ? true : tokenB;
             tokenB = true;
             break;
-          case 1:
+          case TokenTypes.class:
             if (!attributes.class) {
               attributes.class = tokenA;
               break;
             }
             attributes.class += " " + tokenA;
             break;
-          case 2:
+          case TokenTypes.id:
             attributes.id = tokenA;
             break;
-          case 3:
+          case TokenTypes.type:
             type = tokenA;
             break;
         }
@@ -138,15 +156,15 @@
       i++;
       if (character === HASH) {
         storeToken();
-        tokenType = 2;
+        tokenType = TokenTypes.id;
         continue;
       } else if (character === DOT) {
         storeToken();
-        tokenType = 1;
+        tokenType = TokenTypes.class;
         continue;
       } else if (character === BRACKET_OPEN) {
         storeToken();
-        tokenType = 0;
+        tokenType = TokenTypes.attribute;
         parseAttribute();
         continue;
       }
@@ -154,7 +172,14 @@
     }
     return [type, attributes];
   };
+
+  // node_modules/@doars/staark-common/src/fctory.js
   var fctory = new Proxy({}, {
+    /**
+     * @param {FctoryCache} target
+     * @param {string} type
+     * @returns {Fctory}
+     */
     get: (target, type) => {
       if (target[type]) {
         return target[type];
@@ -177,10 +202,12 @@
       };
     }
   });
-  var match = (pattern, lookup, fallback) => {
+
+  // node_modules/@doars/staark-common/src/match.js
+  var match = (key, lookup, fallback) => {
     let result;
-    if (lookup && pattern in lookup && lookup[pattern]) {
-      result = lookup[pattern];
+    if (lookup && key in lookup && lookup[key]) {
+      result = lookup[key];
     } else {
       result = fallback;
     }
@@ -189,6 +216,8 @@
     }
     return arrayify(result);
   };
+
+  // node_modules/@doars/staark-common/src/clone.js
   var cloneRecursive = (value) => {
     if (typeof value === "object") {
       const clone = Array.isArray(value) ? [] : {};
@@ -199,6 +228,8 @@
     }
     return value;
   };
+
+  // node_modules/@doars/staark-common/src/compare.js
   var equalRecursive = (valueA, valueB) => {
     if (valueA === valueB) {
       return true;
@@ -212,18 +243,18 @@
     const keys = Object.keys(valueA);
     return keys.length === Object.keys(valueB).length && keys.every((k) => equalRecursive(valueA[k], valueB[k]));
   };
+
+  // node_modules/@doars/staark-common/src/element.js
   var childrenToNodes = (element) => {
-    var _a;
     const abstractChildNodes = [];
     for (const childNode of element.childNodes) {
       if (childNode instanceof Text) {
         abstractChildNodes.push(
-          (_a = childNode.textContent) != null ? _a : ""
+          childNode.textContent ?? ""
         );
       } else {
-        const elementChild = childNode;
         const attributes = {};
-        for (const attribute of elementChild.attributes) {
+        for (const attribute of childNode.attributes) {
           attributes[attribute.name] = attribute.value;
         }
         abstractChildNodes.push(
@@ -237,8 +268,15 @@
     }
     return abstractChildNodes;
   };
+
+  // node_modules/@doars/staark/src/library/proxy.js
   var proxify = (root, onChange) => {
     const handler = {
+      /**
+       * @param {Record<string, any>} target
+       * @param {string} key
+       * @returns {boolean}
+       */
       deleteProperty: (target, key) => {
         if (Reflect.has(target, key)) {
           const deleted = Reflect.deleteProperty(target, key);
@@ -249,6 +287,12 @@
         }
         return true;
       },
+      /**
+       * @param {Record<string, any>} target
+       * @param {string} key
+       * @param {any} value
+       * @returns {boolean}
+       */
       set: (target, key, value) => {
         const existingValue = target[key];
         if (existingValue !== value) {
@@ -271,6 +315,8 @@
     };
     return add(root);
   };
+
+  // node_modules/@doars/staark/src/library/mount.js
   var mount = (rootElement, renderView, initialState, oldAbstractTree) => {
     if (typeof initialState === "string") {
       initialState = JSON.parse(initialState);
@@ -296,8 +342,8 @@
           if (value) {
             const type = typeof value;
             if (type === "function") {
-              const oldValue = oldAttributes == null ? void 0 : oldAttributes[name];
-              if ((oldValue == null ? void 0 : oldValue.f) !== value) {
+              const oldValue = oldAttributes?.[name];
+              if (oldValue?.f !== value) {
                 if (oldValue) {
                   element.removeEventListener(
                     name,
@@ -545,43 +591,7 @@
     ];
   };
 
-  // node_modules/@doars/vroagn/dst/vroagn.js
-  var __defProp = Object.defineProperty;
-  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __propIsEnum = Object.prototype.propertyIsEnumerable;
-  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-  var __spreadValues = (a, b) => {
-    for (var prop in b || (b = {}))
-      if (__hasOwnProp.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    if (__getOwnPropSymbols)
-      for (var prop of __getOwnPropSymbols(b)) {
-        if (__propIsEnum.call(b, prop))
-          __defNormalProp(a, prop, b[prop]);
-      }
-    return a;
-  };
-  var __async = (__this, __arguments, generator) => {
-    return new Promise((resolve, reject) => {
-      var fulfilled = (value) => {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      var rejected = (value) => {
-        try {
-          step(generator.throw(value));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-      step((generator = generator.apply(__this, __arguments)).next());
-    });
-  };
+  // node_modules/@doars/vroagn/src/utilities/clone.js
   var cloneRecursive2 = (value) => {
     if (typeof value === "object") {
       const clone = Array.isArray(value) ? [] : {};
@@ -592,20 +602,24 @@
     }
     return value;
   };
-  var delay = (time) => __async(void 0, null, function* () {
+
+  // node_modules/@doars/vroagn/src/utilities/delay.js
+  var delay = async (time) => {
     if (time > 0) {
       return new Promise(
         (resolve) => setTimeout(resolve, time)
       );
     }
     return null;
-  });
+  };
+
+  // node_modules/@doars/vroagn/src/utilities/type.js
   var normalizeContentType = (contentType) => contentType.split(";")[0].trim().toLowerCase();
   var getFileExtension = (url) => {
     const match2 = url.match(/\.([^./?]+)(?:[?#]|$)/);
     return match2 ? match2[1].toLowerCase() : null;
   };
-  var getType = function(url, responseHeaders, requestHeaders) {
+  var getType = (url, responseHeaders, requestHeaders) => {
     const contentType = responseHeaders.get("Content-Type");
     if (contentType) {
       return normalizeContentType(contentType);
@@ -626,35 +640,37 @@
     }
     return "";
   };
+
+  // node_modules/@doars/vroagn/src/library/request.js
   var DEFAULT_VALUES = {
     method: "get",
     retryCodes: [429, 503, 504],
     retryDelay: 500
   };
   var create = (initialOptions) => {
-    initialOptions = __spreadValues(__spreadValues({}, DEFAULT_VALUES), cloneRecursive2(initialOptions));
+    initialOptions = {
+      ...DEFAULT_VALUES,
+      ...cloneRecursive2(initialOptions)
+    };
     let lastExecutionTime = 0;
     let activeRequests = 0;
     let totalRequests = 0;
     let debounceTimeout = null;
-    const throttle = (throttleValue) => __async(void 0, null, function* () {
+    const throttle = async (throttleValue) => {
       const now = Date.now();
       const waitTime = throttleValue - (now - lastExecutionTime);
       lastExecutionTime = now + (waitTime > 0 ? waitTime : 0);
-      yield delay(waitTime);
-    });
+      await delay(waitTime);
+    };
     const debounce = (debounceValue) => {
       return new Promise((resolve) => {
         if (debounceTimeout) {
           clearTimeout(debounceTimeout);
         }
-        debounceTimeout = setTimeout(
-          resolve,
-          debounceValue
-        );
+        debounceTimeout = setTimeout(resolve, debounceValue);
       });
     };
-    const sendRequest = (options2) => __async(void 0, null, function* () {
+    const sendRequest = async (options2) => {
       if (options2.maxRequests !== void 0 && totalRequests >= options2.maxRequests) {
         return [new Error("Maximum request limit reached"), null, null];
       }
@@ -670,21 +686,15 @@
       };
       let url = (options2.domain || "") + (options2.path || "");
       if (options2.queryParams) {
-        url += "?" + new URLSearchParams(
-          options2.queryParams
-        ).toString();
+        url += "?" + new URLSearchParams(options2.queryParams).toString();
       }
       if (options2.timeout) {
         const controller = options2.abort || new AbortController();
         config.signal = controller.signal;
-        setTimeout(
-          () => controller.abort(),
-          options2.timeout
-        );
+        setTimeout(() => controller.abort(), options2.timeout);
       }
-      const executeFetch = () => __async(void 0, null, function* () {
-        var _a;
-        const response2 = yield ((_a = options2.fetch) != null ? _a : fetch)(url, config);
+      const executeFetch = async () => {
+        const response2 = await (options2.fetch ?? fetch)(url, config);
         if (!response2.ok) {
           return [new Error("Invalid response"), response2, null];
         }
@@ -696,11 +706,7 @@
             for (const parser of options2.parsers) {
               foundParser = parser.types.includes(type);
               if (foundParser) {
-                result2 = yield parser.parser(
-                  response2,
-                  options2,
-                  type
-                );
+                result2 = await parser.parser(response2, options2, type);
                 break;
               }
             }
@@ -708,45 +714,45 @@
           if (!foundParser) {
             switch (type.toLowerCase()) {
               case "arraybuffer":
-                result2 = yield response2.arrayBuffer();
+                result2 = await response2.arrayBuffer();
                 break;
               case "blob":
-                result2 = yield response2.blob();
+                result2 = await response2.blob();
                 break;
               case "formdata":
-                result2 = yield response2.formData();
+                result2 = await response2.formData();
                 break;
               case "text/plain":
               case "text":
               case "txt":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 break;
               case "text/html-partial":
               case "html-partial":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 const template = document.createElement("template");
                 template.innerHTML = result2;
                 result2 = template.content.childNodes;
                 break;
               case "text/html":
               case "html":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 result2 = new DOMParser().parseFromString(result2, "text/html");
                 break;
               case "application/json":
               case "text/json":
               case "json":
-                result2 = yield response2.json();
+                result2 = await response2.json();
                 break;
               case "image/svg+xml":
               case "svg":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 result2 = new DOMParser().parseFromString(result2, "image/svg+xml");
                 break;
               case "application/xml":
               case "text/xml":
               case "xml":
-                result2 = yield response2.text();
+                result2 = await response2.text();
                 result2 = new DOMParser().parseFromString(result2, "application/xml");
                 break;
             }
@@ -755,18 +761,17 @@
         } catch (error2) {
           return [error2 || new Error("Thrown parsing error is falsy"), response2, null];
         }
-      });
-      const retryRequest = () => __async(void 0, null, function* () {
-        var _a;
+      };
+      const retryRequest = async () => {
         let attempt = 0;
         const retryAttempts = options2.retryAttempts || 0;
         const retryDelay = options2.retryDelay || 0;
         while (attempt < retryAttempts) {
-          const [error2, response2, result2] = yield executeFetch();
+          const [error2, response2, result2] = await executeFetch();
           if (!error2) {
             return [error2, response2, result2];
           }
-          if (!((_a = options2.retryCodes) == null ? void 0 : _a.includes(response2.status || 200))) {
+          if (!options2.retryCodes?.includes(response2.status || 200)) {
             return [new Error("Invalid status code"), response2, result2];
           }
           attempt++;
@@ -787,32 +792,38 @@
               }
             }
           }
-          yield delay(delayTime);
+          await delay(delayTime);
         }
         return executeFetch();
-      });
-      const [error, response, result] = yield retryRequest();
+      };
+      const [error, response, result] = await retryRequest();
       if (!response.ok) {
         return [new Error(response.statusText), response, result];
       }
       return [error, response, result];
-    });
-    return (sendOptions) => __async(void 0, null, function* () {
-      const options2 = __spreadValues(__spreadValues({}, initialOptions), cloneRecursive2(sendOptions));
+    };
+    return async (sendOptions) => {
+      const options2 = {
+        ...initialOptions,
+        ...cloneRecursive2(sendOptions)
+      };
       if (initialOptions.headers) {
-        options2.headers = __spreadValues(__spreadValues({}, initialOptions.headers), options2.headers);
+        options2.headers = {
+          ...initialOptions.headers,
+          ...options2.headers
+        };
       }
       if (options2.debounce) {
-        yield debounce(options2.debounce);
+        await debounce(options2.debounce);
       }
       if (options2.delay) {
-        yield delay(options2.delay);
+        await delay(options2.delay);
       }
       if (options2.throttle) {
-        yield throttle(options2.throttle);
+        await throttle(options2.throttle);
       }
       if (options2.maxConcurrency && activeRequests >= options2.maxConcurrency) {
-        yield new Promise((resolve) => {
+        await new Promise((resolve) => {
           let interval = null;
           const wait = () => {
             if (activeRequests >= options2.maxConcurrency) {
@@ -828,12 +839,10 @@
         });
       }
       activeRequests++;
-      const results = yield sendRequest(
-        options2
-      );
+      const results = await sendRequest(options2);
       activeRequests--;
       return results;
-    });
+    };
   };
 
   // src/utilities/clone.js

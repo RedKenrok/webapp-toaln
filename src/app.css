@@ -1,10 +1,7 @@
-@import '../node_modules/sanitize.css/sanitize.css';
-/* @import '../node_modules/sanitize.css/reduce-motion.css'; */
-@import '../node_modules/sanitize.css/system-ui.css';
-@import '../node_modules/sanitize.css/forms.css';
-@import '../node_modules/sanitize.css/ui-monospace.css';
-@import '../node_modules/sanitize.css/typography.css';
-@import '../node_modules/sanitize.css/assets.css';
+@import './styles/reset/sanitize.css';
+@import './styles/reset/reduce-motion.css';
+@import './styles/reset/forms.css';
+@import './styles/reset/typography.css';
 
 @import './styles/theme.css';
 @import './styles/layout.css';
