@@ -2086,18 +2086,6 @@
       ]),
       node("button", {
         class: "card",
-        click: handleRewrite,
-        type: "button"
-      }, [
-        node("span", {
-          class: "icon"
-        }, "\u{1F916}"),
-        node("b", translate(state2, "overview-rewrite-title")),
-        node("br"),
-        translate(state2, "overview-rewrite-description")
-      ]),
-      node("button", {
-        class: "card",
         click: handleComprehension,
         type: "button"
       }, [
@@ -2119,6 +2107,18 @@
         node("b", translate(state2, "overview-vocabulary-title")),
         node("br"),
         translate(state2, "overview-vocabulary-description")
+      ]),
+      node("button", {
+        class: "card",
+        click: handleRewrite,
+        type: "button"
+      }, [
+        node("span", {
+          class: "icon"
+        }, "\u{1F916}"),
+        node("b", translate(state2, "overview-rewrite-title")),
+        node("br"),
+        translate(state2, "overview-rewrite-description")
       ]),
       node("button", {
         class: "card",

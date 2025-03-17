@@ -135,19 +135,6 @@ export const overview = (
 
       n('button', {
         class: 'card',
-        click: handleRewrite,
-        type: 'button',
-      }, [
-        n('span', {
-          class: 'icon',
-        }, '🤖'),
-        n('b', t(state, 'overview-rewrite-title')),
-        n('br'),
-        t(state, 'overview-rewrite-description'),
-      ]),
-
-      n('button', {
-        class: 'card',
         click: handleComprehension,
         type: 'button',
       }, [
@@ -170,6 +157,19 @@ export const overview = (
         n('b', t(state, 'overview-vocabulary-title')),
         n('br'),
         t(state, 'overview-vocabulary-description'),
+      ]),
+
+      n('button', {
+        class: 'card',
+        click: handleRewrite,
+        type: 'button',
+      }, [
+        n('span', {
+          class: 'icon',
+        }, '🤖'),
+        n('b', t(state, 'overview-rewrite-title')),
+        n('br'),
+        t(state, 'overview-rewrite-description'),
       ]),
 
       n('button', {
