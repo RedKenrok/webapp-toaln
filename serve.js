@@ -2,6 +2,7 @@ import { promises as fs, existsSync } from 'fs'
 import http from 'http'
 import path from 'path'
 import url from 'url'
+
 const getMimeType = function (
   filePath,
 ) {
@@ -86,7 +87,10 @@ const serve = function (
     directory: process.cwd(),
   }, options)
   const server = http.createServer(
-    async (request, response) => {
+    async (
+      request,
+      response,
+    ) => {
       const parsedUrl = url.parse(request.url)
       let pathname = decodeURIComponent(parsedUrl.pathname)
       let filePath = path.join(directory, pathname)
