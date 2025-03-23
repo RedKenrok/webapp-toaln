@@ -168,6 +168,7 @@ export const TRANSLATIONS = Object.freeze({
 
     'button-answer': 'Answer',
     'button-ask': 'Ask',
+    'button-close': 'Close',
     'button-generate': 'Generate',
     'button-go_back': 'Go back',
     'button-reload': 'Reload',
@@ -333,6 +334,7 @@ export const TRANSLATIONS = Object.freeze({
 
     'button-answer': 'Antwoorden',
     'button-ask': 'Vragen',
+    'button-close': 'Sluiten',
     'button-generate': 'Genereren',
     'button-go_back': 'Ga terug',
     'button-reload': 'Herladen',

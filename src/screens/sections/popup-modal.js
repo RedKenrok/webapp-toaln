@@ -50,6 +50,6 @@ export const popupModal = (
     n('button', {
       type: 'button',
       click: handleBack,
-    }, t(state, 'button-go_back')),
+    }, t(state, 'button-close')),
   ]),
 )

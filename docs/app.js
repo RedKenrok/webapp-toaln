@@ -1460,6 +1460,7 @@
       "credits-link": "Made by {%name%}",
       "button-answer": "Answer",
       "button-ask": "Ask",
+      "button-close": "Close",
       "button-generate": "Generate",
       "button-go_back": "Go back",
       "button-reload": "Reload",
@@ -1612,6 +1613,7 @@
       "credits-link": "Gemaakt door {%name%}",
       "button-answer": "Antwoorden",
       "button-ask": "Vragen",
+      "button-close": "Sluiten",
       "button-generate": "Genereren",
       "button-go_back": "Ga terug",
       "button-reload": "Herladen",
@@ -1849,7 +1851,7 @@
       node("button", {
         type: "button",
         click: handleBack2
-      }, translate(state, "button-go_back"))
+      }, translate(state, "button-close"))
     ])
   );
 
