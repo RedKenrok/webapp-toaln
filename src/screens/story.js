@@ -23,7 +23,7 @@ const handleInput = (
 }
 
 const handleReply = (
-  _,
+  _event,
   state,
 ) => {
   if (
@@ -44,7 +44,7 @@ const handleReply = (
       state.storyMessages,
       t(state, 'prompt-context'),
       t(state, 'prompt-story-follow_up'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.storyPending = false
       if (error) {
         state.storyError = error.toString()
@@ -63,7 +63,7 @@ const handleReply = (
 }
 
 const handleGenerate = (
-  _,
+  _event,
   state,
 ) => {
   if (!state.storyPending) {
@@ -83,7 +83,7 @@ const handleGenerate = (
             ))
           : ''
       ),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.storyPending = false
       if (error) {
         state.storyError = error.toString()
@@ -95,7 +95,7 @@ const handleGenerate = (
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.storyError = false
@@ -106,7 +106,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

@@ -19,7 +19,7 @@ const handleInput = (
 }
 
 const handleAnswer = (
-  _,
+  _event,
   state,
 ) => {
   if (
@@ -39,7 +39,7 @@ const handleAnswer = (
       state.vocabularyMessages,
       t(state, 'prompt-context'),
       t(state, 'prompt-vocabulary-follow_up'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.vocabularyPending = false
       if (error) {
         state.vocabularyError = error.toString()
@@ -54,7 +54,10 @@ const handleAnswer = (
   }
 }
 
-const handleGenerate = (_, state) => {
+const handleGenerate = (
+  _event,
+  state,
+) => {
   if (!state.vocabularyPending) {
     state.vocabularyError = false
     state.vocabularyMessages = []
@@ -64,7 +67,7 @@ const handleGenerate = (_, state) => {
       [],
       t(state, 'prompt-context'),
       t(state, 'prompt-vocabulary'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.vocabularyPending = false
       if (error) {
         state.vocabularyError = error.toString()
@@ -76,7 +79,7 @@ const handleGenerate = (_, state) => {
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.vocabularyError = false
@@ -86,7 +89,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

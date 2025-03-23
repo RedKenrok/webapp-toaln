@@ -9,63 +9,63 @@ import { translate as t } from '../data/translations.js'
 import { setScreen } from '../utilities/screen.js'
 
 const handleClarification = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.clarification)
 }
 
 const handleComprehension = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.comprehension)
 }
 
 const handleConversation = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.conversation)
 }
 
 const handleReading = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.reading)
 }
 
 const handleRewrite = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.rewrite)
 }
 
 const handleStory = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.story)
 }
 
 const handleVocabulary = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.vocabulary)
 }
 
 const handleOptions = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.options)
 }
 
 const handleMigrate = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.migrate)

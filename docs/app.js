@@ -1263,7 +1263,7 @@
   var getLanguageFromLocale = (localeCode) => (localeCode ?? "").split("_")[0].split("-")[0];
   var getPreferredLocale = () => window.navigator.languages.map(
     (languageCode) => languageCode.split("-").filter(
-      (_, index) => index < 2
+      (_segment, index) => index < 2
     ).join("-").replace("-", "_").toLowerCase()
   ).reduce((preferredLanguage, languageCode) => {
     if (preferredLanguage) {
@@ -1450,17 +1450,29 @@
       "prompt-topic": ' Incorporate the following topic into your message "{%topic%}".',
       "prompt-vocabulary": "Write a word in {%t:{%s:targetLocale%}%} along with its definition in {%t:{%s:sourceLocale%}%}. The user will then write a sentence in {%t:{%s:targetLocale%}%} in which this word must be used. Take into account the user's skill and language level. Do not provide any additional instructions, explanations, or the answer to the user. Always write in plain text without any formatting, labels, headings, or lists.",
       "prompt-vocabulary-follow_up": "Provide feedback on the sentence in which the user has answered. Check whether the word has been used correctly in the sentence. Provide concise feedback on the {%t:{%s:targetLocale%}%} with considerable depth that is clear enough for the user's level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, headings, or lists.",
+      "prompt-translate": "The user has requested a translation of the selected text. Translate all the {%t:{%s:sourceLocale%}%} into {%t:{%s:targetLocale%}%} and {%t:{%s:targetLocale%}%} into {%t:{%s:sourceLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, headings, or lists.",
+      "prompt-translate-user": 'Translate the selected text in {%t:{%s:sourceLocale%}%}. The user has selected the following text: "{%s:selection.text%}".',
+      "prompt-translate-context": 'It was selected from the context: "{%s:selection.context%}". Translate only the selected text and not the entire context.',
+      "prompt-explain": "The users has requested an explanation of the text. Delve into all the details of the text and provide a clear and concise explanation. Provide additional examples if it fits the explanation. Always write in plain text without any formatting, labels, headings, or lists.",
+      "prompt-explain-user": 'Explain the selected text in {%t:{%s:sourceLocale%}%}. The user has selected the following text: "{%s:selection.text%}".',
+      "prompt-explain-context": 'It was selected from the context: "{%s:selection.context%}". Explain only the selected text and not the entire context.',
       "greeting": "Hi!",
+      "credits-link": "Made by {%name%}",
       "button-answer": "Answer",
       "button-ask": "Ask",
       "button-generate": "Generate",
       "button-go_back": "Go back",
+      "button-reload": "Reload",
       "button-reply": "Reply",
       "button-reset": "Reset",
       "button-rewrite": "Rewrite",
-      "credits-link": "Made by {%name%}",
+      "context-translate": "Translate selection",
+      "context-explain": "Explain selection",
+      "context-copy": "Copy selection",
       "select_an_option": "Select an option",
       "banner-update_now": "There is an update available, click here to update now!",
+      "popup-explain": "Explain the text below:",
+      "popup-translate": "Translate the text below:",
       "setup-source_language": "So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.",
       "setup-target_language": "Now the next step, which language would you like to learn?",
       "setup-proficiency_level": "How proficient would you say you already are in the language? See the explanation below along with an example text to get an idea of what kind of texts to expect.",
@@ -1590,17 +1602,29 @@
       "prompt-topic": ' Verwerk het volgende onderwerp in jouw bericht "{%topic%}".',
       "prompt-vocabulary": "Schrijf een woord in het {%t:{%s:targetLocale%}%} samen met de definitie in het {%t:{%s:sourceLocale%}%}. De gebruiker zal vervolgens een zin in het {%t:{%s:targetLocale%}%} schrijven waarin dit woord verwerkt moeten worden. Hou hierbij rekening met de vaardigheid en taalniveau van de gebruiker. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten.",
       "prompt-vocabulary-follow_up": "Geef feedback op de zin waarmee de gebruik antwoord heeft gegeven. Controleer of de woord juist gebruikt is in de zin. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten.",
+      "prompt-translate": "De gebruiker heeft een vertaling van de geselecteerde tekst aangevraagd. Vertaal alle {%t:{%s:sourceLocale%}%} naar {%t:{%s:targetLocale%}%} en {%t:{%s:targetLocale%}%} naar {%t:{%s:sourceLocale%}%}. Geef de gebruiker geen verdere instructies of uitleg. Schrijf altijd in platte tekst zonder opmaak, labels, kopjes of lijsten.",
+      "prompt-translate-user": 'Vertaal de geselecteerde tekst in {%t:{%s:sourceLocale%}%}. De gebruiker heeft de volgende tekst geselecteerd: "{%s:selection.text%}".',
+      "prompt-translate-context": 'Deze is geselecteerd uit de context: "{%s:selection.context%}". Let op vertaal niet de context, maar alleen de selectie.',
+      "prompt-explain": "De gebruiker heeft een uitleg van de tekst aangevraagd. Ga diep in op alle details van de tekst en geef een duidelijke en beknopte uitleg. Geef aanvullende voorbeelden als dit past bij de uitleg. Schrijf altijd in platte tekst zonder opmaak, labels, kopjes of lijsten.",
+      "prompt-explain-user": 'Leg de geselecteerde tekst uit in {%t:{%s:sourceLocale%}%}. De gebruiker heeft de volgende tekst geselecteerd: "{%s:selection.text%}".',
+      "prompt-explain-context": 'Deze is geselecteerd uit de context: "{%s:selection.context%}". Let op leg niet niet de context uit, maar alleen de selectie.',
       "greeting": "Hoi!",
+      "credits-link": "Gemaakt door {%name%}",
       "button-answer": "Antwoorden",
       "button-ask": "Vragen",
       "button-generate": "Genereren",
       "button-go_back": "Ga terug",
+      "button-reload": "Herladen",
       "button-reply": "Antwoorden",
       "button-reset": "Resetten",
       "button-rewrite": "Herschrijven",
-      "credits-link": "Gemaakt door {%name%}",
+      "context-translate": "Vertaal selectie",
+      "context-explain": "Leg selectie uit",
+      "context-copy": "Kopieer selectie",
       "select_an_option": "Selecteer een optie",
       "banner-update_now": "Er is een update beschikbaar, klik hier om te updaten!",
+      "popup-explain": "Leg de text hieronder uit:",
+      "popup-translate": "Vertaal de text hieronder:",
       "setup-source_language": "Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.",
       "setup-target_language": "Nu het volgende probleem, welke taal wil je leren?",
       "setup-proficiency_level": "Hoe goed zou jij zeggen dat je al in de taal bent? Zie de uitleg hieronder samen met een voorbeeld tekst om een idee te geven wat voor teksten je kan verwachten.",
@@ -1667,18 +1691,183 @@
   });
   var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
+  // src/screens/sections/context-menu.js
+  var removeContextMenu = (state2) => {
+    state2.contextMenu = null;
+    state2.selection = null;
+  };
+  var handleBack = (event, state2) => {
+    window.history.back();
+    removeContextMenu(state2);
+  };
+  var handleCopy = (event, state2) => {
+    navigator.clipboard.writeText(
+      state2.selection.text
+    );
+    removeContextMenu(state2);
+  };
+  var handleExplain = (event, state2) => {
+    state2.popupModal = {
+      messages: [{
+        role: "user",
+        content: translate(state2, "popup-explain") + "\r\n\r\n" + state2.selection.text
+      }],
+      pending: true
+    };
+    createMessage5(
+      state2,
+      [{
+        role: "user",
+        content: translate(state2, "prompt-explain-user")
+      }, ...state2.selection.text === state2.selection.context ? [] : [{
+        role: "context",
+        content: translate(state2, "prompt-explain-context")
+      }]],
+      translate(state2, "prompt-context"),
+      translate(state2, "prompt-explain")
+    ).then(([error, _response, result]) => {
+      state2.popupModal.pending = false;
+      if (error) {
+        state2.popupModal.error = error.toString();
+        return;
+      }
+      state2.popupModal.messages.push(result);
+    });
+    removeContextMenu(state2);
+  };
+  var handleReload = (event, state2) => {
+    window.location.reload();
+    removeContextMenu(state2);
+  };
+  var handleTranslate = (event, state2) => {
+    state2.popupModal = {
+      messages: [{
+        role: "user",
+        content: translate(state2, "popup-translate") + "\r\n\r\n" + state2.selection.text
+      }],
+      pending: true
+    };
+    createMessage5(
+      state2,
+      [{
+        role: "user",
+        content: translate(state2, "prompt-translate-user")
+      }, ...state2.selection.text === state2.selection.context ? [] : [{
+        role: "context",
+        content: translate(state2, "prompt-translate-context")
+      }]],
+      translate(state2, "prompt-context"),
+      translate(state2, "prompt-translate")
+    ).then(([error, _response, result]) => {
+      state2.popupModal.pending = false;
+      if (error) {
+        state2.popupModal.error = error.toString();
+        return;
+      }
+      state2.popupModal.messages.push(result);
+    });
+    removeContextMenu(state2);
+  };
+  var contextMenu = (state2) => conditional(
+    state2.contextMenu && state2.selection,
+    () => node("div", {
+      class: "context-menu",
+      style: {
+        // Change on which side the dropdown appears based on the pointer's position.
+        ...state2.contextMenu.pointerX > window.innerWidth / 2 ? {
+          left: null,
+          right: window.innerWidth - state2.contextMenu.pointerX + "px",
+          borderTopLeftRadius: "var(--border-radius)",
+          borderTopRightRadius: "0"
+        } : {
+          left: state2.contextMenu.pointerX + "px",
+          right: null,
+          borderTopLeftRadius: "0",
+          borderTopRightRadius: "var(--border-radius)"
+        },
+        top: state2.contextMenu.pointerY + "px"
+      }
+    }, [
+      ...conditional(
+        state2.selection.text.length > 0,
+        [
+          node("button", {
+            click: handleCopy
+          }, translate(state2, "context-copy")),
+          node("button", {
+            click: handleTranslate
+          }, translate(state2, "context-translate")),
+          node("button", {
+            click: handleExplain
+          }, translate(state2, "context-explain")),
+          node("div", {
+            class: "margin"
+          })
+        ]
+      ),
+      node("button", {
+        disabled: !window.history.length,
+        click: handleBack
+      }, translate(state2, "button-go_back")),
+      node("button", {
+        click: handleReload
+      }, translate(state2, "button-reload"))
+    ])
+  );
+
+  // src/screens/sections/popup-modal.js
+  var handleBack2 = (_event, state2) => {
+    state2.popupModal = null;
+  };
+  var popupModal = (state2) => conditional(
+    state2.popupModal,
+    () => node("div", {
+      class: "popup-modal"
+    }, [
+      ...conditional(
+        state2.popupModal.messages && state2.popupModal.messages.length > 0,
+        node("div", {
+          class: "messages"
+        }, state2.popupModal.messages.map(
+          (message) => node("p", {
+            class: "message-" + message?.role
+          }, message?.content?.split("\n")?.flatMap(
+            (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+          ))
+        ))
+      ),
+      ...conditional(
+        state2.popupModal.error,
+        node("p", state2.popupModal.error)
+      ),
+      ...conditional(
+        state2.popupModal.pending,
+        node("p", {
+          class: "pending"
+        })
+      ),
+      node("button", {
+        type: "button",
+        click: handleBack2
+      }, translate(state2, "button-go_back"))
+    ])
+  );
+
   // src/screens/sections/update-banner.js
   var handleClick = () => {
     window.location.reload();
   };
-  var updateBanner = (state2) => conditional(state2.appUpdateAvailable, [
-    node("button", {
-      click: handleClick
-    }, translate(state2, "banner-update_now")),
-    node("div", {
-      class: "margin"
-    })
-  ]);
+  var updateBanner = (state2) => conditional(
+    state2.appUpdateAvailable,
+    () => [
+      node("button", {
+        click: handleClick
+      }, translate(state2, "banner-update_now")),
+      node("div", {
+        class: "margin"
+      })
+    ]
+  );
 
   // src/utilities/screen.js
   var screenOptions = Object.values(SCREENS);
@@ -1714,7 +1903,7 @@
     "apiCredentialsPending",
     "apiCredentialsTested"
   ];
-  var handleExport = (_, state2) => {
+  var handleExport = (_event, state2) => {
     const filtered = {};
     for (const key in state2) {
       if (!EXCLUDED_KEYS.includes(key)) {
@@ -1734,7 +1923,7 @@
     document.body.removeChild(downloadLink);
     URL.revokeObjectURL(url);
   };
-  var handleImport = (_, state2) => {
+  var handleImport = (_event, state2) => {
     const input = document.createElement("input");
     input.setAttribute("accept", "application/json");
     input.setAttribute("hidden", true);
@@ -1759,6 +1948,11 @@
           } catch (error) {
             state2.migrateImportError = error.toString();
           }
+          window.history.replaceState(
+            null,
+            "",
+            window.location.pathname + window.location.search
+          );
           window.location.reload();
         });
         reader.readAsText(file);
@@ -1769,7 +1963,7 @@
     document.body.appendChild(input);
     input.click();
   };
-  var handleReset = (_, state2) => {
+  var handleReset = (_event, state2) => {
     if (!state2.migrateReset) {
       state2.migrateReset = true;
       return;
@@ -1777,7 +1971,7 @@
     window.localStorage.setItem(STORAGE_KEY, null);
     window.location.reload();
   };
-  var handleBack = (_, state2) => {
+  var handleBack3 = (_event, state2) => {
     state2.migrateReset = false;
     setScreen(state2, SCREENS.overview);
   };
@@ -1807,7 +2001,7 @@
       translate(state2, "migrate-reset_button")
     )),
     node("button", {
-      click: handleBack,
+      click: handleBack3,
       type: "button"
     }, translate(state2, "button-go_back"))
   ];
@@ -1847,7 +2041,7 @@
       state2.apiCredentials = event.target.value;
     }
   };
-  var handleApiCredentialsTest = (_, state2) => {
+  var handleApiCredentialsTest = (_event, state2) => {
     state2.apiCredentialsPending = true;
     getModels5(state2).then(([error, , result]) => {
       state2.apiCredentialsPending = false;
@@ -1867,7 +2061,7 @@
       state2.apiModel = event.target.selectedOptions[0].value;
     }
   };
-  var handleGoBack = (_, state2) => {
+  var handleGoBack = (_event, state2) => {
     if (isReady(state2)) {
       setScreen(state2, SCREENS.overview);
     }
@@ -2008,31 +2202,31 @@
   ];
 
   // src/screens/overview.js
-  var handleClarification = (_, state2) => {
+  var handleClarification = (_event, state2) => {
     setScreen(state2, SCREENS.clarification);
   };
-  var handleComprehension = (_, state2) => {
+  var handleComprehension = (_event, state2) => {
     setScreen(state2, SCREENS.comprehension);
   };
-  var handleConversation = (_, state2) => {
+  var handleConversation = (_event, state2) => {
     setScreen(state2, SCREENS.conversation);
   };
-  var handleReading = (_, state2) => {
+  var handleReading = (_event, state2) => {
     setScreen(state2, SCREENS.reading);
   };
-  var handleRewrite = (_, state2) => {
+  var handleRewrite = (_event, state2) => {
     setScreen(state2, SCREENS.rewrite);
   };
-  var handleStory = (_, state2) => {
+  var handleStory = (_event, state2) => {
     setScreen(state2, SCREENS.story);
   };
-  var handleVocabulary = (_, state2) => {
+  var handleVocabulary = (_event, state2) => {
     setScreen(state2, SCREENS.vocabulary);
   };
-  var handleOptions = (_, state2) => {
+  var handleOptions = (_event, state2) => {
     setScreen(state2, SCREENS.options);
   };
-  var handleMigrate = (_, state2) => {
+  var handleMigrate = (_event, state2) => {
     setScreen(state2, SCREENS.migrate);
   };
   var overview = (state2) => [
@@ -2228,9 +2422,9 @@
       state2.apiCredentials = event.target.value;
     }
   };
-  var handleApiCredentialsTest2 = (_, state2) => {
+  var handleApiCredentialsTest2 = (_event, state2) => {
     state2.apiCredentialsPending = true;
-    getModels5(state2).then(([error, _2, result]) => {
+    getModels5(state2).then(([error, _response, result]) => {
       state2.apiCredentialsPending = false;
       if (error) {
         state2.apiCredentialsTested = false;
@@ -2249,7 +2443,7 @@
       state2.apiModel = event.target.selectedOptions[0].value;
     }
   };
-  var handleNext = (_, state2) => {
+  var handleNext = (_event, state2) => {
     if (isReady(state2)) {
       setScreen(state2, SCREENS.overview);
     }
@@ -2441,7 +2635,7 @@
   };
 
   // src/screens/conversation.js
-  var handleReply = (_, state2) => {
+  var handleReply = (_event, state2) => {
     if (!state2.conversationPending && state2.conversationInput && state2.conversationInput.trim().length > 0) {
       state2.conversationError = false;
       state2.conversationPending = true;
@@ -2455,7 +2649,7 @@
         state2.conversationMessages,
         translate(state2, "prompt-context"),
         translate(state2, "prompt-conversation-follow_up")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.conversationPending = false;
         if (error) {
           state2.conversationError = error.toString();
@@ -2472,7 +2666,7 @@
       });
     }
   };
-  var handleGenerate = (_, state2) => {
+  var handleGenerate = (_event, state2) => {
     if (!state2.conversationPending) {
       state2.conversationError = false;
       state2.conversationMessages = [];
@@ -2484,7 +2678,7 @@
         translate(state2, "prompt-conversation") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
           state2.topicsOfInterest.filter((topic) => topic)
         )) : "")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.conversationPending = false;
         if (error) {
           state2.conversationError = error.toString();
@@ -2494,13 +2688,13 @@
       });
     }
   };
-  var handleReset2 = (_, state2) => {
+  var handleReset2 = (_event, state2) => {
     state2.conversationError = false;
     state2.conversationMessages = [];
     state2.conversationPending = false;
     state2.conversationStopped = false;
   };
-  var handleBack2 = (_, state2) => {
+  var handleBack4 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var handleInput = (event, state2) => {
@@ -2566,14 +2760,14 @@
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleBack2,
+        click: handleBack4,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
   ];
 
   // src/screens/clarification.js
-  var handleAsk = (_, state2) => {
+  var handleAsk = (_event, state2) => {
     if (!state2.clarificationPending && state2.clarificationInput && state2.clarificationInput.trim().length > 0) {
       state2.clarificationError = false;
       state2.clarificationPending = true;
@@ -2587,7 +2781,7 @@
         state2.clarificationMessages,
         translate(state2, "prompt-context"),
         translate(state2, "prompt-clarification")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.clarificationPending = false;
         if (error) {
           state2.clarificationError = error.toString();
@@ -2604,12 +2798,12 @@
   var handleInput2 = (event, state2) => {
     state2.clarificationInput = event.target.value;
   };
-  var handleReset3 = (_, state2) => {
+  var handleReset3 = (_event, state2) => {
     state2.clarificationError = false;
     state2.clarificationMessages = [];
     state2.clarificationPending = false;
   };
-  var handleBack3 = (_, state2) => {
+  var handleBack5 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var clarification = (state2) => [
@@ -2665,7 +2859,7 @@
       ),
       node("button", {
         type: "button",
-        click: handleBack3
+        click: handleBack5
       }, translate(state2, "button-go_back"))
     ])
   ];
@@ -2674,7 +2868,7 @@
   var handleInput3 = (event, state2) => {
     state2.comprehensionInput = event.target.value;
   };
-  var handleAnswer = (_, state2) => {
+  var handleAnswer = (_event, state2) => {
     if (!state2.comprehensionPending && state2.comprehensionInput && state2.comprehensionInput.trim().length > 0) {
       state2.comprehensionError = false;
       state2.comprehensionPending = true;
@@ -2688,7 +2882,7 @@
         state2.comprehensionMessages,
         translate(state2, "prompt-context"),
         translate(state2, "prompt-comprehension-follow_up")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.comprehensionPending = false;
         if (error) {
           state2.comprehensionError = error.toString();
@@ -2702,7 +2896,7 @@
       });
     }
   };
-  var handleGenerate2 = (_, state2) => {
+  var handleGenerate2 = (_event, state2) => {
     if (!state2.comprehensionPending) {
       state2.comprehensionError = false;
       state2.comprehensionMessages = [];
@@ -2714,7 +2908,7 @@
         translate(state2, "prompt-comprehension") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
           state2.topicsOfInterest.filter((topic) => topic)
         )) : "")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.comprehensionPending = false;
         if (error) {
           state2.comprehensionError = error.toString();
@@ -2724,13 +2918,13 @@
       });
     }
   };
-  var handleReset4 = (_, state2) => {
+  var handleReset4 = (_event, state2) => {
     state2.comprehensionError = false;
     state2.comprehensionInput = "";
     state2.comprehensionMessages = [];
     state2.comprehensionPending = false;
   };
-  var handleBack4 = (_, state2) => {
+  var handleBack6 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var comprehension = (state2) => [
@@ -2797,7 +2991,7 @@
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleBack4,
+        click: handleBack6,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -2807,7 +3001,7 @@
   var handleInput4 = (event, state2) => {
     state2.readingInput = event.target.value;
   };
-  var handleGenerate3 = (_, state2) => {
+  var handleGenerate3 = (_event, state2) => {
     if (!state2.readingPending) {
       state2.readingError = false;
       state2.readingMessages = [];
@@ -2825,7 +3019,7 @@
         state2.readingMessages,
         translate(state2, "prompt-context"),
         instructions
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.readingPending = false;
         if (error) {
           state2.readingError = error.toString();
@@ -2837,13 +3031,13 @@
       });
     }
   };
-  var handleReset5 = (_, state2) => {
+  var handleReset5 = (_event, state2) => {
     state2.readingError = false;
     state2.readingInput = "";
     state2.readingMessages = [];
     state2.readingPending = false;
   };
-  var handleBack5 = (_, state2) => {
+  var handleBack7 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var reading = (state2) => [
@@ -2908,7 +3102,7 @@
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleBack5,
+        click: handleBack7,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -2918,7 +3112,7 @@
   var handleInput5 = (event, state2) => {
     state2.storyInput = event.target.value;
   };
-  var handleReply2 = (_, state2) => {
+  var handleReply2 = (_event, state2) => {
     if (!state2.storyPending && state2.storyInput && state2.storyInput.trim().length > 0) {
       state2.storyError = false;
       state2.storyPending = true;
@@ -2932,7 +3126,7 @@
         state2.storyMessages,
         translate(state2, "prompt-context"),
         translate(state2, "prompt-story-follow_up")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.storyPending = false;
         if (error) {
           state2.storyError = error.toString();
@@ -2949,7 +3143,7 @@
       });
     }
   };
-  var handleGenerate4 = (_, state2) => {
+  var handleGenerate4 = (_event, state2) => {
     if (!state2.storyPending) {
       state2.storyError = false;
       state2.storyMessages = [];
@@ -2961,7 +3155,7 @@
         translate(state2, "prompt-story") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
           state2.topicsOfInterest.filter((topic) => topic)
         )) : "")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.storyPending = false;
         if (error) {
           state2.storyError = error.toString();
@@ -2971,13 +3165,13 @@
       });
     }
   };
-  var handleReset6 = (_, state2) => {
+  var handleReset6 = (_event, state2) => {
     state2.storyError = false;
     state2.storyMessages = [];
     state2.storyPending = false;
     state2.storyStopped = false;
   };
-  var handleBack6 = (_, state2) => {
+  var handleBack8 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var story = (state2) => [
@@ -3040,7 +3234,7 @@
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleBack6,
+        click: handleBack8,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -3050,7 +3244,7 @@
   var handleInput6 = (event, state2) => {
     state2.vocabularyInput = event.target.value;
   };
-  var handleAnswer2 = (_, state2) => {
+  var handleAnswer2 = (_event, state2) => {
     if (!state2.vocabularyPending && state2.vocabularyInput && state2.vocabularyInput.trim().length > 0) {
       state2.vocabularyError = false;
       state2.vocabularyPending = true;
@@ -3064,7 +3258,7 @@
         state2.vocabularyMessages,
         translate(state2, "prompt-context"),
         translate(state2, "prompt-vocabulary-follow_up")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.vocabularyPending = false;
         if (error) {
           state2.vocabularyError = error.toString();
@@ -3078,7 +3272,7 @@
       });
     }
   };
-  var handleGenerate5 = (_, state2) => {
+  var handleGenerate5 = (_event, state2) => {
     if (!state2.vocabularyPending) {
       state2.vocabularyError = false;
       state2.vocabularyMessages = [];
@@ -3088,7 +3282,7 @@
         [],
         translate(state2, "prompt-context"),
         translate(state2, "prompt-vocabulary")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.vocabularyPending = false;
         if (error) {
           state2.vocabularyError = error.toString();
@@ -3098,12 +3292,12 @@
       });
     }
   };
-  var handleReset7 = (_, state2) => {
+  var handleReset7 = (_event, state2) => {
     state2.vocabularyError = false;
     state2.vocabularyMessages = [];
     state2.vocabularyPending = false;
   };
-  var handleBack7 = (_, state2) => {
+  var handleBack9 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var vocabulary = (state2) => [
@@ -3174,7 +3368,7 @@
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleBack7,
+        click: handleBack9,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -3191,6 +3385,49 @@
       counter += 1;
     }
     return result;
+  };
+
+  // src/utilities/context-menu.js
+  var getSelection = () => {
+    const selection = window.getSelection();
+    let context = "";
+    if (selection.anchorNode === selection.focusNode) {
+      context = selection.anchorNode.textContent.trim();
+    } else {
+      const range = selection.getRangeAt(0).cloneRange();
+      range.setStart(
+        selection.anchorNode,
+        0
+      );
+      range.setEnd(
+        selection.focusNode,
+        selection.focusNode.length
+      );
+      const fragment = range.cloneContents();
+      context = Array.from(
+        fragment.childNodes
+      ).map((node2) => node2.textContent).join(" ").trim();
+    }
+    return {
+      context,
+      text: selection?.toString().trim() ?? ""
+    };
+  };
+  var handleContextMenu = (state2) => {
+    document.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      state2.contextMenu = {
+        pointerX: event.pageX,
+        pointerY: event.pageY
+      };
+      state2.selection = getSelection();
+      document.addEventListener("click", () => {
+        state2.contextMenu = null;
+        state2.selection = null;
+      }, {
+        once: true
+      });
+    });
   };
 
   // src/utilities/manifest.js
@@ -3229,7 +3466,7 @@
       }
     });
   }
-  var notifyOnUpdate = (state2) => {
+  var handleUpdates = (state2) => {
     for (const message of messages) {
       handleMessage(state2, message);
     }
@@ -3241,7 +3478,7 @@
   var handleInput7 = (event, state2) => {
     state2.rewriteInput = event.target.value;
   };
-  var handleRewrite2 = (_, state2) => {
+  var handleRewrite2 = (_event, state2) => {
     if (!state2.rewritePending) {
       state2.rewriteError = false;
       state2.rewriteMessages = [{
@@ -3254,7 +3491,7 @@
         state2.rewriteMessages,
         translate(state2, "prompt-context"),
         translate(state2, "prompt-rewrite")
-      ).then(([error, _2, result]) => {
+      ).then(([error, _response, result]) => {
         state2.rewritePending = false;
         if (error) {
           state2.rewriteError = error.toString();
@@ -3266,13 +3503,13 @@
       });
     }
   };
-  var handleReset8 = (_, state2) => {
+  var handleReset8 = (_event, state2) => {
     state2.rewriteError = false;
     state2.rewriteInput = "";
     state2.rewriteMessages = [];
     state2.rewritePending = false;
   };
-  var handleBack8 = (_, state2) => {
+  var handleBack10 = (_event, state2) => {
     setScreen(state2, SCREENS.overview);
   };
   var rewrite = (state2) => [
@@ -3337,7 +3574,7 @@
         }, translate(state2, "button-reset"))
       ),
       node("button", {
-        click: handleBack8,
+        click: handleBack10,
         type: "button"
       }, translate(state2, "button-go_back"))
     ])
@@ -3346,7 +3583,9 @@
   // src/app.js
   var preferredLocale = getPreferredLocale();
   var [_update, _unmount, state] = mount(
-    document.getElementById("app"),
+    document.body.appendChild(
+      document.createElement("div")
+    ),
     (state2) => {
       window.localStorage.setItem(
         STORAGE_KEY,
@@ -3367,13 +3606,18 @@
           [SCREENS.overview]: () => overview(state2),
           [SCREENS.options]: () => options(state2),
           [SCREENS.migrate]: () => migrate(state2)
-        }, () => setup(state2))
+        }, () => setup(state2)),
+        ...popupModal(state2),
+        ...contextMenu(state2)
       ]);
     },
     Object.assign({
       screen: SCREENS.setup,
       userIdentifier: createIdentifier(),
       appUpdateAvailable: false,
+      contextMenu: null,
+      selection: null,
+      popupModal: null,
       sourceLocale: preferredLocale,
       sourceLanguage: getLanguageFromLocale(preferredLocale),
       targetLocale: LOCALES.eng,
@@ -3444,8 +3688,9 @@
     })
   );
   setLangAttribute(state);
-  notifyOnUpdate(state);
-  handleStartup(state);
+  handleContextMenu(state);
   handleHistory(state);
+  handleStartup(state);
+  handleUpdates(state);
 })();
 //# sourceMappingURL=app.js.map

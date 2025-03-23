@@ -23,7 +23,7 @@ const handleInput = (
 }
 
 const handleAnswer = (
-  _,
+  _event,
   state,
 ) => {
   if (
@@ -43,7 +43,7 @@ const handleAnswer = (
       state.comprehensionMessages,
       t(state, 'prompt-context'),
       t(state, 'prompt-comprehension-follow_up'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.comprehensionPending = false
       if (error) {
         state.comprehensionError = error.toString()
@@ -59,7 +59,7 @@ const handleAnswer = (
 }
 
 const handleGenerate = (
-  _,
+  _event,
   state,
 ) => {
   if (!state.comprehensionPending) {
@@ -78,7 +78,7 @@ const handleGenerate = (
             ))
           : ''
       ),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.comprehensionPending = false
       if (error) {
         state.comprehensionError = error.toString()
@@ -90,7 +90,7 @@ const handleGenerate = (
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.comprehensionError = false
@@ -100,7 +100,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

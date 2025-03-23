@@ -156,17 +156,33 @@ export const TRANSLATIONS = Object.freeze({
     'prompt-vocabulary': 'Write a word in {%t:{%s:targetLocale%}%} along with its definition in {%t:{%s:sourceLocale%}%}. The user will then write a sentence in {%t:{%s:targetLocale%}%} in which this word must be used. Take into account the user\'s skill and language level. Do not provide any additional instructions, explanations, or the answer to the user. Always write in plain text without any formatting, labels, headings, or lists.',
     'prompt-vocabulary-follow_up': 'Provide feedback on the sentence in which the user has answered. Check whether the word has been used correctly in the sentence. Provide concise feedback on the {%t:{%s:targetLocale%}%} with considerable depth that is clear enough for the user\'s level of knowledge. Write the feedback in {%t:{%s:sourceLocale%}%}. Focus exclusively on linguistic aspects and ignore content-related evaluations or interpretations of the message. Always write in plain text without any formatting, labels, headings, or lists.',
 
+    'prompt-translate': 'The user has requested a translation of the selected text. Translate all the {%t:{%s:sourceLocale%}%} into {%t:{%s:targetLocale%}%} and {%t:{%s:targetLocale%}%} into {%t:{%s:sourceLocale%}%}. Do not provide any further instructions or explanations to the user. Always write in plain text without any formatting, labels, headings, or lists.',
+    'prompt-translate-user': 'Translate the selected text in {%t:{%s:sourceLocale%}%}. The user has selected the following text: "{%s:selection.text%}".',
+    'prompt-translate-context': 'It was selected from the context: "{%s:selection.context%}". Translate only the selected text and not the entire context.',
+    'prompt-explain': 'The users has requested an explanation of the text. Delve into all the details of the text and provide a clear and concise explanation. Provide additional examples if it fits the explanation. Always write in plain text without any formatting, labels, headings, or lists.',
+    'prompt-explain-user': 'Explain the selected text in {%t:{%s:sourceLocale%}%}. The user has selected the following text: "{%s:selection.text%}".',
+    'prompt-explain-context': 'It was selected from the context: "{%s:selection.context%}". Explain only the selected text and not the entire context.',
+
     'greeting': 'Hi!',
+    'credits-link': 'Made by {%name%}',
+
     'button-answer': 'Answer',
     'button-ask': 'Ask',
     'button-generate': 'Generate',
     'button-go_back': 'Go back',
+    'button-reload': 'Reload',
     'button-reply': 'Reply',
     'button-reset': 'Reset',
     'button-rewrite': 'Rewrite',
-    'credits-link': 'Made by {%name%}',
+    'context-translate': 'Translate selection',
+    'context-explain': 'Explain selection',
+    'context-copy': 'Copy selection',
     'select_an_option': 'Select an option',
+
     'banner-update_now': 'There is an update available, click here to update now!',
+
+    'popup-explain': 'Explain the text below:',
+    'popup-translate': 'Translate the text below:',
 
     'setup-source_language': 'So, you want to improve your proficiency in a language? Let this app help you practise. We need to start by choosing a language you already know.',
     'setup-target_language': 'Now the next step, which language would you like to learn?',
@@ -305,17 +321,33 @@ export const TRANSLATIONS = Object.freeze({
     'prompt-vocabulary': 'Schrijf een woord in het {%t:{%s:targetLocale%}%} samen met de definitie in het {%t:{%s:sourceLocale%}%}. De gebruiker zal vervolgens een zin in het {%t:{%s:targetLocale%}%} schrijven waarin dit woord verwerkt moeten worden. Hou hierbij rekening met de vaardigheid en taalniveau van de gebruiker. Geef geen verdere instructies, uitleg of het antwoord aan de gebruiker. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten.',
     'prompt-vocabulary-follow_up': 'Geef feedback op de zin waarmee de gebruik antwoord heeft gegeven. Controleer of de woord juist gebruikt is in de zin. Geef beknopt feedback over het {%t:{%s:targetLocale%}%} met veel diepgang dat duidelijk genoeg is voor het kennis niveau van de gebruiker. Schrijf de feedback in het {%t:{%s:sourceLocale%}%}. Richt je hierbij uitsluitend op taalkundige aspecten en negeer inhoudelijke evaluaties of interpretaties van het bericht. Schrijf altijd in platte tekst zonder enige opmaak, labels, kopteksten of lijsten.',
 
+    'prompt-translate': 'De gebruiker heeft een vertaling van de geselecteerde tekst aangevraagd. Vertaal alle {%t:{%s:sourceLocale%}%} naar {%t:{%s:targetLocale%}%} en {%t:{%s:targetLocale%}%} naar {%t:{%s:sourceLocale%}%}. Geef de gebruiker geen verdere instructies of uitleg. Schrijf altijd in platte tekst zonder opmaak, labels, kopjes of lijsten.',
+    'prompt-translate-user': 'Vertaal de geselecteerde tekst in {%t:{%s:sourceLocale%}%}. De gebruiker heeft de volgende tekst geselecteerd: "{%s:selection.text%}".',
+    'prompt-translate-context': 'Deze is geselecteerd uit de context: "{%s:selection.context%}". Let op vertaal niet de context, maar alleen de selectie.',
+    'prompt-explain': 'De gebruiker heeft een uitleg van de tekst aangevraagd. Ga diep in op alle details van de tekst en geef een duidelijke en beknopte uitleg. Geef aanvullende voorbeelden als dit past bij de uitleg. Schrijf altijd in platte tekst zonder opmaak, labels, kopjes of lijsten.',
+    'prompt-explain-user': 'Leg de geselecteerde tekst uit in {%t:{%s:sourceLocale%}%}. De gebruiker heeft de volgende tekst geselecteerd: "{%s:selection.text%}".',
+    'prompt-explain-context': 'Deze is geselecteerd uit de context: "{%s:selection.context%}". Let op leg niet niet de context uit, maar alleen de selectie.',
+
     'greeting': 'Hoi!',
+    'credits-link': 'Gemaakt door {%name%}',
+
     'button-answer': 'Antwoorden',
     'button-ask': 'Vragen',
     'button-generate': 'Genereren',
     'button-go_back': 'Ga terug',
+    'button-reload': 'Herladen',
     'button-reply': 'Antwoorden',
     'button-reset': 'Resetten',
     'button-rewrite': 'Herschrijven',
-    'credits-link': 'Gemaakt door {%name%}',
+    'context-translate': 'Vertaal selectie',
+    'context-explain': 'Leg selectie uit',
+    'context-copy': 'Kopieer selectie',
     'select_an_option': 'Selecteer een optie',
+
     'banner-update_now': 'Er is een update beschikbaar, klik hier om te updaten!',
+
+    'popup-explain': 'Leg de text hieronder uit:',
+    'popup-translate': 'Vertaal de text hieronder:',
 
     'setup-source_language': 'Dus jij wilt een taal beter beheersen? Laat deze app je helpen met oefenen. We moeten beginnen met een taal te kiezen die je al kent.',
     'setup-target_language': 'Nu het volgende probleem, welke taal wil je leren?',

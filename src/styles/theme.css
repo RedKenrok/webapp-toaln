@@ -1,17 +1,19 @@
 :root {
   --background: #fff;
   --foreground: #000;
-  --highlight: #111;
+  --highlight: #e8e8e8;
 
   --color-unvisited: #010154;
   --color-visited: #2c0055;
+
+  --border-radius: 0.6125rem;
 }
 
 @media screen and (prefers-color-scheme: dark) {
   :root {
     --background: #000;
     --foreground: #fff;
-    --highlight: #111;
+    --highlight: #181818;
 
     --color-unvisited: #aad4ff;
     --color-visited: #e3aaff;

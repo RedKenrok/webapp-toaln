@@ -1,0 +1,34 @@
+.context-menu {
+  position: absolute;
+  z-index: 1000;
+  padding: 0;
+  min-width: 160px;
+  max-width: 320px;
+
+  background-color: var(--background);
+  border-width: 1px;
+  border-style: solid;
+  border-color: currentColor;
+  border-radius: var(--border-radius);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+
+.context-menu button {
+  text-align: left;
+
+  display: block;
+  padding: 0.5rem 1rem;
+  border: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+.context-menu button:active,
+.context-menu button:focus,
+.context-menu button:hover {
+  background-color: var(--highlight);
+}
+
+.context-menu .margin+button {
+  margin-top: 0.75rem;
+}

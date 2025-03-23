@@ -221,15 +221,16 @@ pre {
 :root {
   --background: #fff;
   --foreground: #000;
-  --highlight: #111;
+  --highlight: #e8e8e8;
   --color-unvisited: #010154;
   --color-visited: #2c0055;
+  --border-radius: 0.6125rem;
 }
 @media screen and (prefers-color-scheme: dark) {
   :root {
     --background: #000;
     --foreground: #fff;
-    --highlight: #111;
+    --highlight: #181818;
     --color-unvisited: #aad4ff;
     --color-visited: #e3aaff;
   }
@@ -247,7 +248,7 @@ body {
 .message-assistant,
 .message-user {
   padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius);
   background-color: var(--highlight);
 }
 .message-assistant {
@@ -350,7 +351,7 @@ textarea {
   display: block;
   width: 100%;
   border-color: currentColor;
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius);
   margin-top: 0.25rem;
   margin-bottom: 1rem;
   background-color: var(--highlight);
@@ -464,6 +465,61 @@ blockquote {
 }
 .icon {
   filter: grayscale(1);
+}
+
+/* src/styles/popup-modal.css */
+body:has(.popup-modal) {
+  overflow: hidden;
+}
+.popup-modal {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+  max-width: 32rem;
+  z-index: 500;
+  overflow-y: scroll;
+  background-color: var(--background);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--border-radius);
+  border-color: currentColor;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+
+/* src/styles/context-menu.css */
+.context-menu {
+  position: absolute;
+  z-index: 1000;
+  padding: 0;
+  min-width: 160px;
+  max-width: 320px;
+  background-color: var(--background);
+  border-width: 1px;
+  border-style: solid;
+  border-color: currentColor;
+  border-radius: var(--border-radius);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+.context-menu button {
+  text-align: left;
+  display: block;
+  padding: 0.5rem 1rem;
+  border: 0;
+  margin: 0;
+  background-color: transparent;
+}
+.context-menu button:active,
+.context-menu button:focus,
+.context-menu button:hover {
+  background-color: var(--highlight);
+}
+.context-menu .margin + button {
+  margin-top: 0.75rem;
 }
 
 /* src/app.css */

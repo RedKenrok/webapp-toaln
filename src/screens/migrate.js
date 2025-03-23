@@ -24,7 +24,7 @@ const EXCLUDED_KEYS = [
 ]
 
 const handleExport = (
-  _,
+  _event,
   state,
 ) => {
   // Returns a stringified version of the state excluding certain keys.
@@ -52,7 +52,7 @@ const handleExport = (
 
 // Reads the selected file and updates the state.
 const handleImport = (
-  _,
+  _event,
   state,
 ) => {
   const input = document.createElement('input')
@@ -84,6 +84,16 @@ const handleImport = (
         } catch (error) {
           state.migrateImportError = error.toString()
         }
+
+        // Clear history api state.
+        window.history.replaceState(
+          null,
+          '',
+          window.location.pathname
+          + window.location.search
+        )
+
+        // Refresh the page for the changes to take effect.
         window.location.reload()
       })
       reader.readAsText(file)
@@ -100,7 +110,7 @@ const handleImport = (
 
 // Handles resetting of the state.
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   if (!state.migrateReset) {
@@ -113,7 +123,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   state.migrateReset = false

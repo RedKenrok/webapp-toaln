@@ -33,7 +33,7 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-export const notifyOnUpdate = (
+export const handleUpdates = (
   state,
 ) => {
   // Handle earlier messages.

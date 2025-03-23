@@ -19,7 +19,7 @@ const handleInput = (
 }
 
 const handleRewrite = (
-  _,
+  _event,
   state,
 ) => {
   if (!state.rewritePending) {
@@ -35,7 +35,7 @@ const handleRewrite = (
       state.rewriteMessages,
       t(state, 'prompt-context'),
       t(state, 'prompt-rewrite'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.rewritePending = false
       if (error) {
         state.rewriteError = error.toString()
@@ -49,7 +49,7 @@ const handleRewrite = (
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.rewriteError = false
@@ -60,7 +60,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

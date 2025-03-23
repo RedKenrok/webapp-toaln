@@ -16,7 +16,7 @@ import { setScreen } from '../utilities/screen.js'
 import { onActivity } from '../utilities/streak.js'
 
 const handleReply = (
-  _,
+  _event,
   state,
 ) => {
   if (
@@ -36,7 +36,7 @@ const handleReply = (
       state.conversationMessages,
       t(state, 'prompt-context'),
       t(state, 'prompt-conversation-follow_up'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.conversationPending = false
       if (error) {
         state.conversationError = error.toString()
@@ -55,7 +55,7 @@ const handleReply = (
 }
 
 const handleGenerate = (
-  _,
+  _event,
   state,
 ) => {
   if (!state.conversationPending) {
@@ -74,7 +74,7 @@ const handleGenerate = (
             ))
           : ''
       ),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.conversationPending = false
       if (error) {
         state.conversationError = error.toString()
@@ -86,7 +86,7 @@ const handleGenerate = (
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.conversationError = false
@@ -97,7 +97,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

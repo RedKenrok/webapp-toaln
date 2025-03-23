@@ -12,7 +12,7 @@ import { setScreen } from '../utilities/screen.js'
 import { onActivity } from '../utilities/streak.js'
 
 const handleAsk = (
-  _,
+  _event,
   state,
 ) => {
   if (
@@ -32,7 +32,7 @@ const handleAsk = (
       state.clarificationMessages,
       t(state, 'prompt-context'),
       t(state, 'prompt-clarification'),
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.clarificationPending = false
       if (error) {
         state.clarificationError = error.toString()
@@ -55,7 +55,7 @@ const handleInput = (
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.clarificationError = false
@@ -65,7 +65,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

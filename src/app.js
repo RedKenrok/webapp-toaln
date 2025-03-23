@@ -19,6 +19,8 @@ import {
 import { SCREENS } from './data/screens.js'
 import { STORAGE_KEY } from './data/state.js'
 
+import { contextMenu } from './screens/sections/context-menu.js'
+import { popupModal } from './screens/sections/popup-modal.js'
 import { updateBanner } from './screens/sections/update-banner.js'
 import { migrate } from './screens/migrate.js'
 import { options } from './screens/options.js'
@@ -33,15 +35,18 @@ import { story } from './screens/story.js'
 import { vocabulary } from './screens/vocabulary.js'
 
 import { createIdentifier } from './utilities/identifiers.js'
-import { handleStartup } from './utilities/manifest.js'
-import { notifyOnUpdate } from './utilities/sw.js'
+import { handleContextMenu } from './utilities/context-menu.js'
 import { handleHistory } from './utilities/screen.js'
+import { handleStartup } from './utilities/manifest.js'
+import { handleUpdates } from './utilities/sw.js'
 import { rewrite } from './screens/rewrite.js'
 
 const preferredLocale = getPreferredLocale()
 
 const [_update, _unmount, state] = mount(
-  document.getElementById('app'),
+  document.body.appendChild(
+    document.createElement('div'),
+  ),
   (state) => {
     window.localStorage.setItem(
       STORAGE_KEY,
@@ -65,6 +70,8 @@ const [_update, _unmount, state] = mount(
         [SCREENS.options]: () => options(state),
         [SCREENS.migrate]: () => migrate(state),
       }, () => setup(state)),
+      ...popupModal(state),
+      ...contextMenu(state),
     ])
   },
   Object.assign({
@@ -72,6 +79,9 @@ const [_update, _unmount, state] = mount(
     userIdentifier: createIdentifier(),
 
     appUpdateAvailable: false,
+    contextMenu: null,
+    selection: null,
+    popupModal: null,
 
     sourceLocale: preferredLocale,
     sourceLanguage: getLanguageFromLocale(preferredLocale),
@@ -159,6 +169,8 @@ const [_update, _unmount, state] = mount(
 )
 
 setLangAttribute(state)
-notifyOnUpdate(state)
-handleStartup(state)
+
+handleContextMenu(state)
 handleHistory(state)
+handleStartup(state)
+handleUpdates(state)

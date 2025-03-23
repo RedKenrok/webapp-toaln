@@ -21,7 +21,7 @@ const handleInput = (
 }
 
 const handleGenerate = (
-  _,
+  _event,
   state,
 ) => {
   if (!state.readingPending) {
@@ -46,7 +46,7 @@ const handleGenerate = (
       state.readingMessages,
       t(state, 'prompt-context'),
       instructions,
-    ).then(([error, _, result]) => {
+    ).then(([error, _response, result]) => {
       state.readingPending = false
       if (error) {
         state.readingError = error.toString()
@@ -60,7 +60,7 @@ const handleGenerate = (
 }
 
 const handleReset = (
-  _,
+  _event,
   state,
 ) => {
   state.readingError = false
@@ -71,7 +71,7 @@ const handleReset = (
 }
 
 const handleBack = (
-  _,
+  _event,
   state,
 ) => {
   setScreen(state, SCREENS.overview)

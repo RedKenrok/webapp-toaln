@@ -12,12 +12,15 @@ const handleClick = (
 
 export const updateBanner = (
   state,
-) => c(state.appUpdateAvailable, [
-  n('button', {
-    click: handleClick,
-  }, t(state, 'banner-update_now')),
+) => c(
+  state.appUpdateAvailable,
+  () => [
+    n('button', {
+      click: handleClick,
+    }, t(state, 'banner-update_now')),
 
-  n('div', {
-    class: 'margin',
-  }),
-])
+    n('div', {
+      class: 'margin',
+    }),
+  ],
+)

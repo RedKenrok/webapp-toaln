@@ -9,3 +9,7 @@
 @import './styles/animation.css';
 @import './styles/form.css';
 @import './styles/typography.css';
+
+/* Specific sections. */
+@import './styles/popup-modal.css';
+@import './styles/context-menu.css';

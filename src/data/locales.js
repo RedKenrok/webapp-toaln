@@ -28,7 +28,7 @@ export const getPreferredLocale = (
     .map(
       (languageCode) =>
         languageCode.split('-').filter(
-          (_, index) => index < 2
+          (_segment, index) => index < 2
         ).join('-').replace('-', '_').toLowerCase())
     .reduce((preferredLanguage, languageCode) => {
       if (preferredLanguage) {

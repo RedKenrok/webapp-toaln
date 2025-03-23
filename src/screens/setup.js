@@ -82,12 +82,12 @@ const handleApiCredentials = (
 }
 
 const handleApiCredentialsTest = (
-  _,
+  _event,
   state,
 ) => {
   state.apiCredentialsPending = true
   getModels(state)
-    .then(([error, _, result]) => {
+    .then(([error, _response, result]) => {
       state.apiCredentialsPending = false
 
       if (error) {
@@ -113,7 +113,7 @@ const handleApiModel = (
 }
 
 const handleNext = (
-  _,
+  _event,
   state,
 ) => {
   if (isReady(state)) {
