@@ -2,29 +2,31 @@ const getSelection = () => {
   const selection = window.getSelection()
 
   let context = ''
-  if (selection.anchorNode === selection.focusNode) {
-    context = selection.anchorNode.textContent.trim()
-  } else {
-    // Clone selection and set the range to the start of the anchor node and the end of the focus node.
-    const range = selection
-      .getRangeAt(0)
-      .cloneRange()
-    range.setStart(
-      selection.anchorNode,
-      0,
-    )
-    range.setEnd(
-      selection.focusNode,
-      selection.focusNode.length,
-    )
+  if (selection.anchorNode) {
+    if (selection.anchorNode === selection.focusNode) {
+      context = selection.anchorNode.textContent.trim()
+    } else {
+      // Clone selection and set the range to the start of the anchor node and the end of the focus node.
+      const range = selection
+        .getRangeAt(0)
+        .cloneRange()
+      range.setStart(
+        selection.anchorNode,
+        0,
+      )
+      range.setEnd(
+        selection.focusNode,
+        selection.focusNode.length,
+      )
 
-    const fragment = range.cloneContents()
-    context = Array.from(
-      fragment.childNodes,
-    )
-      .map((node) => node.textContent)
-      .join(' ')
-      .trim()
+      const fragment = range.cloneContents()
+      context = Array.from(
+        fragment.childNodes,
+      )
+        .map((node) => node.textContent)
+        .join(' ')
+        .trim()
+    }
   }
 
   return {

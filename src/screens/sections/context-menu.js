@@ -8,8 +8,11 @@ import {
 import { createMessage } from '../../apis/apis'
 
 const removeContextMenu = (
+  event,
   state,
 ) => {
+  event.preventDefault()
+
   state.contextMenu = null
   state.selection = null
 }
@@ -19,7 +22,7 @@ const handleBack = (
   state,
 ) => {
   window.history.back()
-  removeContextMenu(state)
+  removeContextMenu(event, state)
 }
 
 const handleCopy = (
@@ -29,7 +32,7 @@ const handleCopy = (
   navigator.clipboard.writeText(
     state.selection.text,
   )
-  removeContextMenu(state)
+  removeContextMenu(event, state)
 }
 
 const handleExplain = (
@@ -72,7 +75,7 @@ const handleExplain = (
     state.popupModal.messages.push(result)
   })
 
-  removeContextMenu(state)
+  removeContextMenu(event, state)
 }
 
 const handleReload = (
@@ -80,7 +83,7 @@ const handleReload = (
   state,
 ) => {
   window.location.reload()
-  removeContextMenu(state)
+  removeContextMenu(event, state)
 }
 
 const handleTranslate = (
@@ -123,61 +126,79 @@ const handleTranslate = (
     state.popupModal.messages.push(result)
   })
 
-  removeContextMenu(state)
+  removeContextMenu(event, state)
 }
 
 export const contextMenu = (
   state,
 ) => c(
   state.contextMenu && state.selection,
-  () => n('div', {
-    class: 'context-menu',
-    style: {
-      // Change on which side the dropdown appears based on the pointer's position.
-      ...(
-        state.contextMenu.pointerX > (window.innerWidth / 2)
-          ? {
-            right: (window.innerWidth - state.contextMenu.pointerX + 'px'),
-            borderTopLeftRadius: 'var(--border-radius)',
-            borderTopRightRadius: '0',
-          }
-          : {
-            left: state.contextMenu.pointerX + 'px',
-            borderTopLeftRadius: '0',
-            borderTopRightRadius: 'var(--border-radius)',
-          }
+  () => {
+    let top = state.contextMenu.pointerY <= (window.innerHeight / 2)
+    let left = state.contextMenu.pointerX <= (window.innerWidth / 2)
+    let anchor = (
+      top
+        ? 'Top'
+        : 'Bottom'
+    ) + (
+        left
+          ? 'Left'
+          : 'Right'
+      )
+
+    return n('div', {
+      class: 'context-menu',
+      style: {
+        ['border' + anchor + 'Radius']: '0',
+        ...(
+          left
+            ? {
+              left: state.contextMenu.pointerX + 'px',
+            }
+            : {
+              right: (window.innerWidth - state.contextMenu.pointerX + 'px'),
+            }
+        ),
+        ...(
+          top
+            ? {
+              top: state.contextMenu.pointerY + 'px',
+            }
+            : {
+              bottom: (window.innerHeight - state.contextMenu.pointerY + 'px'),
+            }
+        )
+      }
+    }, [
+      ...c(
+        state.selection.text.length > 0,
+        [
+          n('button', {
+            click: handleCopy,
+          }, t(state, 'context-copy')),
+
+          n('button', {
+            click: handleTranslate,
+          }, t(state, 'context-translate')),
+
+          n('button', {
+            click: handleExplain,
+          }, t(state, 'context-explain')),
+
+          n('div', {
+            class: 'margin',
+          }),
+        ],
       ),
-      top: state.contextMenu.pointerY + 'px',
-    }
-  }, [
-    ...c(
-      state.selection.text.length > 0,
-      [
-        n('button', {
-          click: handleCopy,
-        }, t(state, 'context-copy')),
 
-        n('button', {
-          click: handleTranslate,
-        }, t(state, 'context-translate')),
+      n('button', {
+        disabled: !window.history.length,
+        click: handleBack,
+      }, t(state, 'button-go_back')),
 
-        n('button', {
-          click: handleExplain,
-        }, t(state, 'context-explain')),
-
-        n('div', {
-          class: 'margin',
-        }),
-      ],
-    ),
-
-    n('button', {
-      disabled: !window.history.length,
-      click: handleBack,
-    }, t(state, 'button-go_back')),
-
-    n('button', {
-      click: handleReload,
-    }, t(state, 'button-reload')),
-  ])
+      n('button', {
+        click: handleReload,
+      }, t(state, 'button-reload')),
+    ])
+  }
 )

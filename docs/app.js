@@ -1698,19 +1698,20 @@
   var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
   // src/screens/sections/context-menu.js
-  var removeContextMenu = (state) => {
+  var removeContextMenu = (event, state) => {
+    event.preventDefault();
     state.contextMenu = null;
     state.selection = null;
   };
   var handleBack = (event, state) => {
     window.history.back();
-    removeContextMenu(state);
+    removeContextMenu(event, state);
   };
   var handleCopy = (event, state) => {
     navigator.clipboard.writeText(
       state.selection.text
     );
-    removeContextMenu(state);
+    removeContextMenu(event, state);
   };
   var handleExplain = (event, state) => {
     state.popupModal = {
@@ -1739,11 +1740,11 @@
       }
       state.popupModal.messages.push(result);
     });
-    removeContextMenu(state);
+    removeContextMenu(event, state);
   };
   var handleReload = (event, state) => {
     window.location.reload();
-    removeContextMenu(state);
+    removeContextMenu(event, state);
   };
   var handleTranslate = (event, state) => {
     state.popupModal = {
@@ -1772,51 +1773,56 @@
       }
       state.popupModal.messages.push(result);
     });
-    removeContextMenu(state);
+    removeContextMenu(event, state);
   };
   var contextMenu = (state) => conditional(
     state.contextMenu && state.selection,
-    () => node("div", {
-      class: "context-menu",
-      style: {
-        // Change on which side the dropdown appears based on the pointer's position.
-        ...state.contextMenu.pointerX > window.innerWidth / 2 ? {
-          right: window.innerWidth - state.contextMenu.pointerX + "px",
-          borderTopLeftRadius: "var(--border-radius)",
-          borderTopRightRadius: "0"
-        } : {
-          left: state.contextMenu.pointerX + "px",
-          borderTopLeftRadius: "0",
-          borderTopRightRadius: "var(--border-radius)"
-        },
-        top: state.contextMenu.pointerY + "px"
-      }
-    }, [
-      ...conditional(
-        state.selection.text.length > 0,
-        [
-          node("button", {
-            click: handleCopy
-          }, translate(state, "context-copy")),
-          node("button", {
-            click: handleTranslate
-          }, translate(state, "context-translate")),
-          node("button", {
-            click: handleExplain
-          }, translate(state, "context-explain")),
-          node("div", {
-            class: "margin"
-          })
-        ]
-      ),
-      node("button", {
-        disabled: !window.history.length,
-        click: handleBack
-      }, translate(state, "button-go_back")),
-      node("button", {
-        click: handleReload
-      }, translate(state, "button-reload"))
-    ])
+    () => {
+      let top = state.contextMenu.pointerY <= window.innerHeight / 2;
+      let left = state.contextMenu.pointerX <= window.innerWidth / 2;
+      let anchor = (top ? "Top" : "Bottom") + (left ? "Left" : "Right");
+      return node("div", {
+        class: "context-menu",
+        style: {
+          ["border" + anchor + "Radius"]: "0",
+          ...left ? {
+            left: state.contextMenu.pointerX + "px"
+          } : {
+            right: window.innerWidth - state.contextMenu.pointerX + "px"
+          },
+          ...top ? {
+            top: state.contextMenu.pointerY + "px"
+          } : {
+            bottom: window.innerHeight - state.contextMenu.pointerY + "px"
+          }
+        }
+      }, [
+        ...conditional(
+          state.selection.text.length > 0,
+          [
+            node("button", {
+              click: handleCopy
+            }, translate(state, "context-copy")),
+            node("button", {
+              click: handleTranslate
+            }, translate(state, "context-translate")),
+            node("button", {
+              click: handleExplain
+            }, translate(state, "context-explain")),
+            node("div", {
+              class: "margin"
+            })
+          ]
+        ),
+        node("button", {
+          disabled: !window.history.length,
+          click: handleBack
+        }, translate(state, "button-go_back")),
+        node("button", {
+          click: handleReload
+        }, translate(state, "button-reload"))
+      ]);
+    }
   );
 
   // src/screens/sections/popup-modal.js
@@ -3395,22 +3401,24 @@
   var getSelection = () => {
     const selection = window.getSelection();
     let context = "";
-    if (selection.anchorNode === selection.focusNode) {
-      context = selection.anchorNode.textContent.trim();
-    } else {
-      const range = selection.getRangeAt(0).cloneRange();
-      range.setStart(
-        selection.anchorNode,
-        0
-      );
-      range.setEnd(
-        selection.focusNode,
-        selection.focusNode.length
-      );
-      const fragment = range.cloneContents();
-      context = Array.from(
-        fragment.childNodes
-      ).map((node2) => node2.textContent).join(" ").trim();
+    if (selection.anchorNode) {
+      if (selection.anchorNode === selection.focusNode) {
+        context = selection.anchorNode.textContent.trim();
+      } else {
+        const range = selection.getRangeAt(0).cloneRange();
+        range.setStart(
+          selection.anchorNode,
+          0
+        );
+        range.setEnd(
+          selection.focusNode,
+          selection.focusNode.length
+        );
+        const fragment = range.cloneContents();
+        context = Array.from(
+          fragment.childNodes
+        ).map((node2) => node2.textContent).join(" ").trim();
+      }
     }
     return {
       context,
