@@ -331,7 +331,7 @@
       }
       return updatePromise;
     };
-    let state2 = Object.getPrototypeOf(initialState) === Proxy.prototype ? initialState : proxify(
+    let state = Object.getPrototypeOf(initialState) === Proxy.prototype ? initialState : proxify(
       initialState,
       triggerUpdate
     );
@@ -351,7 +351,7 @@
                   );
                 }
                 const listener = newAttributes[name] = (event) => {
-                  value(event, state2);
+                  value(event, state);
                 };
                 listener.f = value;
                 element.addEventListener(
@@ -450,7 +450,7 @@
               match2 = {
                 c: arrayifyOrUndefined(
                   newAbstract.r(
-                    state2,
+                    state,
                     newAbstract.m
                   )
                 ),
@@ -562,7 +562,7 @@
         updating = true;
         updatePromise = null;
         let newAbstractTree = arrayifyOrUndefined(
-          renderView(state2)
+          renderView(state)
         );
         updateChildren(
           _rootElement,
@@ -587,7 +587,7 @@
           }
         }
       },
-      state2
+      state
     ];
   };
 
@@ -905,7 +905,7 @@
       }
     })
   );
-  var createMessage = (state2, messages2, context = null, instructions = null) => {
+  var createMessage = (state, messages2, context = null, instructions = null) => {
     messages2 = cloneRecursive3(messages2);
     if (instructions) {
       messages2.unshift({
@@ -915,10 +915,10 @@
     }
     return _createMessage()({
       headers: {
-        "x-api-key": state2.apiCredentials
+        "x-api-key": state.apiCredentials
       },
       body: {
-        model: state2.apiModel ?? apiSettings.preferredModel,
+        model: state.apiModel ?? apiSettings.preferredModel,
         messages: messages2,
         system: context
       }
@@ -946,10 +946,10 @@
       }
     })
   );
-  var getModels = (state2) => {
+  var getModels = (state) => {
     return _getModels()({
       headers: {
-        "x-api-key": state2.apiCredentials
+        "x-api-key": state.apiCredentials
       }
     }).then(([error, response, result]) => {
       if (!error) {
@@ -988,7 +988,7 @@
       }
     })
   );
-  var createMessage2 = (state2, messages2, context = null, instructions = null) => {
+  var createMessage2 = (state, messages2, context = null, instructions = null) => {
     messages2 = cloneRecursive3(messages2);
     const prependAppRole = (message) => {
       if (message) {
@@ -1006,12 +1006,12 @@
     prependAppRole(context);
     return _createMessage2()({
       headers: {
-        Authorization: "Bearer " + state2.apiCredentials
+        Authorization: "Bearer " + state.apiCredentials
       },
       body: {
-        model: state2.apiModel ?? apiSettings2.preferredModel,
+        model: state.apiModel ?? apiSettings2.preferredModel,
         messages: messages2,
-        user: state2.userIdentifier
+        user: state.userIdentifier
       }
     }).then(([error, response, result]) => {
       if (!error) {
@@ -1029,9 +1029,9 @@
       }
     })
   );
-  var getModels2 = (state2) => _getModels2()({
+  var getModels2 = (state) => _getModels2()({
     headers: {
-      Authorization: "Bearer " + state2.apiCredentials
+      Authorization: "Bearer " + state.apiCredentials
     }
   });
 
@@ -1063,10 +1063,10 @@
       method: "post"
     })
   );
-  var createMessage3 = (state2, messages2, context = null, instructions = null) => {
+  var createMessage3 = (state, messages2, context = null, instructions = null) => {
     messages2 = cloneRecursive3(messages2);
     return _createMessage3()({
-      path: "/v1beta/models/" + (state2.apiModel ?? apiSettings3.preferredModel) + ":generateContent?key=" + state2.apiCredentials,
+      path: "/v1beta/models/" + (state.apiModel ?? apiSettings3.preferredModel) + ":generateContent?key=" + state.apiCredentials,
       body: {
         system_instruction: context || instructions ? {
           parts: [context, instructions].filter((text) => text).map((text) => ({
@@ -1098,8 +1098,8 @@
       }
     })
   );
-  var getModels3 = (state2) => _getModels3()({
-    path: "/v1beta/models?pageSize=1000&key=" + state2.apiCredentials
+  var getModels3 = (state) => _getModels3()({
+    path: "/v1beta/models?pageSize=1000&key=" + state.apiCredentials
   }).then(([error, response, result]) => {
     if (!error) {
       result = {
@@ -1141,8 +1141,8 @@
       }
     })
   );
-  var createMessage4 = (state2, messages2, context = null, instructions = null) => {
-    const appRole = (state2.apiModel ?? apiSettings4.preferredModel).toLowerCase().match(/4o|3\.5/) ? "system" : "developer";
+  var createMessage4 = (state, messages2, context = null, instructions = null) => {
+    const appRole = (state.apiModel ?? apiSettings4.preferredModel).toLowerCase().match(/4o|3\.5/) ? "system" : "developer";
     messages2 = cloneRecursive3(messages2);
     const prependAppRole = (message) => {
       if (message) {
@@ -1160,12 +1160,12 @@
     prependAppRole(context);
     return _createMessage4()({
       headers: {
-        Authorization: "Bearer " + state2.apiCredentials
+        Authorization: "Bearer " + state.apiCredentials
       },
       body: {
-        model: state2.apiModel ?? apiSettings4.preferredModel,
+        model: state.apiModel ?? apiSettings4.preferredModel,
         messages: messages2,
-        user: state2.userIdentifier
+        user: state.userIdentifier
       }
     }).then(([error, response, result]) => {
       if (!error) {
@@ -1183,9 +1183,9 @@
       }
     })
   );
-  var getModels4 = (state2) => _getModels4()({
+  var getModels4 = (state) => _getModels4()({
     headers: {
-      Authorization: "Bearer " + state2.apiCredentials
+      Authorization: "Bearer " + state.apiCredentials
     }
   });
 
@@ -1196,33 +1196,33 @@
     google: apiSettings3,
     open_ai: apiSettings4
   });
-  var callApi = (lookupTable, state2, ...parameters) => {
+  var callApi = (lookupTable, state, ...parameters) => {
     let method = null;
-    if (state2.apiProvider) {
-      method = lookupTable[state2.apiProvider];
+    if (state.apiProvider) {
+      method = lookupTable[state.apiProvider];
     }
     if (method) {
-      return method(state2, ...parameters);
+      return method(state, ...parameters);
     }
     return Promise.resolve(
       [new Error("No api selected."), null, null]
     );
   };
-  var createMessage5 = (state2, messages2, context = null, instructions = null) => callApi({
+  var createMessage5 = (state, messages2, context = null, instructions = null) => callApi({
     [APIS.anthropic.code]: createMessage,
     [APIS.deepseek.code]: createMessage2,
     [APIS.google.code]: createMessage3,
     [APIS.open_ai.code]: createMessage4
-  }, state2, messages2, context, instructions);
-  var getModels5 = (state2) => callApi({
+  }, state, messages2, context, instructions);
+  var getModels5 = (state) => callApi({
     [APIS.anthropic.code]: getModels,
     [APIS.deepseek.code]: getModels2,
     [APIS.google.code]: getModels3,
     [APIS.open_ai.code]: getModels4
-  }, state2);
-  var isReady = (state2) => {
-    return state2.apiProvider && APIS[state2.apiProvider] && (!APIS[state2.apiProvider]?.requireCredentials || state2.apiCredentialsTested) && (state2.apiModel ?? APIS[state2.apiProvider].preferredModel) && state2.apiModels?.data?.some(
-      (model) => model.id === (state2.apiModel ?? APIS[state2.apiProvider].preferredModel)
+  }, state);
+  var isReady = (state) => {
+    return state.apiProvider && APIS[state.apiProvider] && (!APIS[state.apiProvider]?.requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiProvider].preferredModel) && state.apiModels?.data?.some(
+      (model) => model.id === (state.apiModel ?? APIS[state.apiProvider].preferredModel)
     );
   };
 
@@ -1280,10 +1280,10 @@
     }
     return preferredLanguage;
   }, null) ?? LOCALES.eng;
-  var setLangAttribute = (state2) => {
+  var setLangAttribute = (state) => {
     document.documentElement.setAttribute(
       "lang",
-      state2.sourceLocale
+      state.sourceLocale
     );
   };
   var PROFICIENCY_LEVELS = Object.freeze({
@@ -1315,8 +1315,8 @@
   var STORAGE_KEY = "toaln:state";
 
   // src/data/translations.js
-  var translate = (state2, key, locale = null) => {
-    locale ??= state2.sourceLocale;
+  var translate = (state, key, locale = null) => {
+    locale ??= state.sourceLocale;
     if (!(locale in TRANSLATIONS)) {
       console.warn('There are no translations available for the language "' + locale + '".');
       return key;
@@ -1337,7 +1337,7 @@
         (match2, key2) => {
           let value = key2.split(".").reduce(
             (innerState, keySegment) => innerState?.[keySegment],
-            state2
+            state
           );
           if (value !== void 0 && value !== null) {
             if (Array.isArray(value)) {
@@ -1692,114 +1692,114 @@
   var TRANSLATABLE_CODES = Object.keys(TRANSLATIONS);
 
   // src/screens/sections/context-menu.js
-  var removeContextMenu = (state2) => {
-    state2.contextMenu = null;
-    state2.selection = null;
+  var removeContextMenu = (state) => {
+    state.contextMenu = null;
+    state.selection = null;
   };
-  var handleBack = (event, state2) => {
+  var handleBack = (event, state) => {
     window.history.back();
-    removeContextMenu(state2);
+    removeContextMenu(state);
   };
-  var handleCopy = (event, state2) => {
+  var handleCopy = (event, state) => {
     navigator.clipboard.writeText(
-      state2.selection.text
+      state.selection.text
     );
-    removeContextMenu(state2);
+    removeContextMenu(state);
   };
-  var handleExplain = (event, state2) => {
-    state2.popupModal = {
+  var handleExplain = (event, state) => {
+    state.popupModal = {
       messages: [{
         role: "user",
-        content: translate(state2, "popup-explain") + "\r\n\r\n" + state2.selection.text
+        content: translate(state, "popup-explain") + "\r\n\r\n" + state.selection.text
       }],
       pending: true
     };
     createMessage5(
-      state2,
+      state,
       [{
         role: "user",
-        content: translate(state2, "prompt-explain-user")
-      }, ...state2.selection.text === state2.selection.context ? [] : [{
+        content: translate(state, "prompt-explain-user")
+      }, ...state.selection.text === state.selection.context ? [] : [{
         role: "context",
-        content: translate(state2, "prompt-explain-context")
+        content: translate(state, "prompt-explain-context")
       }]],
-      translate(state2, "prompt-context"),
-      translate(state2, "prompt-explain")
+      translate(state, "prompt-context"),
+      translate(state, "prompt-explain")
     ).then(([error, _response, result]) => {
-      state2.popupModal.pending = false;
+      state.popupModal.pending = false;
       if (error) {
-        state2.popupModal.error = error.toString();
+        state.popupModal.error = error.toString();
         return;
       }
-      state2.popupModal.messages.push(result);
+      state.popupModal.messages.push(result);
     });
-    removeContextMenu(state2);
+    removeContextMenu(state);
   };
-  var handleReload = (event, state2) => {
+  var handleReload = (event, state) => {
     window.location.reload();
-    removeContextMenu(state2);
+    removeContextMenu(state);
   };
-  var handleTranslate = (event, state2) => {
-    state2.popupModal = {
+  var handleTranslate = (event, state) => {
+    state.popupModal = {
       messages: [{
         role: "user",
-        content: translate(state2, "popup-translate") + "\r\n\r\n" + state2.selection.text
+        content: translate(state, "popup-translate") + "\r\n\r\n" + state.selection.text
       }],
       pending: true
     };
     createMessage5(
-      state2,
+      state,
       [{
         role: "user",
-        content: translate(state2, "prompt-translate-user")
-      }, ...state2.selection.text === state2.selection.context ? [] : [{
+        content: translate(state, "prompt-translate-user")
+      }, ...state.selection.text === state.selection.context ? [] : [{
         role: "context",
-        content: translate(state2, "prompt-translate-context")
+        content: translate(state, "prompt-translate-context")
       }]],
-      translate(state2, "prompt-context"),
-      translate(state2, "prompt-translate")
+      translate(state, "prompt-context"),
+      translate(state, "prompt-translate")
     ).then(([error, _response, result]) => {
-      state2.popupModal.pending = false;
+      state.popupModal.pending = false;
       if (error) {
-        state2.popupModal.error = error.toString();
+        state.popupModal.error = error.toString();
         return;
       }
-      state2.popupModal.messages.push(result);
+      state.popupModal.messages.push(result);
     });
-    removeContextMenu(state2);
+    removeContextMenu(state);
   };
-  var contextMenu = (state2) => conditional(
-    state2.contextMenu && state2.selection,
+  var contextMenu = (state) => conditional(
+    state.contextMenu && state.selection,
     () => node("div", {
       class: "context-menu",
       style: {
         // Change on which side the dropdown appears based on the pointer's position.
-        ...state2.contextMenu.pointerX > window.innerWidth / 2 ? {
+        ...state.contextMenu.pointerX > window.innerWidth / 2 ? {
           left: null,
-          right: window.innerWidth - state2.contextMenu.pointerX + "px",
+          right: window.innerWidth - state.contextMenu.pointerX + "px",
           borderTopLeftRadius: "var(--border-radius)",
           borderTopRightRadius: "0"
         } : {
-          left: state2.contextMenu.pointerX + "px",
+          left: state.contextMenu.pointerX + "px",
           right: null,
           borderTopLeftRadius: "0",
           borderTopRightRadius: "var(--border-radius)"
         },
-        top: state2.contextMenu.pointerY + "px"
+        top: state.contextMenu.pointerY + "px"
       }
     }, [
       ...conditional(
-        state2.selection.text.length > 0,
+        state.selection.text.length > 0,
         [
           node("button", {
             click: handleCopy
-          }, translate(state2, "context-copy")),
+          }, translate(state, "context-copy")),
           node("button", {
             click: handleTranslate
-          }, translate(state2, "context-translate")),
+          }, translate(state, "context-translate")),
           node("button", {
             click: handleExplain
-          }, translate(state2, "context-explain")),
+          }, translate(state, "context-explain")),
           node("div", {
             class: "margin"
           })
@@ -1808,27 +1808,27 @@
       node("button", {
         disabled: !window.history.length,
         click: handleBack
-      }, translate(state2, "button-go_back")),
+      }, translate(state, "button-go_back")),
       node("button", {
         click: handleReload
-      }, translate(state2, "button-reload"))
+      }, translate(state, "button-reload"))
     ])
   );
 
   // src/screens/sections/popup-modal.js
-  var handleBack2 = (_event, state2) => {
-    state2.popupModal = null;
+  var handleBack2 = (_event, state) => {
+    state.popupModal = null;
   };
-  var popupModal = (state2) => conditional(
-    state2.popupModal,
+  var popupModal = (state) => conditional(
+    state.popupModal,
     () => node("div", {
       class: "popup-modal"
     }, [
       ...conditional(
-        state2.popupModal.messages && state2.popupModal.messages.length > 0,
+        state.popupModal.messages && state.popupModal.messages.length > 0,
         node("div", {
           class: "messages"
-        }, state2.popupModal.messages.map(
+        }, state.popupModal.messages.map(
           (message) => node("p", {
             class: "message-" + message?.role
           }, message?.content?.split("\n")?.flatMap(
@@ -1837,11 +1837,11 @@
         ))
       ),
       ...conditional(
-        state2.popupModal.error,
-        node("p", state2.popupModal.error)
+        state.popupModal.error,
+        node("p", state.popupModal.error)
       ),
       ...conditional(
-        state2.popupModal.pending,
+        state.popupModal.pending,
         node("p", {
           class: "pending"
         })
@@ -1849,7 +1849,7 @@
       node("button", {
         type: "button",
         click: handleBack2
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   );
 
@@ -1857,12 +1857,12 @@
   var handleClick = () => {
     window.location.reload();
   };
-  var updateBanner = (state2) => conditional(
-    state2.appUpdateAvailable,
+  var updateBanner = (state) => conditional(
+    state.appUpdateAvailable,
     () => [
       node("button", {
         click: handleClick
-      }, translate(state2, "banner-update_now")),
+      }, translate(state, "banner-update_now")),
       node("div", {
         class: "margin"
       })
@@ -1871,24 +1871,24 @@
 
   // src/utilities/screen.js
   var screenOptions = Object.values(SCREENS);
-  var setScreen = (state2, screen) => {
-    if (screen && state2.screen !== screen && screenOptions.includes(screen)) {
-      if (state2.screen !== SCREENS.setup) {
+  var setScreen = (state, screen) => {
+    if (screen && state.screen !== screen && screenOptions.includes(screen)) {
+      if (state.screen !== SCREENS.setup) {
         window.history.pushState({
           screen
         }, "", "?screen=" + screen);
       }
-      state2.screen = screen;
+      state.screen = screen;
     }
   };
-  var handleHistory = (state2) => {
+  var handleHistory = (state) => {
     window.addEventListener("popstate", (event) => {
       const screen = event.state && event.state.screen;
       if (screen === SCREENS.setup) {
         return false;
       }
-      if (screen && state2.screen !== screen && screenOptions.includes(screen)) {
-        state2.screen = screen;
+      if (screen && state.screen !== screen && screenOptions.includes(screen)) {
+        state.screen = screen;
       }
     });
   };
@@ -1903,11 +1903,11 @@
     "apiCredentialsPending",
     "apiCredentialsTested"
   ];
-  var handleExport = (_event, state2) => {
+  var handleExport = (_event, state) => {
     const filtered = {};
-    for (const key in state2) {
+    for (const key in state) {
       if (!EXCLUDED_KEYS.includes(key)) {
-        filtered[key] = state2[key];
+        filtered[key] = state[key];
       }
     }
     const data = JSON.stringify(filtered);
@@ -1923,7 +1923,7 @@
     document.body.removeChild(downloadLink);
     URL.revokeObjectURL(url);
   };
-  var handleImport = (_event, state2) => {
+  var handleImport = (_event, state) => {
     const input = document.createElement("input");
     input.setAttribute("accept", "application/json");
     input.setAttribute("hidden", true);
@@ -1933,7 +1933,7 @@
       if (file) {
         const reader = new FileReader();
         reader.addEventListener("error", () => {
-          state2.migrateImportError = "Error reading file.";
+          state.migrateImportError = "Error reading file.";
         });
         reader.addEventListener("load", () => {
           try {
@@ -1941,12 +1941,12 @@
             for (const key of EXCLUDED_KEYS) {
               delete imported[key];
             }
-            Object.assign(state2, imported);
+            Object.assign(state, imported);
             for (const key of EXCLUDED_KEYS) {
-              delete state2[key];
+              delete state[key];
             }
           } catch (error) {
-            state2.migrateImportError = error.toString();
+            state.migrateImportError = error.toString();
           }
           window.history.replaceState(
             null,
@@ -1958,171 +1958,171 @@
         reader.readAsText(file);
       }
       input.remove();
-      setScreen(state2, SCREENS.setup);
+      setScreen(state, SCREENS.setup);
     });
     document.body.appendChild(input);
     input.click();
   };
-  var handleReset = (_event, state2) => {
-    if (!state2.migrateReset) {
-      state2.migrateReset = true;
+  var handleReset = (_event, state) => {
+    if (!state.migrateReset) {
+      state.migrateReset = true;
       return;
     }
     window.localStorage.setItem(STORAGE_KEY, null);
     window.location.reload();
   };
-  var handleBack3 = (_event, state2) => {
-    state2.migrateReset = false;
-    setScreen(state2, SCREENS.overview);
+  var handleBack3 = (_event, state) => {
+    state.migrateReset = false;
+    setScreen(state, SCREENS.overview);
   };
-  var migrate = (state2) => [
-    node("b", translate(state2, "greeting")),
-    node("p", translate(state2, "migrate-export")),
+  var migrate = (state) => [
+    node("b", translate(state, "greeting")),
+    node("p", translate(state, "migrate-export")),
     node("button", {
       click: handleExport,
       type: "button"
-    }, translate(state2, "migrate-export_button")),
-    node("p", translate(state2, "migrate-import")),
+    }, translate(state, "migrate-export_button")),
+    node("p", translate(state, "migrate-import")),
     node("button", {
       click: handleImport,
       type: "button"
-    }, translate(state2, "migrate-import_button")),
+    }, translate(state, "migrate-import_button")),
     ...conditional(
-      state2.migrateImportError,
-      node("p", {}, state2.migrateImportError)
+      state.migrateImportError,
+      node("p", {}, state.migrateImportError)
     ),
-    node("p", translate(state2, "migrate-reset")),
+    node("p", translate(state, "migrate-reset")),
     node("button", {
       click: handleReset,
       type: "button"
     }, conditional(
-      state2.migrateReset,
-      translate(state2, "migrate-reset_button-confirmation"),
-      translate(state2, "migrate-reset_button")
+      state.migrateReset,
+      translate(state, "migrate-reset_button-confirmation"),
+      translate(state, "migrate-reset_button")
     )),
     node("button", {
       click: handleBack3,
       type: "button"
-    }, translate(state2, "button-go_back"))
+    }, translate(state, "button-go_back"))
   ];
 
   // src/screens/options.js
-  var handleSourceLanguage = (event, state2) => {
-    if (state2.sourceLocale !== event.target.selectedOptions[0].value) {
-      state2.sourceLocale = event.target.selectedOptions[0].value;
-      state2.sourceLanguage = getLanguageFromLocale(state2.sourceLocale);
-      setLangAttribute(state2);
+  var handleSourceLanguage = (event, state) => {
+    if (state.sourceLocale !== event.target.selectedOptions[0].value) {
+      state.sourceLocale = event.target.selectedOptions[0].value;
+      state.sourceLanguage = getLanguageFromLocale(state.sourceLocale);
+      setLangAttribute(state);
     }
   };
-  var handleTargetLanguage = (event, state2) => {
-    if (state2.targetLocale !== event.target.selectedOptions[0].value) {
-      state2.targetLocale = event.target.selectedOptions[0].value;
-      state2.targetLanguage = getLanguageFromLocale(state2.targetLocale);
+  var handleTargetLanguage = (event, state) => {
+    if (state.targetLocale !== event.target.selectedOptions[0].value) {
+      state.targetLocale = event.target.selectedOptions[0].value;
+      state.targetLanguage = getLanguageFromLocale(state.targetLocale);
     }
   };
-  var handleProficiencyLevel = (event, state2) => {
-    if (state2.proficiencyLevel !== event.target.selectedOptions[0].value) {
-      state2.proficiencyLevel = event.target.selectedOptions[0].value;
+  var handleProficiencyLevel = (event, state) => {
+    if (state.proficiencyLevel !== event.target.selectedOptions[0].value) {
+      state.proficiencyLevel = event.target.selectedOptions[0].value;
     }
   };
-  var handleNewTopic = (event, state2) => {
+  var handleNewTopic = (event, state) => {
     if (event.target.value) {
-      state2.topicsOfInterest.push(event.target.value);
+      state.topicsOfInterest.push(event.target.value);
     }
   };
-  var handleApiProvider = (event, state2) => {
-    if (state2.apiProvider !== event.target.selectedOptions[0].value) {
-      state2.apiProvider = event.target.selectedOptions[0].value;
-      state2.apiCredentialsTested = false;
+  var handleApiProvider = (event, state) => {
+    if (state.apiProvider !== event.target.selectedOptions[0].value) {
+      state.apiProvider = event.target.selectedOptions[0].value;
+      state.apiCredentialsTested = false;
     }
   };
-  var handleApiCredentials = (event, state2) => {
-    if (state2.apiCredentials !== event.target.value) {
-      state2.apiCredentials = event.target.value;
+  var handleApiCredentials = (event, state) => {
+    if (state.apiCredentials !== event.target.value) {
+      state.apiCredentials = event.target.value;
     }
   };
-  var handleApiCredentialsTest = (_event, state2) => {
-    state2.apiCredentialsPending = true;
-    getModels5(state2).then(([error, , result]) => {
-      state2.apiCredentialsPending = false;
+  var handleApiCredentialsTest = (_event, state) => {
+    state.apiCredentialsPending = true;
+    getModels5(state).then(([error, , result]) => {
+      state.apiCredentialsPending = false;
       if (error) {
-        state2.apiCredentialsTested = false;
-        state2.apiCredentialsError = error.toString();
-        state2.apiModels = null;
+        state.apiCredentialsTested = false;
+        state.apiCredentialsError = error.toString();
+        state.apiModels = null;
       } else {
-        state2.apiCredentialsTested = true;
-        state2.apiCredentialsError = false;
-        state2.apiModels = result;
+        state.apiCredentialsTested = true;
+        state.apiCredentialsError = false;
+        state.apiModels = result;
       }
     });
   };
-  var handleApiModel = (event, state2) => {
-    if (state2.apiModel !== event.target.selectedOptions[0].value) {
-      state2.apiModel = event.target.selectedOptions[0].value;
+  var handleApiModel = (event, state) => {
+    if (state.apiModel !== event.target.selectedOptions[0].value) {
+      state.apiModel = event.target.selectedOptions[0].value;
     }
   };
-  var handleGoBack = (_event, state2) => {
-    if (isReady(state2)) {
-      setScreen(state2, SCREENS.overview);
+  var handleGoBack = (_event, state) => {
+    if (isReady(state)) {
+      setScreen(state, SCREENS.overview);
     }
   };
-  var options = (state2) => [
-    node("b", translate(state2, "greeting")),
+  var options = (state) => [
+    node("b", translate(state, "greeting")),
     node("label", {
       for: "select_source_language"
-    }, translate(state2, "options-source_language")),
+    }, translate(state, "options-source_language")),
     node("select", {
       id: "select_source_language",
       change: handleSourceLanguage
     }, TRANSLATABLE_CODES.map(
       (localeCode) => node("option", {
-        selected: state2.sourceLocale === localeCode ? "selected" : false,
+        selected: state.sourceLocale === localeCode ? "selected" : false,
         value: localeCode
-      }, translate(state2, localeCode, localeCode))
+      }, translate(state, localeCode, localeCode))
     )),
     node("label", {
       for: "select_target_language"
-    }, translate(state2, "options-target_language")),
+    }, translate(state, "options-target_language")),
     node("select", {
       id: "select_target_language",
       change: handleTargetLanguage
     }, LOCALE_CODES.map(
       (localeCode) => node("option", {
-        selected: state2.targetLocale === localeCode ? "selected" : false,
+        selected: state.targetLocale === localeCode ? "selected" : false,
         value: localeCode
-      }, translate(state2, localeCode))
+      }, translate(state, localeCode))
     )),
     node("label", {
       for: "select_proficiency_level"
-    }, translate(state2, "options-proficiency_level")),
+    }, translate(state, "options-proficiency_level")),
     node("select", {
       id: "select_proficiency_level",
       change: handleProficiencyLevel
     }, PROFICIENCY_LEVEL_CODES.map(
       (proficiencyLevel) => node("option", {
-        selected: state2.proficiencyLevel === proficiencyLevel ? "selected" : false,
+        selected: state.proficiencyLevel === proficiencyLevel ? "selected" : false,
         value: proficiencyLevel
-      }, translate(state2, "proficiency_name-" + proficiencyLevel))
+      }, translate(state, "proficiency_name-" + proficiencyLevel))
     )),
-    node("ul", translate(state2, "proficiency_description-" + state2.proficiencyLevel).map((text) => node("li", text))),
+    node("ul", translate(state, "proficiency_description-" + state.proficiencyLevel).map((text) => node("li", text))),
     node(
       "blockquote",
       node("p", conditional(
-        TRANSLATABLE_CODES.includes(state2.targetLocale),
-        translate(state2, "proficiency_example-" + state2.proficiencyLevel, state2.targetLocale),
-        translate(state2, "proficiency_example-" + state2.proficiencyLevel)
+        TRANSLATABLE_CODES.includes(state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel)
       ))
     ),
     node("label", {
       for: "input_topics_of_interest"
-    }, translate(state2, "options-topics_of_interest")),
-    ...state2.topicsOfInterest.map(
+    }, translate(state, "options-topics_of_interest")),
+    ...state.topicsOfInterest.map(
       (topic, index) => node("input", {
         keyup: (event) => {
           if (!event.target.value) {
-            state2.topicsOfInterest.splice(index, 1);
+            state.topicsOfInterest.splice(index, 1);
           } else {
-            state2.topicsOfInterest[index] = event.target.value;
+            state.topicsOfInterest[index] = event.target.value;
           }
         },
         value: topic
@@ -2134,27 +2134,27 @@
     }),
     node("label", {
       for: "select_api_provider"
-    }, translate(state2, "options-api_provider")),
+    }, translate(state, "options-api_provider")),
     node("select", {
       id: "select_api_provider",
       change: handleApiProvider
     }, Object.keys(APIS).map(
       (apiProvider) => node("option", {
-        selected: state2.apiProvider === apiProvider ? "selected" : false,
+        selected: state.apiProvider === apiProvider ? "selected" : false,
         value: apiProvider
       }, APIS[apiProvider].name)
     )),
     ...conditional(
-      APIS[state2.apiProvider]?.requireCredentials,
+      APIS[state.apiProvider]?.requireCredentials,
       [
         node("label", {
           for: "input-api_credentials"
-        }, translate(state2, "options-api_credentials")),
+        }, translate(state, "options-api_credentials")),
         node("input", {
           id: "input-api_credentials",
           keyup: handleApiCredentials,
           type: "password",
-          value: state2.apiCredentials
+          value: state.apiCredentials
         })
       ]
     ),
@@ -2162,33 +2162,33 @@
       click: handleApiCredentialsTest,
       type: "button"
     }, [
-      translate(state2, "options-test_api_credentials"),
+      translate(state, "options-test_api_credentials"),
       node("span", {
-        class: state2.apiCredentialsPending ? "pending" : ""
+        class: state.apiCredentialsPending ? "pending" : ""
       })
     ]),
     ...conditional(
-      state2.apiCredentialsError,
-      [node("p", state2.apiCredentialsError)]
+      state.apiCredentialsError,
+      [node("p", state.apiCredentialsError)]
     ),
     ...conditional(
-      !state2.apiCredentialsTested,
-      [node("p", translate(state2, "options-api_credentials_untested"))],
+      !state.apiCredentialsTested,
+      [node("p", translate(state, "options-api_credentials_untested"))],
       [
         node("label", {
           for: "select_api_model"
-        }, translate(state2, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state2.apiProvider]?.preferredModelName ?? APIS[state2.apiProvider]?.preferredModel)),
+        }, translate(state, "options-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiProvider]?.preferredModelName ?? APIS[state.apiProvider]?.preferredModel)),
         node("select", {
           id: "select_api_model",
           change: handleApiModel
         }, [
           node("option", {
             disabled: true,
-            selected: !isReady(state2) ? "selected" : false,
+            selected: !isReady(state) ? "selected" : false,
             value: null
-          }, translate(state2, "select_an_option")),
-          ...state2.apiModels?.data?.filter(APIS[state2.apiProvider].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
-            selected: (state2.apiModel ?? APIS[state2.apiProvider].preferredModel) === model.id ? "selected" : false,
+          }, translate(state, "select_an_option")),
+          ...state.apiModels?.data?.filter(APIS[state.apiProvider].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+            selected: (state.apiModel ?? APIS[state.apiProvider].preferredModel) === model.id ? "selected" : false,
             value: model.id
           }, model.name ?? model.id)) ?? []
         ])
@@ -2196,72 +2196,72 @@
     ),
     node("button", {
       click: handleGoBack,
-      disabled: !isReady(state2),
+      disabled: !isReady(state),
       type: "button"
-    }, translate(state2, "button-go_back"))
+    }, translate(state, "button-go_back"))
   ];
 
   // src/screens/overview.js
-  var handleClarification = (_event, state2) => {
-    setScreen(state2, SCREENS.clarification);
+  var handleClarification = (_event, state) => {
+    setScreen(state, SCREENS.clarification);
   };
-  var handleComprehension = (_event, state2) => {
-    setScreen(state2, SCREENS.comprehension);
+  var handleComprehension = (_event, state) => {
+    setScreen(state, SCREENS.comprehension);
   };
-  var handleConversation = (_event, state2) => {
-    setScreen(state2, SCREENS.conversation);
+  var handleConversation = (_event, state) => {
+    setScreen(state, SCREENS.conversation);
   };
-  var handleReading = (_event, state2) => {
-    setScreen(state2, SCREENS.reading);
+  var handleReading = (_event, state) => {
+    setScreen(state, SCREENS.reading);
   };
-  var handleRewrite = (_event, state2) => {
-    setScreen(state2, SCREENS.rewrite);
+  var handleRewrite = (_event, state) => {
+    setScreen(state, SCREENS.rewrite);
   };
-  var handleStory = (_event, state2) => {
-    setScreen(state2, SCREENS.story);
+  var handleStory = (_event, state) => {
+    setScreen(state, SCREENS.story);
   };
-  var handleVocabulary = (_event, state2) => {
-    setScreen(state2, SCREENS.vocabulary);
+  var handleVocabulary = (_event, state) => {
+    setScreen(state, SCREENS.vocabulary);
   };
-  var handleOptions = (_event, state2) => {
-    setScreen(state2, SCREENS.options);
+  var handleOptions = (_event, state) => {
+    setScreen(state, SCREENS.options);
   };
-  var handleMigrate = (_event, state2) => {
-    setScreen(state2, SCREENS.migrate);
+  var handleMigrate = (_event, state) => {
+    setScreen(state, SCREENS.migrate);
   };
-  var overview = (state2) => [
+  var overview = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
       ...conditional(
-        state2.statisticComprehensionActivity > 0 || state2.statisticConversationActivity > 0 || state2.statisticClarificationActivity > 0 || state2.statisticReadingActivity > 0 || state2.statisticStoryActivity > 0 || state2.statisticVocabularyActivity > 0,
-        translate(state2, "statistics-activity_per_category"),
-        translate(state2, "statistics-no_activity")
+        state.statisticComprehensionActivity > 0 || state.statisticConversationActivity > 0 || state.statisticClarificationActivity > 0 || state.statisticReadingActivity > 0 || state.statisticStoryActivity > 0 || state.statisticVocabularyActivity > 0,
+        translate(state, "statistics-activity_per_category"),
+        translate(state, "statistics-no_activity")
       )
     ]),
     node("p", [
       ...conditional(
-        state2.statisticCurrentActivityStreak > 1 && (new Date(state2.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10) || new Date(state2.statisticLastActivityOn).toISOString().slice(0, 10) === new Date((/* @__PURE__ */ new Date()).setDate((/* @__PURE__ */ new Date()).getDate() - 1)).toISOString().slice(0, 10)),
+        state.statisticCurrentActivityStreak > 1 && (new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10) || new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === new Date((/* @__PURE__ */ new Date()).setDate((/* @__PURE__ */ new Date()).getDate() - 1)).toISOString().slice(0, 10)),
         [
           ...conditional(
-            new Date(state2.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
-            translate(state2, "statistics-extended_activity_streak"),
-            translate(state2, "statistics-current_activity_streak")
+            new Date(state.statisticLastActivityOn).toISOString().slice(0, 10) === (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
+            translate(state, "statistics-extended_activity_streak"),
+            translate(state, "statistics-current_activity_streak")
           ),
           ...conditional(
-            state2.statisticLongestActivityStreak > state2.statisticCurrentActivityStreak,
-            " " + translate(state2, "statistics-longest_activity_streak")
+            state.statisticLongestActivityStreak > state.statisticCurrentActivityStreak,
+            " " + translate(state, "statistics-longest_activity_streak")
           )
         ],
         [
-          translate(state2, "statistics-no_activity_streak"),
+          translate(state, "statistics-no_activity_streak"),
           ...conditional(
-            state2.statisticLongestActivityStreak > 1,
-            " " + translate(state2, "statistics-longest_activity_streak")
+            state.statisticLongestActivityStreak > 1,
+            " " + translate(state, "statistics-longest_activity_streak")
           )
         ]
       ),
-      " " + translate(state2, "overview-intro")
+      " " + translate(state, "overview-intro")
     ]),
     node("div", {
       class: "vertical-layout"
@@ -2274,9 +2274,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F4D6}"),
-        node("b", translate(state2, "overview-reading-title")),
+        node("b", translate(state, "overview-reading-title")),
         node("br"),
-        translate(state2, "overview-reading-description")
+        translate(state, "overview-reading-description")
       ]),
       node("button", {
         class: "card",
@@ -2286,9 +2286,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F58A}\uFE0F"),
-        node("b", translate(state2, "overview-comprehension-title")),
+        node("b", translate(state, "overview-comprehension-title")),
         node("br"),
-        translate(state2, "overview-comprehension-description")
+        translate(state, "overview-comprehension-description")
       ]),
       node("button", {
         class: "card",
@@ -2298,9 +2298,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F50E}"),
-        node("b", translate(state2, "overview-vocabulary-title")),
+        node("b", translate(state, "overview-vocabulary-title")),
         node("br"),
-        translate(state2, "overview-vocabulary-description")
+        translate(state, "overview-vocabulary-description")
       ]),
       node("button", {
         class: "card",
@@ -2310,9 +2310,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F916}"),
-        node("b", translate(state2, "overview-rewrite-title")),
+        node("b", translate(state, "overview-rewrite-title")),
         node("br"),
-        translate(state2, "overview-rewrite-description")
+        translate(state, "overview-rewrite-description")
       ]),
       node("button", {
         class: "card",
@@ -2322,9 +2322,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F4AC}"),
-        node("b", translate(state2, "overview-conversation-title")),
+        node("b", translate(state, "overview-conversation-title")),
         node("br"),
-        translate(state2, "overview-conversation-description")
+        translate(state, "overview-conversation-description")
       ]),
       node("button", {
         class: "card",
@@ -2334,9 +2334,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F3AD}"),
-        node("b", translate(state2, "overview-story-title")),
+        node("b", translate(state, "overview-story-title")),
         node("br"),
-        translate(state2, "overview-story-description")
+        translate(state, "overview-story-description")
       ]),
       node("button", {
         class: "card",
@@ -2346,9 +2346,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F64B}"),
-        node("b", translate(state2, "overview-clarification-title")),
+        node("b", translate(state, "overview-clarification-title")),
         node("br"),
-        translate(state2, "overview-clarification-description")
+        translate(state, "overview-clarification-description")
       ]),
       node("div", {
         class: "margin"
@@ -2361,9 +2361,9 @@
         node("span", {
           class: "icon"
         }, "\u2699\uFE0F"),
-        node("b", translate(state2, "overview-options-title")),
+        node("b", translate(state, "overview-options-title")),
         node("br"),
-        translate(state2, "overview-options-description")
+        translate(state, "overview-options-description")
       ]),
       node("button", {
         class: "card",
@@ -2373,9 +2373,9 @@
         node("span", {
           class: "icon"
         }, "\u{1F4BE}"),
-        node("b", translate(state2, "overview-migrate-title")),
+        node("b", translate(state, "overview-migrate-title")),
         node("br"),
-        translate(state2, "overview-migrate-description")
+        translate(state, "overview-migrate-description")
       ])
     ]),
     node("p", {
@@ -2384,130 +2384,130 @@
       href: "https://rondekker.com/",
       target: "_blank",
       rel: "noopener me"
-    }, translate(state2, "credits-link").replace("{%name%}", "Ron Dekker")))
+    }, translate(state, "credits-link").replace("{%name%}", "Ron Dekker")))
   ];
 
   // src/screens/setup.js
-  var handleSourceLanguage2 = (event, state2) => {
-    if (state2.sourceLocale !== event.target.selectedOptions[0].value) {
-      state2.sourceLocale = event.target.selectedOptions[0].value;
-      state2.sourceLanguage = getLanguageFromLocale(state2.sourceLocale);
-      setLangAttribute(state2);
+  var handleSourceLanguage2 = (event, state) => {
+    if (state.sourceLocale !== event.target.selectedOptions[0].value) {
+      state.sourceLocale = event.target.selectedOptions[0].value;
+      state.sourceLanguage = getLanguageFromLocale(state.sourceLocale);
+      setLangAttribute(state);
     }
   };
-  var handleTargetLanguage2 = (event, state2) => {
-    if (state2.targetLocale !== event.target.selectedOptions[0].value) {
-      state2.targetLocale = event.target.selectedOptions[0].value;
-      state2.targetLanguage = getLanguageFromLocale(state2.targetLocale);
+  var handleTargetLanguage2 = (event, state) => {
+    if (state.targetLocale !== event.target.selectedOptions[0].value) {
+      state.targetLocale = event.target.selectedOptions[0].value;
+      state.targetLanguage = getLanguageFromLocale(state.targetLocale);
     }
   };
-  var handleProficiencyLevel2 = (event, state2) => {
-    if (state2.proficiencyLevel !== event.target.selectedOptions[0].value) {
-      state2.proficiencyLevel = event.target.selectedOptions[0].value;
+  var handleProficiencyLevel2 = (event, state) => {
+    if (state.proficiencyLevel !== event.target.selectedOptions[0].value) {
+      state.proficiencyLevel = event.target.selectedOptions[0].value;
     }
   };
-  var handleNewTopic2 = (event, state2) => {
+  var handleNewTopic2 = (event, state) => {
     if (event.target.value) {
-      state2.topicsOfInterest.push(event.target.value);
+      state.topicsOfInterest.push(event.target.value);
     }
   };
-  var handleApiProvider2 = (event, state2) => {
-    if (state2.apiProvider !== event.target.selectedOptions[0].value) {
-      state2.apiProvider = event.target.selectedOptions[0].value;
-      state2.apiCredentialsTested = false;
+  var handleApiProvider2 = (event, state) => {
+    if (state.apiProvider !== event.target.selectedOptions[0].value) {
+      state.apiProvider = event.target.selectedOptions[0].value;
+      state.apiCredentialsTested = false;
     }
   };
-  var handleApiCredentials2 = (event, state2) => {
-    if (state2.apiCredentials !== event.target.value) {
-      state2.apiCredentials = event.target.value;
+  var handleApiCredentials2 = (event, state) => {
+    if (state.apiCredentials !== event.target.value) {
+      state.apiCredentials = event.target.value;
     }
   };
-  var handleApiCredentialsTest2 = (_event, state2) => {
-    state2.apiCredentialsPending = true;
-    getModels5(state2).then(([error, _response, result]) => {
-      state2.apiCredentialsPending = false;
+  var handleApiCredentialsTest2 = (_event, state) => {
+    state.apiCredentialsPending = true;
+    getModels5(state).then(([error, _response, result]) => {
+      state.apiCredentialsPending = false;
       if (error) {
-        state2.apiCredentialsTested = false;
-        state2.apiCredentialsError = error.toString();
-        state2.apiModels = null;
+        state.apiCredentialsTested = false;
+        state.apiCredentialsError = error.toString();
+        state.apiModels = null;
       } else {
-        state2.apiCredentialsTested = true;
-        state2.apiCredentialsError = false;
-        state2.apiModels = result;
-        state2.apiModel ??= result?.data.length > 0 ? result.data[0].id : null;
+        state.apiCredentialsTested = true;
+        state.apiCredentialsError = false;
+        state.apiModels = result;
+        state.apiModel ??= result?.data.length > 0 ? result.data[0].id : null;
       }
     });
   };
-  var handleApiModel2 = (event, state2) => {
-    if (state2.apiModel !== event.target.selectedOptions[0].value) {
-      state2.apiModel = event.target.selectedOptions[0].value;
+  var handleApiModel2 = (event, state) => {
+    if (state.apiModel !== event.target.selectedOptions[0].value) {
+      state.apiModel = event.target.selectedOptions[0].value;
     }
   };
-  var handleNext = (_event, state2) => {
-    if (isReady(state2)) {
-      setScreen(state2, SCREENS.overview);
+  var handleNext = (_event, state) => {
+    if (isReady(state)) {
+      setScreen(state, SCREENS.overview);
     }
   };
-  var setup = (state2) => [
-    node("b", translate(state2, "greeting")),
+  var setup = (state) => [
+    node("b", translate(state, "greeting")),
     node("label", {
       for: "select_source_language"
-    }, translate(state2, "setup-source_language")),
+    }, translate(state, "setup-source_language")),
     node("select", {
       id: "select_source_language",
       change: handleSourceLanguage2
     }, TRANSLATABLE_CODES.map(
       (localeCode) => node("option", {
-        selected: state2.sourceLocale === localeCode ? "selected" : false,
+        selected: state.sourceLocale === localeCode ? "selected" : false,
         value: localeCode
-      }, translate(state2, localeCode, localeCode))
+      }, translate(state, localeCode, localeCode))
     )),
     node("label", {
       for: "select_target_language"
-    }, translate(state2, "setup-target_language")),
+    }, translate(state, "setup-target_language")),
     node("select", {
       id: "select_target_language",
       change: handleTargetLanguage2
     }, LOCALE_CODES.map(
       (localeCode) => node("option", {
-        selected: state2.targetLocale === localeCode ? "selected" : false,
+        selected: state.targetLocale === localeCode ? "selected" : false,
         value: localeCode
-      }, translate(state2, localeCode))
+      }, translate(state, localeCode))
     )),
     node("label", {
       for: "select_proficiency_level"
-    }, translate(state2, "setup-proficiency_level")),
+    }, translate(state, "setup-proficiency_level")),
     node("select", {
       id: "select_proficiency_level",
       change: handleProficiencyLevel2
     }, PROFICIENCY_LEVEL_CODES.map(
       (proficiencyLevel) => node("option", {
-        selected: state2.proficiencyLevel === proficiencyLevel ? "selected" : false,
+        selected: state.proficiencyLevel === proficiencyLevel ? "selected" : false,
         value: proficiencyLevel
-      }, translate(state2, "proficiency_name-" + proficiencyLevel))
+      }, translate(state, "proficiency_name-" + proficiencyLevel))
     )),
     node(
       "ul",
-      translate(state2, "proficiency_description-" + state2.proficiencyLevel).map((text) => node("li", text))
+      translate(state, "proficiency_description-" + state.proficiencyLevel).map((text) => node("li", text))
     ),
     node(
       "blockquote",
       node("p", conditional(
-        TRANSLATABLE_CODES.includes(state2.targetLocale),
-        translate(state2, "proficiency_example-" + state2.proficiencyLevel, state2.targetLocale),
-        translate(state2, "proficiency_example-" + state2.proficiencyLevel)
+        TRANSLATABLE_CODES.includes(state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel, state.targetLocale),
+        translate(state, "proficiency_example-" + state.proficiencyLevel)
       ))
     ),
     node("label", {
       for: "input_topics_of_interest"
-    }, translate(state2, "setup-topics_of_interest")),
-    ...state2.topicsOfInterest.map(
+    }, translate(state, "setup-topics_of_interest")),
+    ...state.topicsOfInterest.map(
       (topic, index) => node("input", {
         keyup: (event) => {
           if (!event.target.value) {
-            state2.topicsOfInterest.splice(index, 1);
+            state.topicsOfInterest.splice(index, 1);
           } else {
-            state2.topicsOfInterest[index] = event.target.value;
+            state.topicsOfInterest[index] = event.target.value;
           }
         },
         value: topic
@@ -2519,27 +2519,27 @@
     }),
     node("label", {
       for: "select_api_provider"
-    }, translate(state2, "setup-api_provider")),
+    }, translate(state, "setup-api_provider")),
     node("select", {
       id: "select_api_provider",
       change: handleApiProvider2
     }, Object.keys(APIS).map(
       (apiProvider) => node("option", {
-        selected: state2.apiProvider === apiProvider ? "selected" : false,
+        selected: state.apiProvider === apiProvider ? "selected" : false,
         value: apiProvider
       }, APIS[apiProvider].name)
     )),
     ...conditional(
-      APIS[state2.apiProvider]?.requireCredentials,
+      APIS[state.apiProvider]?.requireCredentials,
       [
         node("label", {
           for: "input-api_credentials"
-        }, translate(state2, "setup-api_credentials")),
+        }, translate(state, "setup-api_credentials")),
         node("input", {
           id: "input-api_credentials",
           keyup: handleApiCredentials2,
           type: "password",
-          value: state2.apiCredentials
+          value: state.apiCredentials
         })
       ]
     ),
@@ -2547,47 +2547,47 @@
       click: handleApiCredentialsTest2,
       type: "button"
     }, [
-      translate(state2, "setup-test_api_credentials"),
+      translate(state, "setup-test_api_credentials"),
       node("span", {
-        class: state2.apiCredentialsPending ? "pending" : ""
+        class: state.apiCredentialsPending ? "pending" : ""
       })
     ]),
     ...conditional(
-      state2.apiCredentialsError,
-      [node("p", state2.apiCredentialsError)]
+      state.apiCredentialsError,
+      [node("p", state.apiCredentialsError)]
     ),
     ...conditional(
-      !state2.apiCredentialsTested,
-      [node("p", translate(state2, "setup-api_credentials_untested"))],
+      !state.apiCredentialsTested,
+      [node("p", translate(state, "setup-api_credentials_untested"))],
       [
         node("label", {
           for: "select_api_model"
-        }, translate(state2, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state2.apiProvider]?.preferredModelName ?? APIS[state2.apiProvider]?.preferredModel)),
+        }, translate(state, "setup-api_credentials_tested").replace("{%preferredModel%}", APIS[state.apiProvider]?.preferredModelName ?? APIS[state.apiProvider]?.preferredModel)),
         node("select", {
           id: "select_api_model",
           change: handleApiModel2
         }, [
           node("option", {
             disabled: true,
-            selected: !isReady(state2) ? "selected" : false,
+            selected: !isReady(state) ? "selected" : false,
             value: null
-          }, translate(state2, "select_an_option")),
-          ...state2.apiModels?.data?.filter(APIS[state2.apiProvider].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
-            selected: (state2.apiModel ?? APIS[state2.apiProvider].preferredModel) === model.id ? "selected" : false,
+          }, translate(state, "select_an_option")),
+          ...state.apiModels?.data?.filter(APIS[state.apiProvider].modelOptionsFilter ?? (() => true))?.sort((a, b) => a.id.localeCompare(b.id))?.map((model) => node("option", {
+            selected: (state.apiModel ?? APIS[state.apiProvider].preferredModel) === model.id ? "selected" : false,
             value: model.id
           }, model.name ?? model.id)) ?? []
         ])
       ]
     ),
     ...conditional(
-      isReady(state2),
-      [node("p", translate(state2, "setup-outro"))]
+      isReady(state),
+      [node("p", translate(state, "setup-outro"))]
     ),
     node("button", {
       click: handleNext,
-      disabled: !isReady(state2),
+      disabled: !isReady(state),
       type: "button"
-    }, translate(state2, "setup-next"))
+    }, translate(state, "setup-next"))
   ];
 
   // src/utilities/random.js
@@ -2608,8 +2608,8 @@
   var ONE_DAY = ONE_HOUR * 24;
   var TWO_DAYS = ONE_DAY * 2;
   var GRACE_PERIOD = ONE_HOUR;
-  var onActivity = (state2) => {
-    const lastActivityOn = new Date(state2.statisticLastActivityOn);
+  var onActivity = (state) => {
+    const lastActivityOn = new Date(state.statisticLastActivityOn);
     const lastActivityUTC = Date.UTC(
       lastActivityOn.getFullYear(),
       lastActivityOn.getMonth(),
@@ -2623,94 +2623,94 @@
     );
     const deltaTime = todayUTC - lastActivityUTC;
     if (deltaTime >= TWO_DAYS + GRACE_PERIOD) {
-      state2.statisticCurrentActivityStreak = 1;
-      state2.statisticLastActivityOn = today.toISOString();
+      state.statisticCurrentActivityStreak = 1;
+      state.statisticLastActivityOn = today.toISOString();
     } else if (deltaTime >= ONE_DAY) {
-      state2.statisticCurrentActivityStreak++;
-      state2.statisticLastActivityOn = today.toISOString();
+      state.statisticCurrentActivityStreak++;
+      state.statisticLastActivityOn = today.toISOString();
     }
-    if (state2.statisticCurrentActivityStreak > state2.statisticLongestActivityStreak) {
-      state2.statisticLongestActivityStreak = state2.statisticCurrentActivityStreak;
+    if (state.statisticCurrentActivityStreak > state.statisticLongestActivityStreak) {
+      state.statisticLongestActivityStreak = state.statisticCurrentActivityStreak;
     }
   };
 
   // src/screens/conversation.js
-  var handleReply = (_event, state2) => {
-    if (!state2.conversationPending && state2.conversationInput && state2.conversationInput.trim().length > 0) {
-      state2.conversationError = false;
-      state2.conversationPending = true;
-      state2.conversationMessages.push({
+  var handleReply = (_event, state) => {
+    if (!state.conversationPending && state.conversationInput && state.conversationInput.trim().length > 0) {
+      state.conversationError = false;
+      state.conversationPending = true;
+      state.conversationMessages.push({
         role: "user",
-        content: state2.conversationInput.trim()
+        content: state.conversationInput.trim()
       });
-      state2.conversationInput = "";
+      state.conversationInput = "";
       createMessage5(
-        state2,
-        state2.conversationMessages,
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-conversation-follow_up")
+        state,
+        state.conversationMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-conversation-follow_up")
       ).then(([error, _response, result]) => {
-        state2.conversationPending = false;
+        state.conversationPending = false;
         if (error) {
-          state2.conversationError = error.toString();
-          const message = state2.conversationMessages.pop();
-          state2.conversationInput = message.content;
+          state.conversationError = error.toString();
+          const message = state.conversationMessages.pop();
+          state.conversationInput = message.content;
           return;
         }
         if (result.content.trim().endsWith("STOP")) {
-          state2.conversationStopped = true;
+          state.conversationStopped = true;
         }
-        state2.conversationMessages.push(result);
-        state2.statisticConversationActivity++;
-        onActivity(state2);
+        state.conversationMessages.push(result);
+        state.statisticConversationActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleGenerate = (_event, state2) => {
-    if (!state2.conversationPending) {
-      state2.conversationError = false;
-      state2.conversationMessages = [];
-      state2.conversationPending = true;
+  var handleGenerate = (_event, state) => {
+    if (!state.conversationPending) {
+      state.conversationError = false;
+      state.conversationMessages = [];
+      state.conversationPending = true;
       createMessage5(
-        state2,
+        state,
         [],
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-conversation") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
-          state2.topicsOfInterest.filter((topic) => topic)
+        translate(state, "prompt-context"),
+        translate(state, "prompt-conversation") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
+          state.topicsOfInterest.filter((topic) => topic)
         )) : "")
       ).then(([error, _response, result]) => {
-        state2.conversationPending = false;
+        state.conversationPending = false;
         if (error) {
-          state2.conversationError = error.toString();
+          state.conversationError = error.toString();
           return;
         }
-        state2.conversationMessages.push(result);
+        state.conversationMessages.push(result);
       });
     }
   };
-  var handleReset2 = (_event, state2) => {
-    state2.conversationError = false;
-    state2.conversationMessages = [];
-    state2.conversationPending = false;
-    state2.conversationStopped = false;
+  var handleReset2 = (_event, state) => {
+    state.conversationError = false;
+    state.conversationMessages = [];
+    state.conversationPending = false;
+    state.conversationStopped = false;
   };
-  var handleBack4 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack4 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var handleInput = (event, state2) => {
-    state2.conversationInput = event.target.value;
+  var handleInput = (event, state) => {
+    state.conversationInput = event.target.value;
   };
-  var conversation = (state2) => [
+  var conversation = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
-      translate(state2, "conversation-intro")
+      translate(state, "conversation-intro")
     ]),
     ...conditional(
-      state2.conversationMessages && state2.conversationMessages.length > 0,
+      state.conversationMessages && state.conversationMessages.length > 0,
       node("div", {
         class: "messages"
-      }, state2.conversationMessages.map(
+      }, state.conversationMessages.map(
         (message) => node("p", {
           class: "message-" + message?.role
         }, message?.content?.split("\n")?.flatMap(
@@ -2719,106 +2719,106 @@
       ))
     ),
     ...conditional(
-      state2.conversationError,
-      node("p", state2.conversationError)
+      state.conversationError,
+      node("p", state.conversationError)
     ),
     ...conditional(
-      state2.conversationPending,
+      state.conversationPending,
       node("p", {
         class: "pending"
       }),
       conditional(
-        state2.conversationMessages && state2.conversationMessages.length > 0,
+        state.conversationMessages && state.conversationMessages.length > 0,
         node("textarea", {
           class: "message-user",
           id: "input-question",
           keyup: handleInput
-        }, state2.conversationInput)
+        }, state.conversationInput)
       )
     ),
     node("div", {
       class: "row reverse"
     }, [
       ...conditional(
-        state2.conversationMessages && state2.conversationMessages.length > 0 && !state2.conversationStopped,
+        state.conversationMessages && state.conversationMessages.length > 0 && !state.conversationStopped,
         node("button", {
-          disabled: state2.conversationPending || !state2.conversationInput || state2.conversationInput.trim().length === 0,
+          disabled: state.conversationPending || !state.conversationInput || state.conversationInput.trim().length === 0,
           type: "button",
           click: handleReply
-        }, translate(state2, "button-reply")),
+        }, translate(state, "button-reply")),
         node("button", {
-          disabled: state2.conversationPending,
+          disabled: state.conversationPending,
           type: "button",
           click: handleGenerate
-        }, translate(state2, "button-generate"))
+        }, translate(state, "button-generate"))
       ),
       ...conditional(
-        state2.conversationPending || state2.conversationMessages && state2.conversationMessages.length > 0,
+        state.conversationPending || state.conversationMessages && state.conversationMessages.length > 0,
         node("button", {
           click: handleReset2,
           type: "button"
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         click: handleBack4,
         type: "button"
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/screens/clarification.js
-  var handleAsk = (_event, state2) => {
-    if (!state2.clarificationPending && state2.clarificationInput && state2.clarificationInput.trim().length > 0) {
-      state2.clarificationError = false;
-      state2.clarificationPending = true;
-      state2.clarificationMessages.push({
+  var handleAsk = (_event, state) => {
+    if (!state.clarificationPending && state.clarificationInput && state.clarificationInput.trim().length > 0) {
+      state.clarificationError = false;
+      state.clarificationPending = true;
+      state.clarificationMessages.push({
         role: "user",
-        content: state2.clarificationInput.trim()
+        content: state.clarificationInput.trim()
       });
-      state2.clarificationInput = "";
+      state.clarificationInput = "";
       createMessage5(
-        state2,
-        state2.clarificationMessages,
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-clarification")
+        state,
+        state.clarificationMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-clarification")
       ).then(([error, _response, result]) => {
-        state2.clarificationPending = false;
+        state.clarificationPending = false;
         if (error) {
-          state2.clarificationError = error.toString();
-          const message = state2.clarificationMessages.pop();
-          state2.clarificationInput = message.content;
+          state.clarificationError = error.toString();
+          const message = state.clarificationMessages.pop();
+          state.clarificationInput = message.content;
           return;
         }
-        state2.clarificationMessages.push(result);
-        state2.statisticClarificationActivity++;
-        onActivity(state2);
+        state.clarificationMessages.push(result);
+        state.statisticClarificationActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleInput2 = (event, state2) => {
-    state2.clarificationInput = event.target.value;
+  var handleInput2 = (event, state) => {
+    state.clarificationInput = event.target.value;
   };
-  var handleReset3 = (_event, state2) => {
-    state2.clarificationError = false;
-    state2.clarificationMessages = [];
-    state2.clarificationPending = false;
+  var handleReset3 = (_event, state) => {
+    state.clarificationError = false;
+    state.clarificationMessages = [];
+    state.clarificationPending = false;
   };
-  var handleBack5 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack5 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var clarification = (state2) => [
+  var clarification = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
       node("label", {
         for: "input-question"
-      }, translate(state2, "clarification-intro"))
+      }, translate(state, "clarification-intro"))
     ]),
     ...conditional(
-      state2.clarificationMessages && state2.clarificationMessages.length > 0,
+      state.clarificationMessages && state.clarificationMessages.length > 0,
       node("div", {
         class: "messages"
-      }, state2.clarificationMessages.map(
+      }, state.clarificationMessages.map(
         (message) => node("p", {
           class: "message-" + message?.role
         }, message?.content?.split("\n")?.flatMap(
@@ -2827,117 +2827,117 @@
       ))
     ),
     ...conditional(
-      state2.clarificationError,
-      node("p", state2.clarificationError)
+      state.clarificationError,
+      node("p", state.clarificationError)
     ),
     ...conditional(
-      state2.clarificationPending,
+      state.clarificationPending,
       node("p", {
         class: "pending"
       }),
       node("textarea", {
         class: "message-user",
         id: "input-question",
-        placeholder: translate(state2, "clarification-placeholder"),
+        placeholder: translate(state, "clarification-placeholder"),
         keyup: handleInput2
-      }, state2.clarificationInput)
+      }, state.clarificationInput)
     ),
     node("div", {
       class: "row reverse"
     }, [
       node("button", {
-        disabled: state2.clarificationPending || !state2.clarificationInput || state2.clarificationInput.trim().length === 0,
+        disabled: state.clarificationPending || !state.clarificationInput || state.clarificationInput.trim().length === 0,
         type: "button",
         click: handleAsk
-      }, translate(state2, "button-ask")),
+      }, translate(state, "button-ask")),
       ...conditional(
-        state2.clarificationPending || state2.clarificationMessages && state2.clarificationMessages.length > 0,
+        state.clarificationPending || state.clarificationMessages && state.clarificationMessages.length > 0,
         node("button", {
           type: "button",
           click: handleReset3
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         type: "button",
         click: handleBack5
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/screens/comprehension.js
-  var handleInput3 = (event, state2) => {
-    state2.comprehensionInput = event.target.value;
+  var handleInput3 = (event, state) => {
+    state.comprehensionInput = event.target.value;
   };
-  var handleAnswer = (_event, state2) => {
-    if (!state2.comprehensionPending && state2.comprehensionInput && state2.comprehensionInput.trim().length > 0) {
-      state2.comprehensionError = false;
-      state2.comprehensionPending = true;
-      state2.comprehensionMessages.push({
+  var handleAnswer = (_event, state) => {
+    if (!state.comprehensionPending && state.comprehensionInput && state.comprehensionInput.trim().length > 0) {
+      state.comprehensionError = false;
+      state.comprehensionPending = true;
+      state.comprehensionMessages.push({
         role: "user",
-        content: state2.comprehensionInput.trim()
+        content: state.comprehensionInput.trim()
       });
-      state2.comprehensionInput = "";
+      state.comprehensionInput = "";
       createMessage5(
-        state2,
-        state2.comprehensionMessages,
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-comprehension-follow_up")
+        state,
+        state.comprehensionMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-comprehension-follow_up")
       ).then(([error, _response, result]) => {
-        state2.comprehensionPending = false;
+        state.comprehensionPending = false;
         if (error) {
-          state2.comprehensionError = error.toString();
-          const message = state2.comprehensionMessages.pop();
-          state2.comprehensionInput = message.content;
+          state.comprehensionError = error.toString();
+          const message = state.comprehensionMessages.pop();
+          state.comprehensionInput = message.content;
           return;
         }
-        state2.comprehensionMessages.push(result);
-        state2.statisticComprehensionActivity++;
-        onActivity(state2);
+        state.comprehensionMessages.push(result);
+        state.statisticComprehensionActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleGenerate2 = (_event, state2) => {
-    if (!state2.comprehensionPending) {
-      state2.comprehensionError = false;
-      state2.comprehensionMessages = [];
-      state2.comprehensionPending = true;
+  var handleGenerate2 = (_event, state) => {
+    if (!state.comprehensionPending) {
+      state.comprehensionError = false;
+      state.comprehensionMessages = [];
+      state.comprehensionPending = true;
       createMessage5(
-        state2,
+        state,
         [],
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-comprehension") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
-          state2.topicsOfInterest.filter((topic) => topic)
+        translate(state, "prompt-context"),
+        translate(state, "prompt-comprehension") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
+          state.topicsOfInterest.filter((topic) => topic)
         )) : "")
       ).then(([error, _response, result]) => {
-        state2.comprehensionPending = false;
+        state.comprehensionPending = false;
         if (error) {
-          state2.comprehensionError = error.toString();
+          state.comprehensionError = error.toString();
           return;
         }
-        state2.comprehensionMessages.push(result);
+        state.comprehensionMessages.push(result);
       });
     }
   };
-  var handleReset4 = (_event, state2) => {
-    state2.comprehensionError = false;
-    state2.comprehensionInput = "";
-    state2.comprehensionMessages = [];
-    state2.comprehensionPending = false;
+  var handleReset4 = (_event, state) => {
+    state.comprehensionError = false;
+    state.comprehensionInput = "";
+    state.comprehensionMessages = [];
+    state.comprehensionPending = false;
   };
-  var handleBack6 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack6 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var comprehension = (state2) => [
+  var comprehension = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
-      translate(state2, "comprehension-intro")
+      translate(state, "comprehension-intro")
     ]),
     ...conditional(
-      state2.comprehensionMessages && state2.comprehensionMessages.length > 0,
+      state.comprehensionMessages && state.comprehensionMessages.length > 0,
       node("div", {
         class: "messages"
-      }, state2.comprehensionMessages.map(
+      }, state.comprehensionMessages.map(
         (message) => node(
           "p",
           {
@@ -2950,110 +2950,110 @@
       ))
     ),
     ...conditional(
-      state2.comprehensionError,
-      node("p", state2.comprehensionError)
+      state.comprehensionError,
+      node("p", state.comprehensionError)
     ),
     ...conditional(
-      state2.comprehensionPending,
+      state.comprehensionPending,
       node("p", {
         class: "pending"
       }),
       conditional(
-        state2.comprehensionMessages && state2.comprehensionMessages.length > 0 && state2.comprehensionMessages.length < 3,
+        state.comprehensionMessages && state.comprehensionMessages.length > 0 && state.comprehensionMessages.length < 3,
         node("textarea", {
           class: "message-user",
           id: "input-question",
           keyup: handleInput3
-        }, state2.comprehensionInput)
+        }, state.comprehensionInput)
       )
     ),
     node("div", {
       class: "row reverse"
     }, [
       ...conditional(
-        state2.comprehensionMessages && state2.comprehensionMessages.length > 0 && state2.comprehensionMessages.length < 3,
+        state.comprehensionMessages && state.comprehensionMessages.length > 0 && state.comprehensionMessages.length < 3,
         node("button", {
-          disabled: state2.comprehensionPending || !state2.comprehensionInput || state2.comprehensionInput.trim().length === 0,
+          disabled: state.comprehensionPending || !state.comprehensionInput || state.comprehensionInput.trim().length === 0,
           type: "button",
           click: handleAnswer
-        }, translate(state2, "button-answer")),
+        }, translate(state, "button-answer")),
         node("button", {
-          disabled: state2.comprehensionPending,
+          disabled: state.comprehensionPending,
           type: "button",
           click: handleGenerate2
-        }, translate(state2, "button-generate"))
+        }, translate(state, "button-generate"))
       ),
       ...conditional(
-        state2.comprehensionPending || state2.comprehensionMessages && state2.comprehensionMessages.length > 0,
+        state.comprehensionPending || state.comprehensionMessages && state.comprehensionMessages.length > 0,
         node("button", {
           click: handleReset4,
           type: "button"
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         click: handleBack6,
         type: "button"
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/screens/reading.js
-  var handleInput4 = (event, state2) => {
-    state2.readingInput = event.target.value;
+  var handleInput4 = (event, state) => {
+    state.readingInput = event.target.value;
   };
-  var handleGenerate3 = (_event, state2) => {
-    if (!state2.readingPending) {
-      state2.readingError = false;
-      state2.readingMessages = [];
-      state2.readingPending = true;
-      let instructions = translate(state2, "prompt-reading");
-      if (state2.readingInput && state2.readingInput.trim().length > 0) {
-        state2.readingMessages.push({
+  var handleGenerate3 = (_event, state) => {
+    if (!state.readingPending) {
+      state.readingError = false;
+      state.readingMessages = [];
+      state.readingPending = true;
+      let instructions = translate(state, "prompt-reading");
+      if (state.readingInput && state.readingInput.trim().length > 0) {
+        state.readingMessages.push({
           role: "user",
-          content: state2.readingInput.trim()
+          content: state.readingInput.trim()
         });
-        instructions += " " + translate(state2, "prompt-reading-topic");
+        instructions += " " + translate(state, "prompt-reading-topic");
       }
       createMessage5(
-        state2,
-        state2.readingMessages,
-        translate(state2, "prompt-context"),
+        state,
+        state.readingMessages,
+        translate(state, "prompt-context"),
         instructions
       ).then(([error, _response, result]) => {
-        state2.readingPending = false;
+        state.readingPending = false;
         if (error) {
-          state2.readingError = error.toString();
+          state.readingError = error.toString();
           return;
         }
-        state2.readingMessages.push(result);
-        state2.statisticReadingActivity++;
-        onActivity(state2);
+        state.readingMessages.push(result);
+        state.statisticReadingActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleReset5 = (_event, state2) => {
-    state2.readingError = false;
-    state2.readingInput = "";
-    state2.readingMessages = [];
-    state2.readingPending = false;
+  var handleReset5 = (_event, state) => {
+    state.readingError = false;
+    state.readingInput = "";
+    state.readingMessages = [];
+    state.readingPending = false;
   };
-  var handleBack7 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack7 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var reading = (state2) => [
+  var reading = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
       node("label", {
         for: "input-topic"
-      }, translate(state2, "reading-intro"))
+      }, translate(state, "reading-intro"))
     ]),
     node("div", {
       class: "messages"
     }, [
       ...conditional(
-        state2.readingMessages && state2.readingMessages?.length > 0,
-        state2.readingMessages?.map(
+        state.readingMessages && state.readingMessages?.length > 0,
+        state.readingMessages?.map(
           (message) => node(
             "p",
             {
@@ -3066,19 +3066,19 @@
         ),
         node("textarea", {
           class: "message-user",
-          disabled: state2.readingMessages?.length > 0,
+          disabled: state.readingMessages?.length > 0,
           id: "input-topic",
           input: handleInput4,
-          placeholder: translate(state2, "reading-placeholder")
-        }, state2.readingInput || "")
+          placeholder: translate(state, "reading-placeholder")
+        }, state.readingInput || "")
       )
     ]),
     ...conditional(
-      state2.readingError,
-      node("p", state2.readingError)
+      state.readingError,
+      node("p", state.readingError)
     ),
     ...conditional(
-      state2.readingPending,
+      state.readingPending,
       node("p", {
         class: "pending"
       })
@@ -3087,104 +3087,104 @@
       class: "row reverse"
     }, [
       ...conditional(
-        state2.readingPending || state2.readingMessages && state2.readingMessages?.length === 0,
+        state.readingPending || state.readingMessages && state.readingMessages?.length === 0,
         node("button", {
           click: handleGenerate3,
-          disabled: state2.readingPending,
+          disabled: state.readingPending,
           type: "button"
-        }, translate(state2, "button-generate"))
+        }, translate(state, "button-generate"))
       ),
       ...conditional(
-        state2.readingPending || state2.readingMessages && state2.readingMessages?.length > 0,
+        state.readingPending || state.readingMessages && state.readingMessages?.length > 0,
         node("button", {
           type: "button",
           click: handleReset5
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         click: handleBack7,
         type: "button"
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/screens/story.js
-  var handleInput5 = (event, state2) => {
-    state2.storyInput = event.target.value;
+  var handleInput5 = (event, state) => {
+    state.storyInput = event.target.value;
   };
-  var handleReply2 = (_event, state2) => {
-    if (!state2.storyPending && state2.storyInput && state2.storyInput.trim().length > 0) {
-      state2.storyError = false;
-      state2.storyPending = true;
-      state2.storyMessages.push({
+  var handleReply2 = (_event, state) => {
+    if (!state.storyPending && state.storyInput && state.storyInput.trim().length > 0) {
+      state.storyError = false;
+      state.storyPending = true;
+      state.storyMessages.push({
         role: "user",
-        content: state2.storyInput.trim()
+        content: state.storyInput.trim()
       });
-      state2.storyInput = "";
+      state.storyInput = "";
       createMessage5(
-        state2,
-        state2.storyMessages,
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-story-follow_up")
+        state,
+        state.storyMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-story-follow_up")
       ).then(([error, _response, result]) => {
-        state2.storyPending = false;
+        state.storyPending = false;
         if (error) {
-          state2.storyError = error.toString();
-          const message = state2.storyMessages.pop();
-          state2.storyInput = message.content;
+          state.storyError = error.toString();
+          const message = state.storyMessages.pop();
+          state.storyInput = message.content;
           return;
         }
         if (result.content.endsWith("STOP")) {
-          state2.storyStopped = true;
+          state.storyStopped = true;
         }
-        state2.storyMessages.push(result);
-        state2.statisticStoryActivity++;
-        onActivity(state2);
+        state.storyMessages.push(result);
+        state.statisticStoryActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleGenerate4 = (_event, state2) => {
-    if (!state2.storyPending) {
-      state2.storyError = false;
-      state2.storyMessages = [];
-      state2.storyPending = true;
+  var handleGenerate4 = (_event, state) => {
+    if (!state.storyPending) {
+      state.storyError = false;
+      state.storyMessages = [];
+      state.storyPending = true;
       createMessage5(
-        state2,
+        state,
         [],
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-story") + (randomBool(10) ? translate(state2, "prompt-topic").replace("{%topic%}", randomItem(
-          state2.topicsOfInterest.filter((topic) => topic)
+        translate(state, "prompt-context"),
+        translate(state, "prompt-story") + (randomBool(10) ? translate(state, "prompt-topic").replace("{%topic%}", randomItem(
+          state.topicsOfInterest.filter((topic) => topic)
         )) : "")
       ).then(([error, _response, result]) => {
-        state2.storyPending = false;
+        state.storyPending = false;
         if (error) {
-          state2.storyError = error.toString();
+          state.storyError = error.toString();
           return;
         }
-        state2.storyMessages.push(result);
+        state.storyMessages.push(result);
       });
     }
   };
-  var handleReset6 = (_event, state2) => {
-    state2.storyError = false;
-    state2.storyMessages = [];
-    state2.storyPending = false;
-    state2.storyStopped = false;
+  var handleReset6 = (_event, state) => {
+    state.storyError = false;
+    state.storyMessages = [];
+    state.storyPending = false;
+    state.storyStopped = false;
   };
-  var handleBack8 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack8 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var story = (state2) => [
+  var story = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
-      translate(state2, "story-intro")
+      translate(state, "story-intro")
     ]),
     ...conditional(
-      state2.storyMessages && state2.storyMessages.length > 0,
+      state.storyMessages && state.storyMessages.length > 0,
       node("div", {
         class: "messages"
-      }, state2.storyMessages.map(
+      }, state.storyMessages.map(
         (message) => node("p", {
           class: "message-" + message?.role
         }, message?.content?.split("\n")?.flatMap(
@@ -3193,124 +3193,124 @@
       ))
     ),
     ...conditional(
-      state2.storyError,
-      node("p", state2.storyError)
+      state.storyError,
+      node("p", state.storyError)
     ),
     ...conditional(
-      state2.storyPending,
+      state.storyPending,
       node("p", {
         class: "pending"
       }),
       conditional(
-        state2.storyMessages && state2.storyMessages.length > 0,
+        state.storyMessages && state.storyMessages.length > 0,
         node("textarea", {
           class: "message-user",
           id: "input-question",
           keyup: handleInput5
-        }, state2.storyInput)
+        }, state.storyInput)
       )
     ),
     node("div", {
       class: "row reverse"
     }, [
       ...conditional(
-        state2.storyMessages && state2.storyMessages.length > 0 && !state2.storyStopped,
+        state.storyMessages && state.storyMessages.length > 0 && !state.storyStopped,
         node("button", {
-          disabled: state2.storyPending || !state2.storyInput || state2.storyInput.trim().length === 0,
+          disabled: state.storyPending || !state.storyInput || state.storyInput.trim().length === 0,
           type: "button",
           click: handleReply2
-        }, translate(state2, "button-reply")),
+        }, translate(state, "button-reply")),
         node("button", {
-          disabled: state2.storyPending,
+          disabled: state.storyPending,
           type: "button",
           click: handleGenerate4
-        }, translate(state2, "button-generate"))
+        }, translate(state, "button-generate"))
       ),
       ...conditional(
-        state2.storyPending || state2.storyMessages && state2.storyMessages.length > 0,
+        state.storyPending || state.storyMessages && state.storyMessages.length > 0,
         node("button", {
           click: handleReset6,
           type: "button"
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         click: handleBack8,
         type: "button"
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/screens/vocabulary.js
-  var handleInput6 = (event, state2) => {
-    state2.vocabularyInput = event.target.value;
+  var handleInput6 = (event, state) => {
+    state.vocabularyInput = event.target.value;
   };
-  var handleAnswer2 = (_event, state2) => {
-    if (!state2.vocabularyPending && state2.vocabularyInput && state2.vocabularyInput.trim().length > 0) {
-      state2.vocabularyError = false;
-      state2.vocabularyPending = true;
-      state2.vocabularyMessages.push({
+  var handleAnswer2 = (_event, state) => {
+    if (!state.vocabularyPending && state.vocabularyInput && state.vocabularyInput.trim().length > 0) {
+      state.vocabularyError = false;
+      state.vocabularyPending = true;
+      state.vocabularyMessages.push({
         role: "user",
-        content: state2.vocabularyInput.trim()
+        content: state.vocabularyInput.trim()
       });
-      state2.vocabularyInput = "";
+      state.vocabularyInput = "";
       createMessage5(
-        state2,
-        state2.vocabularyMessages,
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-vocabulary-follow_up")
+        state,
+        state.vocabularyMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-vocabulary-follow_up")
       ).then(([error, _response, result]) => {
-        state2.vocabularyPending = false;
+        state.vocabularyPending = false;
         if (error) {
-          state2.vocabularyError = error.toString();
-          const message = state2.vocabularyMessages.pop();
-          state2.vocabularyInput = message.content;
+          state.vocabularyError = error.toString();
+          const message = state.vocabularyMessages.pop();
+          state.vocabularyInput = message.content;
           return;
         }
-        state2.vocabularyMessages.push(result);
-        state2.statisticVocabularyActivity++;
-        onActivity(state2);
+        state.vocabularyMessages.push(result);
+        state.statisticVocabularyActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleGenerate5 = (_event, state2) => {
-    if (!state2.vocabularyPending) {
-      state2.vocabularyError = false;
-      state2.vocabularyMessages = [];
-      state2.vocabularyPending = true;
+  var handleGenerate5 = (_event, state) => {
+    if (!state.vocabularyPending) {
+      state.vocabularyError = false;
+      state.vocabularyMessages = [];
+      state.vocabularyPending = true;
       createMessage5(
-        state2,
+        state,
         [],
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-vocabulary")
+        translate(state, "prompt-context"),
+        translate(state, "prompt-vocabulary")
       ).then(([error, _response, result]) => {
-        state2.vocabularyPending = false;
+        state.vocabularyPending = false;
         if (error) {
-          state2.vocabularyError = error.toString();
+          state.vocabularyError = error.toString();
           return;
         }
-        state2.vocabularyMessages.push(result);
+        state.vocabularyMessages.push(result);
       });
     }
   };
-  var handleReset7 = (_event, state2) => {
-    state2.vocabularyError = false;
-    state2.vocabularyMessages = [];
-    state2.vocabularyPending = false;
+  var handleReset7 = (_event, state) => {
+    state.vocabularyError = false;
+    state.vocabularyMessages = [];
+    state.vocabularyPending = false;
   };
-  var handleBack9 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack9 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var vocabulary = (state2) => [
+  var vocabulary = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
-      translate(state2, "vocabulary-intro")
+      translate(state, "vocabulary-intro")
     ]),
     ...conditional(
-      state2.vocabularyMessages && state2.vocabularyMessages.length > 0,
+      state.vocabularyMessages && state.vocabularyMessages.length > 0,
       node("div", {
         class: "messages"
-      }, state2.vocabularyMessages.map(
+      }, state.vocabularyMessages.map(
         (message) => node(
           "p",
           {
@@ -3323,16 +3323,16 @@
       ))
     ),
     ...conditional(
-      state2.vocabularyError,
-      node("p", state2.vocabularyError)
+      state.vocabularyError,
+      node("p", state.vocabularyError)
     ),
     ...conditional(
-      state2.vocabularyPending,
+      state.vocabularyPending,
       node("p", {
         class: "pending"
       }),
       conditional(
-        state2.vocabularyMessages && state2.vocabularyMessages.length > 0 && state2.vocabularyMessages.length < 3,
+        state.vocabularyMessages && state.vocabularyMessages.length > 0 && state.vocabularyMessages.length < 3,
         node(
           "textarea",
           {
@@ -3340,7 +3340,7 @@
             id: "input-question",
             keyup: handleInput6
           },
-          state2.vocabularyInput
+          state.vocabularyInput
         )
       )
     ),
@@ -3348,29 +3348,29 @@
       class: "row reverse"
     }, [
       ...conditional(
-        state2.vocabularyMessages && state2.vocabularyMessages.length > 0 && state2.vocabularyMessages.length < 3,
+        state.vocabularyMessages && state.vocabularyMessages.length > 0 && state.vocabularyMessages.length < 3,
         node("button", {
-          disabled: state2.vocabularyPending || !state2.vocabularyInput || state2.vocabularyInput.trim().length === 0,
+          disabled: state.vocabularyPending || !state.vocabularyInput || state.vocabularyInput.trim().length === 0,
           type: "button",
           click: handleAnswer2
-        }, translate(state2, "button-answer")),
+        }, translate(state, "button-answer")),
         node("button", {
-          disabled: state2.vocabularyPending,
+          disabled: state.vocabularyPending,
           type: "button",
           click: handleGenerate5
-        }, translate(state2, "button-generate"))
+        }, translate(state, "button-generate"))
       ),
       ...conditional(
-        state2.vocabularyPending || state2.vocabularyMessages && state2.vocabularyMessages.length > 0,
+        state.vocabularyPending || state.vocabularyMessages && state.vocabularyMessages.length > 0,
         node("button", {
           click: handleReset7,
           type: "button"
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         click: handleBack9,
         type: "button"
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
@@ -3413,17 +3413,17 @@
       text: selection?.toString().trim() ?? ""
     };
   };
-  var handleContextMenu = (state2) => {
+  var handleContextMenu = (state) => {
     document.addEventListener("contextmenu", (event) => {
       event.preventDefault();
-      state2.contextMenu = {
+      state.contextMenu = {
         pointerX: event.pageX,
         pointerY: event.pageY
       };
-      state2.selection = getSelection();
+      state.selection = getSelection();
       document.addEventListener("click", () => {
-        state2.contextMenu = null;
-        state2.selection = null;
+        state.contextMenu = null;
+        state.selection = null;
       }, {
         once: true
       });
@@ -3431,26 +3431,26 @@
   };
 
   // src/utilities/manifest.js
-  var handleStartup = (state2) => {
+  var handleStartup = (state) => {
     const searchParameters = new URLSearchParams(
       window.location.search
     );
-    if (!isReady(state2)) {
+    if (!isReady(state)) {
       return;
     }
     const screen = searchParameters.get("screen");
     if (screen !== SCREENS.setup) {
-      setScreen(state2, screen);
+      setScreen(state, screen);
     }
   };
 
   // src/utilities/sw.js
   var appState;
   var messages = [];
-  var handleMessage = (state2, event) => {
+  var handleMessage = (state, event) => {
     switch (event?.data?.type) {
       case "cacheUpdate":
-        state2.appUpdateAvailable = true;
+        state.appUpdateAvailable = true;
         break;
     }
   };
@@ -3466,66 +3466,66 @@
       }
     });
   }
-  var handleUpdates = (state2) => {
+  var handleUpdates = (state) => {
     for (const message of messages) {
-      handleMessage(state2, message);
+      handleMessage(state, message);
     }
-    appState = state2;
+    appState = state;
     messages = null;
   };
 
   // src/screens/rewrite.js
-  var handleInput7 = (event, state2) => {
-    state2.rewriteInput = event.target.value;
+  var handleInput7 = (event, state) => {
+    state.rewriteInput = event.target.value;
   };
-  var handleRewrite2 = (_event, state2) => {
-    if (!state2.rewritePending) {
-      state2.rewriteError = false;
-      state2.rewriteMessages = [{
+  var handleRewrite2 = (_event, state) => {
+    if (!state.rewritePending) {
+      state.rewriteError = false;
+      state.rewriteMessages = [{
         role: "user",
-        content: state2.rewriteInput.trim()
+        content: state.rewriteInput.trim()
       }];
-      state2.rewritePending = true;
+      state.rewritePending = true;
       createMessage5(
-        state2,
-        state2.rewriteMessages,
-        translate(state2, "prompt-context"),
-        translate(state2, "prompt-rewrite")
+        state,
+        state.rewriteMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-rewrite")
       ).then(([error, _response, result]) => {
-        state2.rewritePending = false;
+        state.rewritePending = false;
         if (error) {
-          state2.rewriteError = error.toString();
+          state.rewriteError = error.toString();
           return;
         }
-        state2.rewriteMessages.push(result);
-        state2.statisticRewriteActivity++;
-        onActivity(state2);
+        state.rewriteMessages.push(result);
+        state.statisticRewriteActivity++;
+        onActivity(state);
       });
     }
   };
-  var handleReset8 = (_event, state2) => {
-    state2.rewriteError = false;
-    state2.rewriteInput = "";
-    state2.rewriteMessages = [];
-    state2.rewritePending = false;
+  var handleReset8 = (_event, state) => {
+    state.rewriteError = false;
+    state.rewriteInput = "";
+    state.rewriteMessages = [];
+    state.rewritePending = false;
   };
-  var handleBack10 = (_event, state2) => {
-    setScreen(state2, SCREENS.overview);
+  var handleBack10 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
   };
-  var rewrite = (state2) => [
+  var rewrite = (state) => [
     node("p", [
-      node("b", translate(state2, "greeting")),
+      node("b", translate(state, "greeting")),
       node("br"),
       node("label", {
         for: "input-text"
-      }, translate(state2, "rewrite-intro"))
+      }, translate(state, "rewrite-intro"))
     ]),
     node("div", {
       class: "messages"
     }, [
       ...conditional(
-        state2.rewriteMessages && state2.rewriteMessages.length > 0,
-        state2.rewriteMessages.map(
+        state.rewriteMessages && state.rewriteMessages.length > 0,
+        state.rewriteMessages.map(
           (message) => node(
             "p",
             {
@@ -3538,19 +3538,19 @@
         ),
         node("textarea", {
           class: "message-user",
-          disabled: state2.rewriteMessages && state2.rewriteMessages.length > 0,
+          disabled: state.rewriteMessages && state.rewriteMessages.length > 0,
           id: "input-text",
           input: handleInput7,
-          placeholder: translate(state2, "rewrite-placeholder")
-        }, state2.rewriteInput)
+          placeholder: translate(state, "rewrite-placeholder")
+        }, state.rewriteInput)
       )
     ]),
     ...conditional(
-      state2.rewriteError,
-      node("p", state2.rewriteError)
+      state.rewriteError,
+      node("p", state.rewriteError)
     ),
     ...conditional(
-      state2.rewritePending,
+      state.rewritePending,
       node("p", {
         class: "pending"
       })
@@ -3559,138 +3559,145 @@
       class: "row reverse"
     }, [
       ...conditional(
-        state2.rewritePending || state2.rewriteMessages && state2.rewriteMessages.length === 0,
+        state.rewritePending || state.rewriteMessages && state.rewriteMessages.length === 0,
         node("button", {
           click: handleRewrite2,
-          disabled: state2.rewritePending || state2.rewriteInput.trim().length === 0,
+          disabled: state.rewritePending || state.rewriteInput.trim().length === 0,
           type: "button"
-        }, translate(state2, "button-rewrite"))
+        }, translate(state, "button-rewrite"))
       ),
       ...conditional(
-        state2.rewritePending || state2.rewriteMessages && state2.rewriteMessages.length > 0,
+        state.rewritePending || state.rewriteMessages && state.rewriteMessages.length > 0,
         node("button", {
           type: "button",
           click: handleReset8
-        }, translate(state2, "button-reset"))
+        }, translate(state, "button-reset"))
       ),
       node("button", {
         click: handleBack10,
         type: "button"
-      }, translate(state2, "button-go_back"))
+      }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/app.js
-  var preferredLocale = getPreferredLocale();
-  var [_update, _unmount, state] = mount(
-    document.body.appendChild(
-      document.createElement("div")
-    ),
-    (state2) => {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(state2)
-      );
-      return node("div", {
-        class: "screen"
-      }, [
-        ...updateBanner(state2),
-        ...match(state2.screen, {
-          [SCREENS.clarification]: () => clarification(state2),
-          [SCREENS.comprehension]: () => comprehension(state2),
-          [SCREENS.conversation]: () => conversation(state2),
-          [SCREENS.reading]: () => reading(state2),
-          [SCREENS.rewrite]: () => rewrite(state2),
-          [SCREENS.story]: () => story(state2),
-          [SCREENS.vocabulary]: () => vocabulary(state2),
-          [SCREENS.overview]: () => overview(state2),
-          [SCREENS.options]: () => options(state2),
-          [SCREENS.migrate]: () => migrate(state2)
-        }, () => setup(state2)),
-        ...popupModal(state2),
-        ...contextMenu(state2)
-      ]);
-    },
-    Object.assign({
-      screen: SCREENS.setup,
-      userIdentifier: createIdentifier(),
-      appUpdateAvailable: false,
-      contextMenu: null,
-      selection: null,
-      popupModal: null,
-      sourceLocale: preferredLocale,
-      sourceLanguage: getLanguageFromLocale(preferredLocale),
-      targetLocale: LOCALES.eng,
-      targetLanguage: getLanguageFromLocale(LOCALES.eng),
-      proficiencyLevel: PROFICIENCY_LEVELS.a1,
-      topicsOfInterest: [],
-      apiProvider: APIS.google.code,
-      apiModel: apiSettings3.preferredModel,
-      apiCredentials: null,
-      apiCredentialsError: false,
-      apiCredentialsPending: false,
-      apiCredentialsTested: false,
-      migrateImportError: false,
-      migrateReset: false,
-      statisticClarificationActivity: 0,
-      statisticComprehensionActivity: 0,
-      statisticConversationActivity: 0,
-      statisticReadingActivity: 0,
-      statisticRewriteActivity: 0,
-      statisticStoryActivity: 0,
-      statisticVocabularyActivity: 0,
-      statisticLastActivityOn: null,
-      statisticCurrentActivityStreak: 0,
-      statisticLongestActivityStreak: 0,
-      clarificationInput: "",
-      clarificationError: false,
-      clarificationPending: false,
-      clarificationMessages: [],
-      comprehensionInput: "",
-      comprehensionReviewed: false,
-      comprehensionError: false,
-      comprehensionPending: false,
-      comprehensionMessages: [],
-      conversationInput: "",
-      conversationStopped: false,
-      conversationError: false,
-      conversationPending: false,
-      conversationMessages: [],
-      readingInput: "",
-      readingError: false,
-      readingPending: false,
-      readingMessages: [],
-      rewriteInput: "",
-      rewriteError: false,
-      rewritePending: false,
-      rewriteMessages: [],
-      storyInput: "",
-      storyReviewed: false,
-      storyError: false,
-      storyPending: false,
-      storyMessages: [],
-      vocabularyInput: "",
-      vocabularyReviewed: false,
-      vocabularyError: false,
-      vocabularyPending: false,
-      vocabularyMessages: []
-    }, window.localStorage.getItem(STORAGE_KEY) ? JSON.parse(
-      window.localStorage.getItem(STORAGE_KEY)
-    ) : {}, {
-      // Ensure files updated is always reset after a full page refresh.
-      appUpdateAvailable: false,
-      apiCredentialsPending: false,
-      clarificationPending: false,
-      comprehensionPending: false,
-      conversationPending: false,
-      storyPending: false,
-      vocabularyPending: false
-    })
-  );
-  setLangAttribute(state);
-  handleContextMenu(state);
-  handleHistory(state);
-  handleStartup(state);
-  handleUpdates(state);
+  var initialize = () => {
+    const preferredLocale = getPreferredLocale();
+    const [_update, _unmount, state] = mount(
+      document.body.appendChild(
+        document.createElement("div")
+      ),
+      (state2) => {
+        window.localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(state2)
+        );
+        return node("div", {
+          class: "screen"
+        }, [
+          ...updateBanner(state2),
+          ...match(state2.screen, {
+            [SCREENS.clarification]: () => clarification(state2),
+            [SCREENS.comprehension]: () => comprehension(state2),
+            [SCREENS.conversation]: () => conversation(state2),
+            [SCREENS.reading]: () => reading(state2),
+            [SCREENS.rewrite]: () => rewrite(state2),
+            [SCREENS.story]: () => story(state2),
+            [SCREENS.vocabulary]: () => vocabulary(state2),
+            [SCREENS.overview]: () => overview(state2),
+            [SCREENS.options]: () => options(state2),
+            [SCREENS.migrate]: () => migrate(state2)
+          }, () => setup(state2)),
+          ...popupModal(state2),
+          ...contextMenu(state2)
+        ]);
+      },
+      Object.assign({
+        screen: SCREENS.setup,
+        userIdentifier: createIdentifier(),
+        appUpdateAvailable: false,
+        contextMenu: null,
+        selection: null,
+        popupModal: null,
+        sourceLocale: preferredLocale,
+        sourceLanguage: getLanguageFromLocale(preferredLocale),
+        targetLocale: LOCALES.eng,
+        targetLanguage: getLanguageFromLocale(LOCALES.eng),
+        proficiencyLevel: PROFICIENCY_LEVELS.a1,
+        topicsOfInterest: [],
+        apiProvider: APIS.google.code,
+        apiModel: apiSettings3.preferredModel,
+        apiCredentials: null,
+        apiCredentialsError: false,
+        apiCredentialsPending: false,
+        apiCredentialsTested: false,
+        migrateImportError: false,
+        migrateReset: false,
+        statisticClarificationActivity: 0,
+        statisticComprehensionActivity: 0,
+        statisticConversationActivity: 0,
+        statisticReadingActivity: 0,
+        statisticRewriteActivity: 0,
+        statisticStoryActivity: 0,
+        statisticVocabularyActivity: 0,
+        statisticLastActivityOn: null,
+        statisticCurrentActivityStreak: 0,
+        statisticLongestActivityStreak: 0,
+        clarificationInput: "",
+        clarificationError: false,
+        clarificationPending: false,
+        clarificationMessages: [],
+        comprehensionInput: "",
+        comprehensionReviewed: false,
+        comprehensionError: false,
+        comprehensionPending: false,
+        comprehensionMessages: [],
+        conversationInput: "",
+        conversationStopped: false,
+        conversationError: false,
+        conversationPending: false,
+        conversationMessages: [],
+        readingInput: "",
+        readingError: false,
+        readingPending: false,
+        readingMessages: [],
+        rewriteInput: "",
+        rewriteError: false,
+        rewritePending: false,
+        rewriteMessages: [],
+        storyInput: "",
+        storyReviewed: false,
+        storyError: false,
+        storyPending: false,
+        storyMessages: [],
+        vocabularyInput: "",
+        vocabularyReviewed: false,
+        vocabularyError: false,
+        vocabularyPending: false,
+        vocabularyMessages: []
+      }, window.localStorage.getItem(STORAGE_KEY) ? JSON.parse(
+        window.localStorage.getItem(STORAGE_KEY)
+      ) : {}, {
+        // Ensure files updated is always reset after a full page refresh.
+        appUpdateAvailable: false,
+        apiCredentialsPending: false,
+        clarificationPending: false,
+        comprehensionPending: false,
+        conversationPending: false,
+        storyPending: false,
+        vocabularyPending: false
+      })
+    );
+    setLangAttribute(state);
+    handleContextMenu(state);
+    handleHistory(state);
+    handleStartup(state);
+    handleUpdates(state);
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialize);
+  } else {
+    initialize();
+  }
 })();
 //# sourceMappingURL=app.js.map
