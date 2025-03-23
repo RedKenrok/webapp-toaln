@@ -32,9 +32,9 @@
   // node_modules/@doars/staark-common/src/factory.js
   var factory = new Proxy({}, {
     /**
-     * @param {FactoryCache} target
-     * @param {string} type
-     * @returns {Factory}
+     * @param {FactoryCache} target Factory cache.
+     * @param {string} type Type of the nodes to generate.
+     * @returns {Factory} Function that generates the a node with the given type.
      */
     get: (target, type) => {
       if (target[type]) {
@@ -176,9 +176,9 @@
   // node_modules/@doars/staark-common/src/fctory.js
   var fctory = new Proxy({}, {
     /**
-     * @param {FctoryCache} target
-     * @param {string} type
-     * @returns {Fctory}
+     * @param {FctoryCache} target Factory cache.
+     * @param {string} type Type of the nodes to generate.
+     * @returns {Fctory} Function that generates the a node with the given type.
      */
     get: (target, type) => {
       if (target[type]) {
@@ -273,9 +273,11 @@
   var proxify = (root, onChange) => {
     const handler = {
       /**
-       * @param {Record<string, any>} target
-       * @param {string} key
-       * @returns {boolean}
+       * Deletes a property from the target object and invokes the onChange callback if the property existed.
+       *
+       * @param {Record<string, any>} target - The target object from which the property will be deleted.
+       * @param {string} key - The key of the property to be deleted.
+       * @returns {boolean} - True if the property was deleted, otherwise false.
        */
       deleteProperty: (target, key) => {
         if (Reflect.has(target, key)) {
@@ -288,10 +290,12 @@
         return true;
       },
       /**
-       * @param {Record<string, any>} target
-       * @param {string} key
-       * @param {any} value
-       * @returns {boolean}
+       * Sets a property on the target object and invokes the onChange callback if the value has changed.
+       *
+       * @param {Record<string, any>} target - The target object on which the property will be set.
+       * @param {string} key - The key of the property to be set.
+       * @param {any} value - The value to be set.
+       * @returns {boolean} - True if the property was set, otherwise false.
        */
       set: (target, key, value) => {
         const existingValue = target[key];
@@ -389,13 +393,13 @@
                 }
                 if (oldAttributes && oldAttributes[name] && typeof oldAttributes[name] === "object" && !Array.isArray(oldAttributes[name])) {
                   for (let styleName in oldAttributes[name]) {
-                    if (!(styleName in value)) {
-                      if (styleName.includes("-")) {
+                    if (!value[styleName]) {
+                      if (styleName.includes("-", 1)) {
                         element.style.removeProperty(
                           styleName
                         );
                       } else {
-                        delete element.style[styleName];
+                        element.style[styleName] = null;
                       }
                     }
                   }
@@ -1777,13 +1781,11 @@
       style: {
         // Change on which side the dropdown appears based on the pointer's position.
         ...state.contextMenu.pointerX > window.innerWidth / 2 ? {
-          left: null,
           right: window.innerWidth - state.contextMenu.pointerX + "px",
           borderTopLeftRadius: "var(--border-radius)",
           borderTopRightRadius: "0"
         } : {
           left: state.contextMenu.pointerX + "px",
-          right: null,
           borderTopLeftRadius: "0",
           borderTopRightRadius: "var(--border-radius)"
         },

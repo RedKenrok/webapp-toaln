@@ -137,14 +137,12 @@ export const contextMenu = (
       ...(
         state.contextMenu.pointerX > (window.innerWidth / 2)
           ? {
-            left: null,
             right: (window.innerWidth - state.contextMenu.pointerX + 'px'),
             borderTopLeftRadius: 'var(--border-radius)',
             borderTopRightRadius: '0',
           }
           : {
             left: state.contextMenu.pointerX + 'px',
-            right: null,
             borderTopLeftRadius: '0',
             borderTopRightRadius: 'var(--border-radius)',
           }
