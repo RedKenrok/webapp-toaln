@@ -957,12 +957,12 @@
       }
     }).then(([error, response, result]) => {
       if (!error) {
-        result.data = result.data.map((item) => {
-          return {
+        result.data = result.data.map(
+          (item) => ({
             ...item,
             name: item.display_name
-          };
-        });
+          })
+        );
       }
       return [error, response, result];
     });
@@ -3118,8 +3118,114 @@
     ])
   ];
 
-  // src/screens/story.js
+  // src/screens/rewrite.js
   var handleInput5 = (event, state) => {
+    state.rewriteInput = event.target.value;
+  };
+  var handleRewrite2 = (_event, state) => {
+    if (!state.rewritePending) {
+      state.rewriteError = false;
+      state.rewriteMessages = [{
+        role: "user",
+        content: state.rewriteInput.trim()
+      }];
+      state.rewritePending = true;
+      createMessage5(
+        state,
+        state.rewriteMessages,
+        translate(state, "prompt-context"),
+        translate(state, "prompt-rewrite")
+      ).then(([error, _response, result]) => {
+        state.rewritePending = false;
+        if (error) {
+          state.rewriteError = error.toString();
+          return;
+        }
+        state.rewriteMessages.push(result);
+        state.statisticRewriteActivity++;
+        onActivity(state);
+      });
+    }
+  };
+  var handleReset6 = (_event, state) => {
+    state.rewriteError = false;
+    state.rewriteInput = "";
+    state.rewriteMessages = [];
+    state.rewritePending = false;
+  };
+  var handleBack8 = (_event, state) => {
+    setScreen(state, SCREENS.overview);
+  };
+  var rewrite = (state) => [
+    node("p", [
+      node("b", translate(state, "greeting")),
+      node("br"),
+      node("label", {
+        for: "input-text"
+      }, translate(state, "rewrite-intro"))
+    ]),
+    node("div", {
+      class: "messages"
+    }, [
+      ...conditional(
+        state.rewriteMessages && state.rewriteMessages.length > 0,
+        state.rewriteMessages.map(
+          (message) => node(
+            "p",
+            {
+              class: "message-" + message.role
+            },
+            message.content.split("\n").flatMap(
+              (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
+            )
+          )
+        ),
+        node("textarea", {
+          class: "message-user",
+          disabled: state.rewriteMessages && state.rewriteMessages.length > 0,
+          id: "input-text",
+          input: handleInput5,
+          placeholder: translate(state, "rewrite-placeholder")
+        }, state.rewriteInput)
+      )
+    ]),
+    ...conditional(
+      state.rewriteError,
+      node("p", state.rewriteError)
+    ),
+    ...conditional(
+      state.rewritePending,
+      node("p", {
+        class: "pending"
+      })
+    ),
+    node("div", {
+      class: "row reverse"
+    }, [
+      ...conditional(
+        state.rewritePending || state.rewriteMessages && state.rewriteMessages.length === 0,
+        node("button", {
+          click: handleRewrite2,
+          disabled: state.rewritePending || state.rewriteInput.trim().length === 0,
+          type: "button"
+        }, translate(state, "button-rewrite"))
+      ),
+      ...conditional(
+        state.rewritePending || state.rewriteMessages && state.rewriteMessages.length > 0,
+        node("button", {
+          type: "button",
+          click: handleReset6
+        }, translate(state, "button-reset"))
+      ),
+      node("button", {
+        click: handleBack8,
+        type: "button"
+      }, translate(state, "button-go_back"))
+    ])
+  ];
+
+  // src/screens/story.js
+  var handleInput6 = (event, state) => {
     state.storyInput = event.target.value;
   };
   var handleReply2 = (_event, state) => {
@@ -3175,13 +3281,13 @@
       });
     }
   };
-  var handleReset6 = (_event, state) => {
+  var handleReset7 = (_event, state) => {
     state.storyError = false;
     state.storyMessages = [];
     state.storyPending = false;
     state.storyStopped = false;
   };
-  var handleBack8 = (_event, state) => {
+  var handleBack9 = (_event, state) => {
     setScreen(state, SCREENS.overview);
   };
   var story = (state) => [
@@ -3216,7 +3322,7 @@
         node("textarea", {
           class: "message-user",
           id: "input-question",
-          keyup: handleInput5
+          keyup: handleInput6
         }, state.storyInput)
       )
     ),
@@ -3239,19 +3345,19 @@
       ...conditional(
         state.storyPending || state.storyMessages && state.storyMessages.length > 0,
         node("button", {
-          click: handleReset6,
+          click: handleReset7,
           type: "button"
         }, translate(state, "button-reset"))
       ),
       node("button", {
-        click: handleBack8,
+        click: handleBack9,
         type: "button"
       }, translate(state, "button-go_back"))
     ])
   ];
 
   // src/screens/vocabulary.js
-  var handleInput6 = (event, state) => {
+  var handleInput7 = (event, state) => {
     state.vocabularyInput = event.target.value;
   };
   var handleAnswer2 = (_event, state) => {
@@ -3302,12 +3408,12 @@
       });
     }
   };
-  var handleReset7 = (_event, state) => {
+  var handleReset8 = (_event, state) => {
     state.vocabularyError = false;
     state.vocabularyMessages = [];
     state.vocabularyPending = false;
   };
-  var handleBack9 = (_event, state) => {
+  var handleBack10 = (_event, state) => {
     setScreen(state, SCREENS.overview);
   };
   var vocabulary = (state) => [
@@ -3348,7 +3454,7 @@
           {
             class: "message-user",
             id: "input-question",
-            keyup: handleInput6
+            keyup: handleInput7
           },
           state.vocabularyInput
         )
@@ -3373,12 +3479,12 @@
       ...conditional(
         state.vocabularyPending || state.vocabularyMessages && state.vocabularyMessages.length > 0,
         node("button", {
-          click: handleReset7,
+          click: handleReset8,
           type: "button"
         }, translate(state, "button-reset"))
       ),
       node("button", {
-        click: handleBack9,
+        click: handleBack10,
         type: "button"
       }, translate(state, "button-go_back"))
     ])
@@ -3386,7 +3492,7 @@
 
   // src/utilities/identifiers.js
   var IDENTIFIER_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  var createIdentifier = (length) => {
+  var createIdentifier = (length = 32) => {
     let result = "";
     const charactersLength = IDENTIFIER_CHARACTERS.length;
     let counter = 0;
@@ -3485,112 +3591,6 @@
     appState = state;
     messages = null;
   };
-
-  // src/screens/rewrite.js
-  var handleInput7 = (event, state) => {
-    state.rewriteInput = event.target.value;
-  };
-  var handleRewrite2 = (_event, state) => {
-    if (!state.rewritePending) {
-      state.rewriteError = false;
-      state.rewriteMessages = [{
-        role: "user",
-        content: state.rewriteInput.trim()
-      }];
-      state.rewritePending = true;
-      createMessage5(
-        state,
-        state.rewriteMessages,
-        translate(state, "prompt-context"),
-        translate(state, "prompt-rewrite")
-      ).then(([error, _response, result]) => {
-        state.rewritePending = false;
-        if (error) {
-          state.rewriteError = error.toString();
-          return;
-        }
-        state.rewriteMessages.push(result);
-        state.statisticRewriteActivity++;
-        onActivity(state);
-      });
-    }
-  };
-  var handleReset8 = (_event, state) => {
-    state.rewriteError = false;
-    state.rewriteInput = "";
-    state.rewriteMessages = [];
-    state.rewritePending = false;
-  };
-  var handleBack10 = (_event, state) => {
-    setScreen(state, SCREENS.overview);
-  };
-  var rewrite = (state) => [
-    node("p", [
-      node("b", translate(state, "greeting")),
-      node("br"),
-      node("label", {
-        for: "input-text"
-      }, translate(state, "rewrite-intro"))
-    ]),
-    node("div", {
-      class: "messages"
-    }, [
-      ...conditional(
-        state.rewriteMessages && state.rewriteMessages.length > 0,
-        state.rewriteMessages.map(
-          (message) => node(
-            "p",
-            {
-              class: "message-" + message.role
-            },
-            message.content.split("\n").flatMap(
-              (content, index, results) => index === results.length - 1 ? [content] : [content, node("br")]
-            )
-          )
-        ),
-        node("textarea", {
-          class: "message-user",
-          disabled: state.rewriteMessages && state.rewriteMessages.length > 0,
-          id: "input-text",
-          input: handleInput7,
-          placeholder: translate(state, "rewrite-placeholder")
-        }, state.rewriteInput)
-      )
-    ]),
-    ...conditional(
-      state.rewriteError,
-      node("p", state.rewriteError)
-    ),
-    ...conditional(
-      state.rewritePending,
-      node("p", {
-        class: "pending"
-      })
-    ),
-    node("div", {
-      class: "row reverse"
-    }, [
-      ...conditional(
-        state.rewritePending || state.rewriteMessages && state.rewriteMessages.length === 0,
-        node("button", {
-          click: handleRewrite2,
-          disabled: state.rewritePending || state.rewriteInput.trim().length === 0,
-          type: "button"
-        }, translate(state, "button-rewrite"))
-      ),
-      ...conditional(
-        state.rewritePending || state.rewriteMessages && state.rewriteMessages.length > 0,
-        node("button", {
-          type: "button",
-          click: handleReset8
-        }, translate(state, "button-reset"))
-      ),
-      node("button", {
-        click: handleBack10,
-        type: "button"
-      }, translate(state, "button-go_back"))
-    ])
-  ];
 
   // src/app.js
   var initialize = () => {

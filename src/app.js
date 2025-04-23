@@ -31,6 +31,7 @@ import { conversation } from './screens/conversation.js'
 import { clarification } from './screens/clarification.js'
 import { comprehension } from './screens/comprehension.js'
 import { reading } from './screens/reading.js'
+import { rewrite } from './screens/rewrite.js'
 import { story } from './screens/story.js'
 import { vocabulary } from './screens/vocabulary.js'
 
@@ -39,7 +40,6 @@ import { handleContextMenu } from './utilities/context-menu.js'
 import { handleHistory } from './utilities/screen.js'
 import { handleStartup } from './utilities/manifest.js'
 import { handleUpdates } from './utilities/sw.js'
-import { rewrite } from './screens/rewrite.js'
 
 const initialize = () => {
   const preferredLocale = getPreferredLocale()

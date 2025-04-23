@@ -87,12 +87,12 @@ export const getModels = (
     },
   }).then(([error, response, result]) => {
     if (!error) {
-      result.data = result.data.map(item => {
-        return {
+      result.data = result.data.map(
+        item => ({
           ...item,
           name: item.display_name,
-        }
-      })
+        }),
+      )
     }
     return [error, response, result]
   })

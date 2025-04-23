@@ -1,6 +1,6 @@
 const IDENTIFIER_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 export const createIdentifier = (
-  length
+  length = 32,
 ) => {
   let result = '';
   const charactersLength = IDENTIFIER_CHARACTERS.length;
