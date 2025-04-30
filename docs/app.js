@@ -29,180 +29,6 @@
     };
   };
 
-  // node_modules/@doars/staark-common/src/factory.js
-  var factory = new Proxy({}, {
-    /**
-     * @param {FactoryCache} target Factory cache.
-     * @param {string} type Type of the nodes to generate.
-     * @returns {Factory} Function that generates the a node with the given type.
-     */
-    get: (target, type) => {
-      if (target[type]) {
-        return target[type];
-      }
-      const typeConverted = (type[0] + type.substring(1).replace(
-        /([A-Z])/g,
-        (capital) => "-" + capital
-      )).toUpperCase();
-      return target[type] = (attributesOrContents, contents) => node(
-        typeConverted,
-        attributesOrContents,
-        contents
-      );
-    }
-  });
-
-  // node_modules/@doars/staark-common/src/selector.js
-  var BRACKET_CLOSE = "]";
-  var BRACKET_OPEN = "[";
-  var DOT = ".";
-  var EQUAL = "=";
-  var HASH = "#";
-  var QUOTE_SINGLE = "'";
-  var QUOTE_DOUBLE = '"';
-  var TokenTypes = {
-    attribute: 0,
-    class: 1,
-    id: 2,
-    type: 3
-  };
-  var selectorToTokenizer = (selector) => {
-    const length = selector.length;
-    let i = 0;
-    let type = "";
-    const attributes = {};
-    let tokenA = "";
-    let tokenB = true;
-    let tokenType = TokenTypes.type;
-    const storeToken = () => {
-      if (tokenA) {
-        switch (tokenType) {
-          case TokenTypes.attribute:
-            attributes[tokenA] = tokenB === true ? true : tokenB;
-            tokenB = true;
-            break;
-          case TokenTypes.class:
-            if (!attributes.class) {
-              attributes.class = tokenA;
-              break;
-            }
-            attributes.class += " " + tokenA;
-            break;
-          case TokenTypes.id:
-            attributes.id = tokenA;
-            break;
-          case TokenTypes.type:
-            type = tokenA;
-            break;
-        }
-        tokenA = "";
-      }
-    };
-    let character;
-    let attributeBracketCount;
-    const parseAttribute = () => {
-      attributeBracketCount = 0;
-      while (i < length) {
-        character = selector[i];
-        i++;
-        if (character === EQUAL) {
-          tokenB = "";
-          character = selector[i];
-          const endOnDoubleQuote = character === QUOTE_DOUBLE;
-          const endOnSingleQuote = character === QUOTE_SINGLE;
-          if (endOnDoubleQuote || endOnSingleQuote) {
-            tokenB += character;
-            i++;
-          }
-          while (i < length) {
-            character = selector[i];
-            if (endOnDoubleQuote && character === QUOTE_DOUBLE || endOnSingleQuote && character === QUOTE_SINGLE) {
-              tokenB += character;
-              i++;
-              break;
-            } else if (!endOnDoubleQuote && !endOnSingleQuote && character === BRACKET_CLOSE) {
-              break;
-            }
-            tokenB += character;
-            i++;
-          }
-          if (tokenB[0] === QUOTE_DOUBLE && tokenB[tokenB.length - 1] === QUOTE_DOUBLE || tokenB[0] === QUOTE_SINGLE && tokenB[tokenB.length - 1] === QUOTE_SINGLE) {
-            tokenB = tokenB.substring(1, tokenB.length - 1);
-          }
-          while (i < length) {
-            character = selector[i];
-            i++;
-            if (character === BRACKET_CLOSE) {
-              break;
-            }
-          }
-          break;
-        } else if (character === BRACKET_OPEN) {
-          attributeBracketCount++;
-          continue;
-        } else if (character === BRACKET_CLOSE) {
-          attributeBracketCount--;
-          if (attributeBracketCount < 0) {
-            break;
-          }
-          continue;
-        }
-        tokenA += character;
-      }
-      storeToken();
-    };
-    while (i < length) {
-      character = selector[i];
-      i++;
-      if (character === HASH) {
-        storeToken();
-        tokenType = TokenTypes.id;
-        continue;
-      } else if (character === DOT) {
-        storeToken();
-        tokenType = TokenTypes.class;
-        continue;
-      } else if (character === BRACKET_OPEN) {
-        storeToken();
-        tokenType = TokenTypes.attribute;
-        parseAttribute();
-        continue;
-      }
-      tokenA += character;
-    }
-    return [type, attributes];
-  };
-
-  // node_modules/@doars/staark-common/src/fctory.js
-  var fctory = new Proxy({}, {
-    /**
-     * @param {FctoryCache} target Factory cache.
-     * @param {string} type Type of the nodes to generate.
-     * @returns {Fctory} Function that generates the a node with the given type.
-     */
-    get: (target, type) => {
-      if (target[type]) {
-        return target[type];
-      }
-      const typeConverted = (type[0] + type.substring(1).replace(
-        /([A-Z])/g,
-        (capital) => "-" + capital
-      )).toUpperCase();
-      return target[type] = (selector, contents) => {
-        let attributes;
-        if (selector) {
-          const [_, _attributes] = selectorToTokenizer(selector);
-          attributes = _attributes;
-        }
-        return node(
-          typeConverted,
-          attributes,
-          contents
-        );
-      };
-    }
-  });
-
   // node_modules/@doars/staark-common/src/match.js
   var match = (key, lookup, fallback) => {
     let result;
@@ -347,7 +173,9 @@
             const type = typeof value;
             if (type === "function") {
               const oldValue = oldAttributes?.[name];
-              if (oldValue?.f !== value) {
+              if (oldValue?.f === value) {
+                newAttributes[name] = oldAttributes[name];
+              } else {
                 if (oldValue) {
                   element.removeEventListener(
                     name,
@@ -357,11 +185,11 @@
                 const listener = newAttributes[name] = (event) => {
                   value(event, state);
                 };
-                listener.f = value;
                 element.addEventListener(
                   name,
                   listener
                 );
+                listener.f = value;
               }
             } else {
               if (name === "class") {

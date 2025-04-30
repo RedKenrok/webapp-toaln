@@ -16,10 +16,10 @@
     "serve": "node serve.js"
   },
   "devDependencies": {
-    "esbuild": "^0.25.1"
+    "esbuild": "^0.25.3"
   },
   "dependencies": {
-    "@doars/staark": "^1.7.8",
+    "@doars/staark": "^1.7.10",
     "@doars/vroagn": "^1.4.3"
   }
 }
