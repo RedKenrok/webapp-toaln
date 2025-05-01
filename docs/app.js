@@ -174,7 +174,7 @@
             if (type === "function") {
               const oldValue = oldAttributes?.[name];
               if (oldValue?.f === value) {
-                newAttributes[name] = oldAttributes[name];
+                newAttributes[name] = oldValue;
               } else {
                 if (oldValue) {
                   element.removeEventListener(
