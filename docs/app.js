@@ -949,8 +949,7 @@
   var apiSettings4 = Object.freeze({
     code: "open_ai",
     name: "OpenAI",
-    preferredModel: "gpt-4o-mini",
-    // preferredModelName: 'GPT 4o-mini',
+    preferredModel: "gpt-4.1-mini",
     requireCredentials: true,
     modelOptionsFilter: (model) => ![
       "babbage-",
@@ -1021,12 +1020,79 @@
     }
   });
 
+  // src/apis/open-router.js
+  var apiSettings5 = Object.freeze({
+    code: "open_router",
+    name: "Open Router",
+    preferredModel: "deepseek/deepseek-chat:free",
+    requireCredentials: true
+  });
+  var _createMessage5 = callOnce(
+    () => create({
+      method: "post",
+      domain: "https://openrouter.ai",
+      path: "/api/v1/chat/completions",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+  );
+  var createMessage5 = (state, messages2, context = null, instructions = null) => {
+    const appRole = (state.apiModel ?? apiSettings5.preferredModel).toLowerCase().match(/4o|3\.5/) ? "system" : "developer";
+    messages2 = cloneRecursive3(messages2);
+    const prependAppRole = (message) => {
+      if (message) {
+        if (messages2.length > 0 && messages2[0].role === appRole) {
+          messages2[0].content = message + " " + messages2[0].content;
+        } else {
+          messages2.unshift({
+            role: appRole,
+            content: message
+          });
+        }
+      }
+    };
+    prependAppRole(instructions);
+    prependAppRole(context);
+    return _createMessage5()({
+      headers: {
+        Authorization: "Bearer " + state.apiCredentials
+      },
+      body: {
+        model: state.apiModel ?? apiSettings5.preferredModel,
+        messages: messages2,
+        user: state.userIdentifier
+      }
+    }).then(([error, response, result]) => {
+      if (!error) {
+        result = result?.choices?.[0]?.message;
+      }
+      return [error, response, result];
+    });
+  };
+  var _getModels5 = callOnce(
+    () => create({
+      domain: "https://openrouter.ai",
+      path: "/api/v1/models",
+      headers: {
+        "Accept": "application/json"
+      }
+    })
+  );
+  var getModels5 = (state) => _getModels5()({
+    headers: {
+      Authorization: "Bearer " + state.apiCredentials
+    }
+  });
+
   // src/apis/apis.js
   var APIS = Object.freeze({
-    anthropic: apiSettings,
-    deepseek: apiSettings2,
-    google: apiSettings3,
-    open_ai: apiSettings4
+    [apiSettings.code]: apiSettings,
+    [apiSettings2.code]: apiSettings2,
+    [apiSettings3.code]: apiSettings3,
+    [apiSettings4.code]: apiSettings4,
+    [apiSettings5.code]: apiSettings5
   });
   var callApi = (lookupTable, state, ...parameters) => {
     let method = null;
@@ -1040,17 +1106,19 @@
       [new Error("No api selected."), null, null]
     );
   };
-  var createMessage5 = (state, messages2, context = null, instructions = null) => callApi({
-    [APIS.anthropic.code]: createMessage,
-    [APIS.deepseek.code]: createMessage2,
-    [APIS.google.code]: createMessage3,
-    [APIS.open_ai.code]: createMessage4
+  var createMessage6 = (state, messages2, context = null, instructions = null) => callApi({
+    [apiSettings.code]: createMessage,
+    [apiSettings2.code]: createMessage2,
+    [apiSettings3.code]: createMessage3,
+    [apiSettings4.code]: createMessage4,
+    [apiSettings5.code]: createMessage5
   }, state, messages2, context, instructions);
-  var getModels5 = (state) => callApi({
-    [APIS.anthropic.code]: getModels,
-    [APIS.deepseek.code]: getModels2,
-    [APIS.google.code]: getModels3,
-    [APIS.open_ai.code]: getModels4
+  var getModels6 = (state) => callApi({
+    [apiSettings.code]: getModels,
+    [apiSettings2.code]: getModels2,
+    [apiSettings3.code]: getModels3,
+    [apiSettings4.code]: getModels4,
+    [apiSettings5.code]: getModels5
   }, state);
   var isReady = (state) => {
     return state.apiProvider && APIS[state.apiProvider] && (!APIS[state.apiProvider]?.requireCredentials || state.apiCredentialsTested) && (state.apiModel ?? APIS[state.apiProvider].preferredModel) && state.apiModels?.data?.some(
@@ -1549,7 +1617,7 @@
       }],
       pending: true
     };
-    createMessage5(
+    createMessage6(
       state,
       [{
         role: "user",
@@ -1582,7 +1650,7 @@
       }],
       pending: true
     };
-    createMessage5(
+    createMessage6(
       state,
       [{
         role: "user",
@@ -1881,7 +1949,7 @@
   };
   var handleApiCredentialsTest = (_event, state) => {
     state.apiCredentialsPending = true;
-    getModels5(state).then(([error, , result]) => {
+    getModels6(state).then(([error, , result]) => {
       state.apiCredentialsPending = false;
       if (error) {
         state.apiCredentialsTested = false;
@@ -2262,7 +2330,7 @@
   };
   var handleApiCredentialsTest2 = (_event, state) => {
     state.apiCredentialsPending = true;
-    getModels5(state).then(([error, _response, result]) => {
+    getModels6(state).then(([error, _response, result]) => {
       state.apiCredentialsPending = false;
       if (error) {
         state.apiCredentialsTested = false;
@@ -2482,7 +2550,7 @@
         content: state.conversationInput.trim()
       });
       state.conversationInput = "";
-      createMessage5(
+      createMessage6(
         state,
         state.conversationMessages,
         translate(state, "prompt-context"),
@@ -2509,7 +2577,7 @@
       state.conversationError = false;
       state.conversationMessages = [];
       state.conversationPending = true;
-      createMessage5(
+      createMessage6(
         state,
         [],
         translate(state, "prompt-context"),
@@ -2614,7 +2682,7 @@
         content: state.clarificationInput.trim()
       });
       state.clarificationInput = "";
-      createMessage5(
+      createMessage6(
         state,
         state.clarificationMessages,
         translate(state, "prompt-context"),
@@ -2715,7 +2783,7 @@
         content: state.comprehensionInput.trim()
       });
       state.comprehensionInput = "";
-      createMessage5(
+      createMessage6(
         state,
         state.comprehensionMessages,
         translate(state, "prompt-context"),
@@ -2739,7 +2807,7 @@
       state.comprehensionError = false;
       state.comprehensionMessages = [];
       state.comprehensionPending = true;
-      createMessage5(
+      createMessage6(
         state,
         [],
         translate(state, "prompt-context"),
@@ -2852,7 +2920,7 @@
         });
         instructions += " " + translate(state, "prompt-reading-topic");
       }
-      createMessage5(
+      createMessage6(
         state,
         state.readingMessages,
         translate(state, "prompt-context"),
@@ -2958,7 +3026,7 @@
         content: state.rewriteInput.trim()
       }];
       state.rewritePending = true;
-      createMessage5(
+      createMessage6(
         state,
         state.rewriteMessages,
         translate(state, "prompt-context"),
@@ -3065,7 +3133,7 @@
         content: state.storyInput.trim()
       });
       state.storyInput = "";
-      createMessage5(
+      createMessage6(
         state,
         state.storyMessages,
         translate(state, "prompt-context"),
@@ -3092,7 +3160,7 @@
       state.storyError = false;
       state.storyMessages = [];
       state.storyPending = true;
-      createMessage5(
+      createMessage6(
         state,
         [],
         translate(state, "prompt-context"),
@@ -3197,7 +3265,7 @@
         content: state.vocabularyInput.trim()
       });
       state.vocabularyInput = "";
-      createMessage5(
+      createMessage6(
         state,
         state.vocabularyMessages,
         translate(state, "prompt-context"),
@@ -3221,7 +3289,7 @@
       state.vocabularyError = false;
       state.vocabularyMessages = [];
       state.vocabularyPending = true;
-      createMessage5(
+      createMessage6(
         state,
         [],
         translate(state, "prompt-context"),

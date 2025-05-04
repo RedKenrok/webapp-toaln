@@ -29,15 +29,7 @@ In order to build and use the app you need to have `Node.JS` installed. You can 
 
 ## API credentials
 
-API credentials allow the app to be connected to the LLM provider of your choice. It is important to note that these credentials should be stored securely and not be provided to third-parties. This app breaks that rule since you are entering it into an online website, which is of course not recommend. This app however does not share the credentials outside of your browser, you can check this yourself by digging through the source code. If you are up for using this app you can read below on how you can obtain access to your API credentials.
-
-### Anthropic
-
-TODO:
-
-### DeepSeek
-
-TODO:
+API credentials allow the app to be connected to the LLM provider of your choice. It is important to note that these credentials should be stored securely and not be provided to third-parties. This app breaks that rule since you are entering it into an online website, which is of course not recommend. This app however does not share the credentials outside of your browser, you can check this yourself by reading the source code. The following LLM providers are available *Anthropic*, *DeepSeek*, *Google*, *OpenAI* and *OpenRouter*. If you are up for using this app you can read below on how you can obtain access to your API credentials.
 
 ### Google AI Studio
 
@@ -80,7 +72,3 @@ Google AI Studio offers limited monthly access to the Gemini API for free. You c
     - Under "API restrictions," select "Restrict key."
     - Choose "Gemini API" from the list of APIs.
     - Click "Save."
-
-### Open AI
-
-TODO:

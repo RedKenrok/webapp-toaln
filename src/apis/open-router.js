@@ -3,29 +3,17 @@ import { cloneRecursive } from '../utilities/clone.js'
 import { callOnce } from '../utilities/singleton.js'
 
 export const apiSettings = Object.freeze({
-  code: 'open_ai',
-  name: 'OpenAI',
-  preferredModel: 'gpt-4.1-mini',
+  code: 'open_router',
+  name: 'Open Router',
+  preferredModel: 'deepseek/deepseek-chat:free',
   requireCredentials: true,
-  modelOptionsFilter: model =>
-    ![
-      'babbage-',
-      'dall-e-',
-      'davinci-',
-      'embedding-',
-      'moderation-',
-      'tts-',
-      'whisper-',
-    ].some(keyword => model.id.toLowerCase().includes(keyword))
-    && !model.id.match(/-(?:\d){4}$/)
-    && !model.id.match(/-(?:\d){4}-(?:\d){2}-(?:\d){2}$/)
 })
 
 const _createMessage = callOnce(
   () => create({
     method: 'post',
-    domain: 'https://api.openai.com',
-    path: '/v1/chat/completions',
+    domain: 'https://openrouter.ai',
+    path: '/api/v1/chat/completions',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -87,8 +75,8 @@ export const createMessage = (
 
 const _getModels = callOnce(
   () => create({
-    domain: 'https://api.openai.com',
-    path: '/v1/models',
+    domain: 'https://openrouter.ai',
+    path: '/api/v1/models',
     headers: {
       'Accept': 'application/json',
     },

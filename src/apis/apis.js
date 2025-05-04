@@ -1,4 +1,3 @@
-
 import {
   apiSettings as apiSettingsAnthropic,
   createMessage as createMessageAnthropic,
@@ -19,12 +18,18 @@ import {
   createMessage as createMessageOpenAI,
   getModels as getModelsOpenAI,
 } from './open-ai.js'
+import {
+  apiSettings as apiSettingsOpenRouter,
+  createMessage as createMessageOpenRouter,
+  getModels as getModelsOpenRouter,
+} from './open-router.js'
 
 export const APIS = Object.freeze({
-  anthropic: apiSettingsAnthropic,
-  deepseek: apiSettingsDeepseek,
-  google: apiSettingsGoogle,
-  open_ai: apiSettingsOpenAI,
+  [apiSettingsAnthropic.code]: apiSettingsAnthropic,
+  [apiSettingsDeepseek.code]: apiSettingsDeepseek,
+  [apiSettingsGoogle.code]: apiSettingsGoogle,
+  [apiSettingsOpenAI.code]: apiSettingsOpenAI,
+  [apiSettingsOpenRouter.code]: apiSettingsOpenRouter,
 })
 
 const callApi = (
@@ -50,19 +55,21 @@ export const createMessage = (
   context = null,
   instructions = null,
 ) => callApi({
-  [APIS.anthropic.code]: createMessageAnthropic,
-  [APIS.deepseek.code]: createMessageDeepseek,
-  [APIS.google.code]: createMessageGoogle,
-  [APIS.open_ai.code]: createMessageOpenAI,
+  [apiSettingsAnthropic.code]: createMessageAnthropic,
+  [apiSettingsDeepseek.code]: createMessageDeepseek,
+  [apiSettingsGoogle.code]: createMessageGoogle,
+  [apiSettingsOpenAI.code]: createMessageOpenAI,
+  [apiSettingsOpenRouter.code]: createMessageOpenRouter,
 }, state, messages, context, instructions)
 
 export const getModels = (
   state,
 ) => callApi({
-  [APIS.anthropic.code]: getModelsAnthropic,
-  [APIS.deepseek.code]: getModelsDeepseek,
-  [APIS.google.code]: getModelsGoogle,
-  [APIS.open_ai.code]: getModelsOpenAI,
+  [apiSettingsAnthropic.code]: getModelsAnthropic,
+  [apiSettingsDeepseek.code]: getModelsDeepseek,
+  [apiSettingsGoogle.code]: getModelsGoogle,
+  [apiSettingsOpenAI.code]: getModelsOpenAI,
+  [apiSettingsOpenRouter.code]: getModelsOpenRouter,
 }, state)
 
 export const isReady = (
