@@ -1,24 +1,15 @@
-# Toaln
+# Apps
 
-*Toaln* is a simple language learning app which utilises the power of Large Language Models to practise.
+## Toaln
 
-Try the app out at [https://redkenrok.github.io/webapp-toaln/index.html](https://redkenrok.github.io/webapp-toaln/index.html). In order to use it you do need to specify an API key. You can use either an Anthropic or OpenAI key.
+*Toaln* is a simple language learning app which utilises the power of Large Language Models to practise. Try the app out at [https://redkenrok.github.io/webapps/toaln/index.html](https://redkenrok.github.io/webapps/toaln/index.html). In order to use it you do need to specify [credentials for an LLM API](#llm-api-credentials).
 
-## Running
-
-In order to build and use the app you need to have `Node.JS` installed. You can then run `bash run_install.sh` and after that `bash run_develop.sh`. It will then tell you which port on localhost to go to in your browser to load the app. Be sure to navigate to `localhost:<port>/develop.html` to view the not yet minified development version.
-
-## Made with
-
-- *[staark](https://github.com/doars/staark/tree/main/packages/staark#readme)* a teensy-tiny library for for building web apps.
-- *[vroagn](https://github.com/doars/staark/tree/main/packages/vroagn#readme)* a teensy-tiny library for managing network requests.
-
-## Future ideas
+### Future ideas
 
 - Split translations up in separate CSV files so not all are added into the JS bundle.
 - Have any more suggestions? Feel free to create a pull request.
 
-## Scrapped ideas
+### Scrapped ideas
 
 | Idea                                                                                                                                                               | Reason                                                                                       |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
@@ -27,11 +18,11 @@ In order to build and use the app you need to have `Node.JS` installed. You can 
 | Generate a sentence with a mistake the user has to correct them.                                                                                                   | Nice role reversal, but the user might just not simply know enough to point out the mistake. |
 | Generate a word and definition and the user has to play a game of word association where they answer with a thematically similar word and definition of their own. | Already have a similar option for practising vocabulary. Perhaps this can be added later.    |
 
-## API credentials
+# LLM API credentials
 
-API credentials allow the app to be connected to the LLM provider of your choice. It is important to note that these credentials should be stored securely and not be provided to third-parties. This app breaks that rule since you are entering it into an online website, which is of course not recommend. This app however does not share the credentials outside of your browser, you can check this yourself by reading the source code. The following LLM providers are available *Anthropic*, *DeepSeek*, *Google*, *OpenAI* and *OpenRouter*. If you are up for using this app you can read below on how you can obtain access to your API credentials.
+LLM API credentials allow certain apps to be connected to the LLM provider of your choice. It is important to note that these credentials should be stored securely and not be provided to third-parties. These apps breaks that rule since you are entering it into an online website, which is of course not recommend. These apps however does not share the credentials outside of your browser, you can check this yourself by reading the source code. The following LLM providers are available *Anthropic*, *DeepSeek*, *Google*, *OpenAI* and *OpenRouter*. If you are up for using these apps you can read below on how you can obtain access to your API credentials.
 
-### Google AI Studio
+## Google AI Studio
 
 Google AI Studio offers limited monthly access to the Gemini API for free. You can get an API credentials using the steps below.
 
@@ -72,3 +63,12 @@ Google AI Studio offers limited monthly access to the Gemini API for free. You c
     - Under "API restrictions," select "Restrict key."
     - Choose "Gemini API" from the list of APIs.
     - Click "Save."
+
+# Developing
+
+In order to build and use these apps you need to have `Node.JS` installed. You can then run `bash run_install.sh` and after that `bash run_develop.sh`. It will then tell you which port on localhost to go to in your browser to load the apps. Be sure to navigate to `localhost:<port>/develop.html` to view the not yet minified development version.
+
+# Made with
+
+- *[staark](https://github.com/doars/staark/tree/main/packages/staark#readme)* a teensy-tiny library for for building web apps.
+- *[vroagn](https://github.com/doars/staark/tree/main/packages/vroagn#readme)* a teensy-tiny library for managing network requests.

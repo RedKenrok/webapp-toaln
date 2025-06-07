@@ -25,38 +25,14 @@ const getMimeType = function (
     case '.jpg':
     case '.jpeg':
       return 'image/jpeg'
-    case '.gif':
-      return 'image/gif'
     case '.svg':
       return 'image/svg+xml'
-    case '.pdf':
-      return 'application/pdf'
     case '.txt':
       return 'text/plain'
-    case '.xml':
-      return 'application/xml'
-    case '.zip':
-      return 'application/zip'
-    case '.mp3':
-      return 'audio/mpeg'
-    case '.mp4':
-      return 'video/mp4'
-    case '.wav':
-      return 'audio/wav'
-    case '.ogg':
-      return 'audio/ogg'
     case '.webm':
       return 'video/webm'
     case '.ico':
       return 'image/x-icon'
-    case '.ttf':
-      return 'font/ttf'
-    case '.otf':
-      return 'font/otf'
-    case '.woff':
-      return 'font/woff'
-    case '.woff2':
-      return 'font/woff2'
     default:
       return 'application/octet-stream'
   }
@@ -67,7 +43,7 @@ const getFile = async function (
 ) {
   try {
     if (!existsSync(filePath)) {
-      return [404, new Error('Not Found'), null]
+      return [404, new Error('Not Found'), filePath, null]
     }
 
     let stats = await fs.stat(filePath)
@@ -76,9 +52,9 @@ const getFile = async function (
     }
 
     const data = await fs.readFile(filePath)
-    return [200, null, data]
+    return [200, null, filePath, data]
   } catch (error) {
-    return [500, error, null]
+    return [500, error, filePath, null]
   }
 }
 
@@ -96,9 +72,9 @@ const serve = function (
     ) => {
       const parsedUrl = url.parse(request.url)
       let pathname = decodeURIComponent(parsedUrl.pathname)
-      let filePath = path.join(directory, pathname)
+      let absoluteFilePath = path.join(directory, pathname)
 
-      const [status, error, data] = await getFile(filePath)
+      const [status, error, filePath, data] = await getFile(absoluteFilePath)
       if (error) {
         if (status === 404) {
           response.statusCode = 404

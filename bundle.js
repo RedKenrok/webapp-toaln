@@ -57,6 +57,9 @@ const bundle = (
 
       options = Object.assign({
         bundle: true,
+        define: {
+          'process.env.NODE_ENV': "'development'",
+        },
         format: 'esm',
         minify: false,
         platform: 'browser',
@@ -82,13 +85,29 @@ const bundle = (
 }
 
 await bundle({
-  entryPoints: 'src/app.css',
+  entryPoints: 'apps/home/app.css',
   outfile: 'docs/app.css',
 }, {
-  format: 'iife',
-  entryPoints: 'src/app.js',
+  entryPoints: 'apps/home/app.js',
   outfile: 'docs/app.js',
 }, {
-  entryPoints: 'src/sw.js',
-  outfile: 'docs/sw.js',
+  entryPoints: 'apps/schrievn/app.css',
+  outfile: 'docs/schrievn/app.css',
+}, {
+  format: 'iife',
+  entryPoints: 'apps/schrievn/app.js',
+  outfile: 'docs/schrievn/app.js',
+}, {
+  entryPoints: 'apps/schrievn/sw.js',
+  outfile: 'docs/schrievn/sw.js',
+}, {
+  entryPoints: 'apps/toaln/app.css',
+  outfile: 'docs/toaln/app.css',
+}, {
+  format: 'iife',
+  entryPoints: 'apps/toaln/app.js',
+  outfile: 'docs/toaln/app.js',
+}, {
+  entryPoints: 'apps/toaln/sw.js',
+  outfile: 'docs/toaln/sw.js',
 })

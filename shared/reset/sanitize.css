@@ -1,0 +1,345 @@
+/* Document */
+
+/*
+ * 1. Add border box sizing in all browsers (opinionated).
+ * 2. Backgrounds do not repeat by default (opinionated).
+ */
+
+*,
+::before,
+::after {
+  /* 1 */
+  box-sizing: border-box;
+
+  /* 2 */
+  background-repeat: no-repeat;
+}
+
+/*
+ * 1. Add text decoration inheritance in all browsers (opinionated).
+ * 2. Add vertical alignment inheritance in all browsers (opinionated).
+ */
+
+::before,
+::after {
+  /* 1 */
+  text-decoration: inherit;
+
+  /* 2 */
+  vertical-align: inherit;
+}
+
+/*
+ * 1. Use the default cursor in all browsers (opinionated).
+ * 2. Change the line height in all browsers (opinionated).
+ * 3. Breaks words to prevent overflow in all browsers (opinionated).
+ * 4. Use a 4-space tab width in all browsers (opinionated).
+ * 5. Remove the grey highlight on links in iOS (opinionated).
+ * 6. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+:where(:root) {
+  /* 1 */
+  cursor: default;
+
+  /* 2 */
+  line-height: 1.5;
+
+  /* 3 */
+  overflow-wrap: break-word;
+
+  /* 4 */
+  -moz-tab-size: 4;
+  tab-size: 4;
+
+  /* 5 */
+  -webkit-tap-highlight-color: transparent;
+
+  /* 6 */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Sections */
+
+/* Remove the margin in all browsers (opinionated). */
+
+:where(body) {
+  margin: 0;
+}
+
+/* Correct the font size and margin on `h1` elements within `section` and `article` contexts in Chrome, Edge, Firefox, and Safari. */
+
+:where(h1) {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content */
+
+/* Remove the margin on nested lists in Chrome, Edge, and Safari. */
+
+:where(dl, ol, ul) :where(dl, ol, ul) {
+  margin: 0;
+}
+
+/*
+ * 1. Correct the inheritance of border color in Firefox.
+ * 2. Add the correct box sizing in Firefox.
+ */
+
+:where(hr) {
+  /* 1 */
+  color: inherit;
+
+  /* 2 */
+  height: 0;
+}
+
+/* Remove the list style on navigation lists in all browsers (opinionated). */
+
+:where(nav) :where(ol, ul) {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Prevent VoiceOver from ignoring list semantics in Safari (opinionated). */
+
+:where(nav li)::before {
+  content: "\200B";
+  float: left;
+}
+
+/*
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ * 3. Prevent overflow of the container in all browsers (opinionated).
+ */
+
+:where(pre) {
+  /* 1 */
+  font-family: monospace, monospace;
+
+  /* 2 */
+  font-size: 1em;
+
+  /* 3 */
+  overflow: auto;
+}
+
+/* Text-level semantics */
+
+/* Add the correct text decoration in Safari. */
+
+:where(abbr[title]) {
+  text-decoration: underline;
+  text-decoration: underline dotted;
+}
+
+/* Add the correct font weight in Chrome, Edge, and Safari. */
+
+:where(b, strong) {
+  font-weight: bolder;
+}
+
+/*
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+:where(code, kbd, samp) {
+  /* 1 */
+  font-family: monospace, monospace;
+
+  /* 2 */
+  font-size: 1em;
+}
+
+/* Add the correct font size in all browsers. */
+
+:where(small) {
+  font-size: 80%;
+}
+
+/* Embedded content */
+
+/* Change the alignment on media elements in all browsers (opinionated). */
+
+:where(audio, canvas, iframe, img, svg, video) {
+  vertical-align: middle;
+}
+
+/* Remove the border on iframes in all browsers (opinionated). */
+
+:where(iframe) {
+  border-style: none;
+}
+
+/* Change the fill color to match the text color in all browsers (opinionated). */
+
+:where(svg:not([fill])) {
+  fill: currentColor;
+}
+
+/* Tabular data */
+
+/*
+ * 1. Collapse border spacing in all browsers (opinionated).
+ * 2. Correct table border color inheritance in all Chrome, Edge, and Safari.
+ * 3. Remove text indentation from table contents in Chrome, Edge, and Safari.
+ */
+
+:where(table) {
+  /* 1 */
+  border-collapse: collapse;
+
+  /* 2 */
+  border-color: inherit;
+
+  /* 3 */
+  text-indent: 0;
+}
+
+/* Forms */
+
+/* Remove the margin on controls in Safari. */
+
+:where(button, input, select) {
+  margin: 0;
+}
+
+/* Correct the inability to style buttons in iOS and Safari. */
+
+:where(button, [type="button" i], [type="reset" i], [type="submit" i]) {
+  -webkit-appearance: button;
+}
+
+/* Change the inconsistent appearance in all browsers (opinionated). */
+
+:where(fieldset) {
+  border: 1px solid #a0a0a0;
+}
+
+/* Add the correct vertical alignment in Chrome, Edge, and Firefox. */
+
+:where(progress) {
+  vertical-align: baseline;
+}
+
+/*
+ * 1. Remove the margin in Firefox and Safari.
+ * 2. Change the resize direction in all browsers (opinionated).
+ */
+
+:where(textarea) {
+  /* 1 */
+  margin: 0;
+
+  /* 2 */
+  resize: vertical;
+}
+
+/*
+ * 1. Correct the odd appearance in Chrome, Edge, and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+
+:where([type="search" i]) {
+  /* 1 */
+  -webkit-appearance: textfield;
+
+  /* 2 */
+  outline-offset: -2px;
+}
+
+/* Correct the cursor style of increment and decrement buttons in Safari. */
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/* Correct the text style of placeholders in Chrome, Edge, and Safari. */
+
+::-webkit-input-placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+
+/* Remove the inner padding in Chrome, Edge, and Safari on macOS. */
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+ * 1. Correct the inability to style upload buttons in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+
+::-webkit-file-upload-button {
+  /* 1 */
+  -webkit-appearance: button;
+
+  /* 2 */
+  font: inherit;
+}
+
+/* Interactive */
+
+/* Add the correct styles in Safari. */
+
+:where(dialog) {
+  background-color: white;
+  border: solid;
+  color: black;
+  height: -moz-fit-content;
+  height: fit-content;
+  left: 0;
+  margin: auto;
+  padding: 1em;
+  position: absolute;
+  right: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+:where(dialog:not([open])) {
+  display: none;
+}
+
+/* Add the correct display in Safari. */
+
+:where(details > summary:first-of-type) {
+  display: list-item;
+}
+
+/* Accessibility */
+
+/* Change the cursor on busy elements in all browsers (opinionated). */
+
+:where([aria-busy="true" i]) {
+  cursor: progress;
+}
+
+/* Change the cursor on control elements in all browsers (opinionated). */
+
+:where([aria-controls]) {
+  cursor: pointer;
+}
+
+/* Change the cursor on disabled, not-editable, or otherwise inoperable elements in all browsers (opinionated). */
+
+:where([aria-disabled="true" i], [disabled]) {
+  cursor: not-allowed;
+}
+
+/* Change the display on visually hidden accessible elements in all browsers (opinionated). */
+
+:where([aria-hidden="false" i][hidden]) {
+  display: initial;
+}
+
+:where([aria-hidden="false" i][hidden]:not(:focus)) {
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+}
